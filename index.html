@@ -727,21 +727,19 @@
             { nis: "102402", nama: "Budi Santoso", jk: "L", hp: "08987654321", foto: "", status: "A", ket: "Tanpa Keterangan", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false },
             { nis: "102403", nama: "Citra Lestari", jk: "P", hp: "08571122334", foto: "", status: "S", ket: "Demam Berdarah", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false }
         ];
+        
         // VVV--- PASTE KODE CLOUD BARU DI SINI ---VVV
-        const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxVv9_x9wuM2-VkacVwul5hnjbXM6Por_yunr_Wp5-j_4hQUsh0o6eFzOts6uIF7hUkww/exec"; // <-- GANTI DENGAN URL DARI GOOGLE
+ const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxVv9_x9wuM2-VkacVwul5hnjbXM6Por_yunr_Wp5-j_4hQUsh0o6eFzOts6uIF7hUkww/exec"; 
 
         function simpanDataKeCloud() {
-            // Tetap simpan lokal agar aplikasi tidak terasa lemot
             localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
-            
-            // Kirim data ke Google Sheets
             fetch(CLOUD_URL, {
                 redirect: "follow",
                 method: 'POST',
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(dataSiswa)
-            }).then(res => console.log("Berhasil tersimpan di Cloud!"))
-              .catch(err => console.error("Gagal simpan ke Cloud", err));
+            }).then(res => console.log("Berhasil simpan ke Cloud!"))
+              .catch(err => console.error("Gagal:", err));
         }
         // ^^^-------------------------------------^^^
 
@@ -868,7 +866,7 @@
             }
         }
 
-        function prosesLogin(e) {
+     function prosesLogin(e) {
             e.preventDefault();
             let role = document.getElementById("roleSelect").value;
             let usernameVal = document.getElementById("login-username").value;
@@ -880,23 +878,49 @@
                 let targetSiswa = dataSiswa.find(s => s.nis === usernameVal);
                 if (targetSiswa && pass === targetSiswa.nis) {
                     isAdminLoggedIn = false;
-                    let statusSiswa = document.querySelector('input[name="student_status"]:checked').value; let ketManual = document.getElementById('student-ket-manual').value.trim();
-                    targetSiswa.status = statusSiswa; targetSiswa.waktuAbsen = getWaktuSekarang(); 
-                    if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
+                    let statusSiswa = document.querySelector('input[name="student_status"]:checked').value; 
+                    let ketManual = document.getElementById('student-ket-manual').value.trim();
+                    targetSiswa.status = statusSiswa; 
+                    targetSiswa.waktuAbsen = getWaktuSekarang(); 
+                    if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; 
+                    else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
                     
                     let activeRekapDay = parseInt(localStorage.getItem('activeRekapDay') || "-1");
                     if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekap[activeRekapDay] = statusSiswa; }
-                    simpanDataKeCloud(); document.getElementById('student-ket-manual').value = ""; localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
+                    
+                    // PANGGIL FUNGSI CLOUD DI SINI
+                    simpanDataKeCloud(); 
+                    
+                    document.getElementById('student-ket-manual').value = ""; 
+                    localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); 
+                    alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
                 } else { alert("Password (NISN) yang Anda masukkan salah!"); return; }
             } else if (role === "admin") {
-                if(usernameVal === "admin" && pass === "admin123") { isAdminLoggedIn = true; unlockAdminFeatures(); alert("Selamat datang Bapak Wali Kelas!"); } else { alert("Username/Password Salah! (Gunakan user: admin, pw: admin123)."); return; }
+                if(usernameVal === "admin" && pass === "admin123") { 
+                    isAdminLoggedIn = true; 
+                    unlockAdminFeatures(); 
+                    alert("Selamat datang Bapak Wali Kelas!"); 
+                } else { alert("Username/Password Salah!"); return; }
             } else {
-                isAdminLoggedIn = false; alert("Login berhasil sebagai " + role.toUpperCase());
+                isAdminLoggedIn = false; 
+                alert("Login berhasil sebagai " + role.toUpperCase());
             }
 
-            currentRole = role; localStorage.setItem('siwali_logged_in', 'true'); localStorage.setItem('siwali_role', role); localStorage.setItem('siwali_is_admin', isAdminLoggedIn ? 'true' : 'false'); localStorage.setItem('siwali_active_tab', 'dashboard');
-            updateHeaderProfileInfo(); renderAllViews(); let music = document.getElementById('bg-music-mars'); if(music) { music.play().catch(err => console.log("Gagal audio")); }
-            document.getElementById('login-page').style.display = "none"; document.getElementById('app-page').style.display = "block"; switchTab('dashboard');
+            currentRole = role; 
+            localStorage.setItem('siwali_logged_in', 'true'); 
+            localStorage.setItem('siwali_role', role); 
+            localStorage.setItem('siwali_is_admin', isAdminLoggedIn ? 'true' : 'false'); 
+            localStorage.setItem('siwali_active_tab', 'dashboard');
+            
+            updateHeaderProfileInfo(); 
+            renderAllViews(); 
+            
+            let music = document.getElementById('bg-music-mars'); 
+            if(music) { music.play().catch(err => console.log("Gagal audio")); }
+            
+            document.getElementById('login-page').style.display = "none"; 
+            document.getElementById('app-page').style.display = "block"; 
+            switchTab('dashboard');
         }
 
         // --- NAVIGASI ---
