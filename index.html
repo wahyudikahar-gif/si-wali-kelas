@@ -727,10 +727,30 @@
             { nis: "102402", nama: "Budi Santoso", jk: "L", hp: "08987654321", foto: "", status: "A", ket: "Tanpa Keterangan", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false },
             { nis: "102403", nama: "Citra Lestari", jk: "P", hp: "08571122334", foto: "", status: "S", ket: "Demam Berdarah", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false }
         ];
+        // VVV--- PASTE KODE CLOUD BARU DI SINI ---VVV
+        const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxVv9_x9wuM2-VkacVwul5hnjbXM6Por_yunr_Wp5-j_4hQUsh0o6eFzOts6uIF7hUkww/exec"; // <-- GANTI DENGAN URL DARI GOOGLE
+
+        function simpanDataKeCloud() {
+            // Tetap simpan lokal agar aplikasi tidak terasa lemot
+            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+            
+            // Kirim data ke Google Sheets
+            fetch(CLOUD_URL, {
+                redirect: "follow",
+                method: 'POST',
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(dataSiswa)
+            }).then(res => console.log("Berhasil tersimpan di Cloud!"))
+              .catch(err => console.error("Gagal simpan ke Cloud", err));
+        }
+        // ^^^-------------------------------------^^^
 
         let dataSiswa = JSON.parse(localStorage.getItem('dataSiswaMaster'));
         if (!dataSiswa || dataSiswa.length === 0) {
-            dataSiswa = defaultSiswa; localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+
+        let dataSiswa = JSON.parse(localStorage.getItem('dataSiswaMaster'));
+        if (!dataSiswa || dataSiswa.length === 0) {
+            dataSiswa = defaultSiswa; simpanDataKeCloud();
         }
 
         // --- LOAD DATA AWAL & RECOVERY SESI ---
@@ -743,7 +763,7 @@
                 if(typeof s.catatan === 'undefined') s.catatan = "";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
             });
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+            simpanDataKeCloud();
 
             // Load Global Settings
             let savedRekapDay = localStorage.getItem('activeRekapDay'); if(savedRekapDay) document.getElementById('select-active-rekap').value = savedRekapDay;
@@ -794,7 +814,7 @@
 
         function renderAllViews() {
             dataSiswa.sort((a, b) => a.nama.localeCompare(b.nama));
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+            simpanDataKeCloud();
             renderDashboard(); renderDataSiswa(); renderFormAbsensi(); renderTabelAbsensi4Minggu(); renderKas(); renderTunggakanDashboard(); renderLunasDashboard(); handleRoleVisibility(); renderSemuaGambar(); loadCatatanDashboard();
         }
 
@@ -849,7 +869,7 @@
                     
                     let activeRekapDay = parseInt(localStorage.getItem('activeRekapDay') || "-1");
                     if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekap[activeRekapDay] = statusSiswa; }
-                    localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa)); document.getElementById('student-ket-manual').value = ""; localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
+                    simpanDataKeCloud(); document.getElementById('student-ket-manual').value = ""; localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
                 } else { alert("Password (NISN) yang Anda masukkan salah!"); return; }
             } else if (role === "admin") {
                 if(usernameVal === "admin" && pass === "admin123") { isAdminLoggedIn = true; unlockAdminFeatures(); alert("Selamat datang Bapak Wali Kelas!"); } else { alert("Username/Password Salah! (Gunakan user: admin, pw: admin123)."); return; }
@@ -898,7 +918,7 @@
                 let s = dataSiswa.find(x => x.nis === cb.value);
                 if(s) s.panggilanOrtu = cb.checked;
             });
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa)); 
+            simpanDataKeCloud(); 
             alert("Data panggilan orang tua berhasil disimpan!");
             renderDashboard(); 
         }
@@ -906,7 +926,7 @@
         function hapusPanggilanOrtu() { 
             if(confirm("Hapus semua panggilan orang tua?")) {
                 dataSiswa.forEach(s => s.panggilanOrtu = false);
-                localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+                simpanDataKeCloud();
                 populateCheckboxPanggilanOrtu();
                 renderDashboard();
                 alert("Semua panggilan telah dihapus.");
@@ -1047,7 +1067,7 @@
                 siswa.status = newStatus; siswa.ket = document.getElementById(`ket_${index}`).value;
                 if(activeRekapDay >= 0 && activeRekapDay < 20) { siswa.rekap[activeRekapDay] = newStatus; }
             });
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa)); renderDashboard(); renderTabelAbsensi4Minggu(); alert("Data Absensi Harian tersimpan! Dashboard dan Rekap Bulanan otomatis diperbarui."); switchTab('dashboard');
+            simpanDataKeCloud(); renderDashboard(); renderTabelAbsensi4Minggu(); alert("Data Absensi Harian tersimpan! Dashboard dan Rekap Bulanan otomatis diperbarui."); switchTab('dashboard');
         }
         function resetAbsensi() { if(confirm("Atur ulang status harian semua jadi HADIR?")) { dataSiswa.forEach(s => { s.status = 'H'; s.ket = ''; s.waktuAbsen = "-"; }); renderAllViews(); } }
         function renderTabelAbsensi4Minggu() {
@@ -1073,7 +1093,7 @@
         function simpanRekapBulanan() {
             let inputs = document.querySelectorAll('.input-absen');
             inputs.forEach(inp => { let sIdx = parseInt(inp.getAttribute('data-siswa-idx')); let dIdx = parseInt(inp.getAttribute('data-day-idx')); let val = inp.value.toUpperCase(); if (dataSiswa[sIdx]) { dataSiswa[sIdx].rekap[dIdx] = (val === 'H' || val === 'S' || val === 'I' || val === 'A') ? val : ""; } });
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa)); inputs.forEach(inp => inp.disabled = true); document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual Rekap'; document.getElementById('btn-save-rekap').classList.add('hidden'); renderTabelAbsensi4Minggu(); alert("Buku Rekap Bulanan berhasil diperbarui secara manual!");
+            simpanDataKeCloud(); inputs.forEach(inp => inp.disabled = true); document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual Rekap'; document.getElementById('btn-save-rekap').classList.add('hidden'); renderTabelAbsensi4Minggu(); alert("Buku Rekap Bulanan berhasil diperbarui secara manual!");
         }
         function downloadExcelRekapBulanan() {
             let tabel = document.getElementById('tabel-rekap-bulanan'); let tableClone = tabel.cloneNode(true); let dateHeaders = tableClone.querySelectorAll('.date-header'); dateHeaders.forEach(dt => { dt.parentElement.innerHTML = dt.parentElement.innerText.trim() + " " + (dt.value || ''); }); let inputs = tableClone.querySelectorAll('.input-absen'); inputs.forEach(inp => { inp.parentElement.innerHTML = inp.value; });
@@ -1092,7 +1112,7 @@
             document.getElementById('total-semua').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); document.getElementById('display-kas').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); document.getElementById('total-tunggakan').innerText = "Rp " + totalTunggakan.toLocaleString('id-ID'); document.getElementById('jml-tunggak').innerText = jumlahSiswaMenunggak;
         }
         function bukaAdminKas() { if (currentRole !== "admin" && currentRole !== "bendahara") { alert("Akses Ditolak!"); return; } let pass = prompt("Masukkan Password Keuangan:"); if(pass === "admin123") { isAdminKasUnlocked = true; document.getElementById('admin-area-kas').classList.remove('locked'); document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-unlock"></i> Mode Admin Aktif'; document.getElementById('btn-save-kas').style.display = "inline-block"; } else { alert("Password Salah!"); } }
-        function simpanKasDariForm() { if (!isAdminKasUnlocked) return; const currentDateStr = getFormatTanggalSaja(); document.querySelectorAll('.kas-checkbox-input').forEach(input => { let studentIdx = parseInt(input.getAttribute('data-student')); let weekIdx = parseInt(input.getAttribute('data-week')); let isCheckedNow = input.checked; let wasCheckedBefore = dataSiswa[studentIdx].kas[weekIdx]; dataSiswa[studentIdx].kas[weekIdx] = isCheckedNow; if (isCheckedNow && !wasCheckedBefore) { dataSiswa[studentIdx].kasTanggal[weekIdx] = currentDateStr; } else if (!isCheckedNow) { dataSiswa[studentIdx].kasTanggal[weekIdx] = ""; } }); localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa)); isAdminKasUnlocked = false; document.getElementById('admin-area-kas').classList.add('locked'); document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin Kas'; document.getElementById('btn-save-kas').style.display = "none"; renderAllViews(); alert("Data Buku Kas Berhasil Disimpan Permanen!"); }
+        function simpanKasDariForm() { if (!isAdminKasUnlocked) return; const currentDateStr = getFormatTanggalSaja(); document.querySelectorAll('.kas-checkbox-input').forEach(input => { let studentIdx = parseInt(input.getAttribute('data-student')); let weekIdx = parseInt(input.getAttribute('data-week')); let isCheckedNow = input.checked; let wasCheckedBefore = dataSiswa[studentIdx].kas[weekIdx]; dataSiswa[studentIdx].kas[weekIdx] = isCheckedNow; if (isCheckedNow && !wasCheckedBefore) { dataSiswa[studentIdx].kasTanggal[weekIdx] = currentDateStr; } else if (!isCheckedNow) { dataSiswa[studentIdx].kasTanggal[weekIdx] = ""; } }); simpanDataKeCloud(); isAdminKasUnlocked = false; document.getElementById('admin-area-kas').classList.add('locked'); document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin Kas'; document.getElementById('btn-save-kas').style.display = "none"; renderAllViews(); alert("Data Buku Kas Berhasil Disimpan Permanen!"); }
         function downloadExcelKas() {
             let tableHTML = `<table border="1"><thead><tr><th colspan="9" style="font-size:16px; font-weight:bold; text-align:center;">LAPORAN BENDAHARA</th></tr><tr><th style="background-color: #f2f2f2;">No.</th><th style="background-color: #f2f2f2;">Nama Siswa</th><th style="background-color: #f2f2f2;">M1 (Rp)</th><th style="background-color: #f2f2f2;">M2 (Rp)</th><th style="background-color: #f2f2f2;">M3 (Rp)</th><th style="background-color: #f2f2f2;">M4 (Rp)</th><th style="background-color: #f2f2f2;">Total</th><th style="background-color: #f2f2f2;">Keterangan</th><th style="background-color: #f2f2f2;">Tanggal Pembayaran Otomatis</th></tr></thead><tbody>`;
             dataSiswa.forEach((s, idx) => { let m1 = s.kas[0] ? iuranKasPerMinggu : 0; let m2 = s.kas[1] ? iuranKasPerMinggu : 0; let m3 = s.kas[2] ? iuranKasPerMinggu : 0; let m4 = s.kas[3] ? iuranKasPerMinggu : 0; let totalSiswa = m1 + m2 + m3 + m4; let hitungCentang = s.kas.filter(Boolean).length; let keterangan = hitungCentang === totalMingguKas ? "Lunas" : `Menunggak ${totalMingguKas - hitungCentang} Minggu`; let tglBayar = []; for(let i = 0; i < 4; i++) { if(s.kas[i] && s.kasTanggal && s.kasTanggal[i]) tglBayar.push(`M${i+1}: ${s.kasTanggal[i]}`); } let stringTanggal = tglBayar.length > 0 ? tglBayar.join(' | ') : '-'; tableHTML += `<tr><td style="text-align:center;">${idx + 1}</td><td><strong>${s.nama}</strong></td><td style="text-align:right;">${m1}</td><td style="text-align:right;">${m2}</td><td style="text-align:right;">${m3}</td><td style="text-align:right;">${m4}</td><td style="text-align:right; font-weight:bold;">${totalSiswa}</td><td style="text-align:center;">${keterangan}</td><td>${stringTanggal}</td></tr>`; });
@@ -1199,7 +1219,7 @@
                 }
             });
 
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+            simpanDataKeCloud();
             alert("Catatan berhasil disimpan!");
             loadCatatanDashboard();
         }
