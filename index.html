@@ -21,7 +21,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; }
+        body { background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
 
         /* --- HALAMAN LOGIN --- */
         #login-page { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
@@ -36,8 +36,8 @@
         /* --- HALAMAN APLIKASI UTAMA --- */
         #app-page { display: none; }
         
-        /* --- SIDEBAR --- */
-        .sidebar { width: 260px; background-color: var(--primary); color: var(--white); min-height: 100vh; padding: 20px 0; position: fixed; z-index: 10; display: flex; flex-direction: column; justify-content: space-between;}
+        /* --- SIDEBAR & NAVBAR MOBILE --- */
+        .sidebar { width: 260px; background-color: var(--primary); color: var(--white); min-height: 100vh; padding: 20px 0; position: fixed; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s ease; }
         .school-brand { text-align: center; padding: 10px 20px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
         .school-logo { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 10px; border: 3px solid var(--secondary); background-color: var(--white); object-fit: cover; }
         .school-brand h3 { font-size: 16px; color: var(--white); }
@@ -47,19 +47,23 @@
         .sidebar ul li i.menu-icon { margin-right: 15px; width: 20px; text-align: center; }
         .sidebar ul li:hover, .sidebar ul li.active { background-color: rgba(255,255,255,0.1); border-left: 4px solid var(--secondary); }
         .sidebar-logout { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-top: auto; }
+        
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 99; }
+        .mobile-nav-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--primary); margin-right: 15px; }
 
         /* --- MAIN CONTENT & TABS --- */
-        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 30px 40px; }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 30px 40px; transition: 0.3s ease; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         /* --- HEADER & CARDS --- */
         .header { display: flex; justify-content: space-between; align-items: center; background-color: var(--white); padding: 20px 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        .header-left { display: flex; align-items: center; }
         .profile-section { display: flex; align-items: center; }
         .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--secondary); }
         .header-info h2 { color: var(--primary); font-size: 20px; margin-bottom: 3px;}
         .header-info p { color: #555; font-size: 14px; font-weight: bold; background-color: var(--bg-light); display: inline-block; padding: 4px 10px; border-radius: 15px;}
-        .time-section { text-align: right; background-color: var(--bg-light); padding: 10px 20px; border-radius: 8px; border-left: 4px solid var(--secondary); margin-left: auto; display: flex; align-items: center; gap: 15px;}
+        .time-section { text-align: right; background-color: var(--bg-light); padding: 10px 20px; border-radius: 8px; border-left: 4px solid var(--secondary); display: flex; align-items: center; gap: 15px;}
         .time-section .clock { font-size: 24px; font-weight: bold; color: var(--primary); }
         .time-section .date { font-size: 13px; color: #555; }
         
@@ -67,7 +71,7 @@
         .card { background-color: var(--white); padding: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
         .card.alert { border-bottom: 4px solid var(--danger); }
         .card-info h4 { color: #777; font-size: 13px; margin-bottom: 5px; text-transform: uppercase;}
-        .card-info h2 { color: var(--primary); font-size: 26px; }
+        .card-info h2 { color: var(--primary); font-size: 24px; }
         .card-icon { font-size: 35px; color: var(--secondary); opacity: 0.8; }
         .card.alert .card-icon { color: var(--danger); }
 
@@ -76,24 +80,24 @@
         .panggilan-ortu-card { background: var(--danger); color: var(--white); padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 20px; border-left: 8px solid #8B0000; display: flex; align-items: center; overflow: hidden; position: relative; }
         .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; }
         
-        /* Modifikasi Class Animasi Teks */
-        .teks-bergerak { display: inline-block; font-size: 17px; font-weight: bold; color: #ffffff; text-transform: uppercase; animation: smooth-marquee 25s linear infinite; padding-left: 100%; }
-        .teks-bergerak-panggilan { display: inline-block; font-size: 19px; font-weight: bold; color: #ffffff; text-transform: uppercase; animation: smooth-marquee-fast 15s linear infinite; padding-left: 100%; letter-spacing: 1px; }
-        .teks-bergerak-dark { display: inline-block; font-size: 15px; font-weight: bold; color: #333333; animation: smooth-marquee 20s linear infinite; padding-left: 100%; }
-        .teks-bergerak-piket { display: inline-block; font-family: 'Arial Black', sans-serif; font-size: 16px; font-weight: bold; color: var(--text-dark); animation: smooth-marquee 20s linear infinite; padding-left: 100%; text-transform: uppercase; }
+        .teks-bergerak { display: inline-block; font-size: 16px; font-weight: bold; color: #ffffff; text-transform: uppercase; animation: smooth-marquee 25s linear infinite; padding-left: 100%; }
+        .teks-bergerak-panggilan { display: inline-block; font-size: 18px; font-weight: bold; color: #ffffff; text-transform: uppercase; animation: smooth-marquee-fast 15s linear infinite; padding-left: 100%; letter-spacing: 1px; }
+        .teks-bergerak-dark { display: inline-block; font-size: 14px; font-weight: bold; color: #333333; animation: smooth-marquee 20s linear infinite; padding-left: 100%; }
+        .teks-bergerak-piket { display: inline-block; font-family: 'Arial Black', sans-serif; font-size: 15px; font-weight: bold; color: var(--text-dark); animation: smooth-marquee 20s linear infinite; padding-left: 100%; text-transform: uppercase; }
         
         @keyframes smooth-marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         @keyframes smooth-marquee-fast { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         
-        .admin-control-box { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 20px; align-items: center;}
-        .admin-control-box input, .admin-control-box textarea { padding: 8px; border: 1px solid #ccc; border-radius: 5px; flex: 1; }
+        .admin-control-box { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;}
+        .admin-control-box input, .admin-control-box textarea { padding: 8px; border: 1px solid #ccc; border-radius: 5px; flex: 1; min-width: 200px; }
 
         /* --- PANELS & TABLES --- */
         .panels-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;}
-        .panel { background-color: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); margin-bottom: 20px; }
-        .panel h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; }
+        .panel { background-color: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); margin-bottom: 20px; overflow: hidden; }
+        .panel h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; font-size: 18px;}
         
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .table-responsive { overflow-x: auto; width: 100%; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
         table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: middle;}
         table th { background-color: var(--bg-light); color: var(--primary); font-weight: bold;}
         table.text-center th, table.text-center td { text-align: center; }
@@ -105,7 +109,7 @@
         .bg-blue { background-color: var(--info); }
         .bg-dark { background-color: #34495e; }
 
-        .btn-action { background: var(--secondary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 13px;}
+        .btn-action { background: var(--secondary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; justify-content: center;}
         .btn-action.danger { background: var(--danger); }
         .btn-action.excel { background: #27ae60; }
         .btn-action.upload { background: #2980b9; } 
@@ -113,10 +117,10 @@
         .hidden { display: none !important; }
         
         .radio-group { display: flex; gap: 10px; flex-wrap: wrap;}
-        .radio-group label { cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 3px; }
+        .radio-group label { cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 3px; font-size: 13px; }
         input[type="text"], input[type="number"], select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
         
-        .student-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; }
+        .student-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; flex-shrink: 0;}
         .avatar-container { display: flex; align-items: center; gap: 10px; }
         
         /* --- Uang Kas & Settings --- */
@@ -126,27 +130,26 @@
         .form-tambah { background: #fdfdfd; padding: 15px; border: 1px dashed var(--secondary); border-radius: 8px; margin-bottom: 20px; display: none; }
         .form-grid { display: grid; grid-template-columns: 1fr 2fr 1fr 2fr; gap: 15px; align-items: center; }
         
-        .settings-panel { background-color: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 600px; margin-bottom: 20px;}
-        .profile-edit { display: flex; align-items: center; margin-bottom: 30px; }
-        .profile-edit img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--secondary); margin-right: 20px; }
+        .settings-panel { background-color: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; margin-bottom: 20px;}
+        .profile-edit { display: flex; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;}
+        .profile-edit img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--secondary); }
         .upload-btn-wrapper { position: relative; overflow: hidden; display: inline-block; }
         .btn-upload { border: none; background-color: var(--primary); color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
         .upload-btn-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; width: 100%; }
         .form-group label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 8px; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;}
         
         /* Image Preview Dashboard */
-        .img-dashboard-preview { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top:10px; display: none;}
+        .img-dashboard-preview { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top:10px; display: none; height: auto;}
         .empty-state-text { color: #777; font-style: italic; font-size: 13px; text-align: center; padding: 15px;}
 
         /* --- INSTAGRAM INTEGRATION COMPONENT --- */
         .instagram-grid { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
-        .instagram-btn { background: var(--instagram); color: var(--white); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .instagram-btn { background: var(--instagram); color: var(--white); padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .instagram-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
         /* --- TAMBAHAN CSS UNTUK TABEL ABSENSI 4 MINGGU --- */
-        .table-responsive { overflow-x: auto; width: 100%; margin-top: 15px; border: 1px solid #eee; }
         .tabel-rekap { min-width: 1600px; text-align: center; border-collapse: collapse; }
         .tabel-rekap th, .tabel-rekap td { border: 1px solid #ccc; padding: 8px; font-size: 13px; }
         .tabel-rekap th { background-color: var(--primary); color: white; }
@@ -157,6 +160,41 @@
         .input-absen { width: 30px; height: 30px; text-align: center; text-transform: uppercase; font-weight: bold; border: 1px solid #ddd; border-radius: 4px; }
         .input-absen:focus { border-color: var(--secondary); outline: none; background: #e8f5e9; }
         .input-absen:disabled { background: #f4f4f4; border: 1px dashed #ccc; color: #555;}
+        
+        /* ==============================================================
+           MEDIA QUERIES UNTUK TAMPILAN SMARTPHONE (RESPONSIVE)
+           ============================================================== */
+        @media screen and (max-width: 1024px) {
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+            .panels-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media screen and (max-width: 768px) {
+            /* Navbar Top Bar on Mobile */
+            .mobile-nav-toggle { display: block; }
+            .sidebar { transform: translateX(-100%); box-shadow: 4px 0 15px rgba(0,0,0,0.2); }
+            .sidebar.show { transform: translateX(0); }
+            .sidebar-overlay.show { display: block; }
+            
+            .main-content { margin-left: 0; width: 100%; padding: 15px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 15px; padding: 15px; }
+            .time-section { width: 100%; justify-content: space-between; border-left: none; border-top: 4px solid var(--secondary); padding-top: 15px; }
+            
+            .cards-grid { grid-template-columns: 1fr; gap: 15px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 15px; }
+            
+            .panel { padding: 15px; }
+            .form-grid { grid-template-columns: 1fr; }
+            
+            /* Responsive table adjustments */
+            table th, table td { font-size: 12px; padding: 8px; }
+            .btn-action { font-size: 11px; padding: 8px 10px; }
+            
+            /* Admin control box stacking */
+            .admin-control-box { flex-direction: column; align-items: stretch; }
+            .admin-control-box > div { display: flex; justify-content: space-between; gap: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -187,9 +225,8 @@
                         <label style="color: var(--secondary);"><input type="radio" name="student_status" value="H" checked> Hadir</label>
                         <label style="color: var(--warning);"><input type="radio" name="student_status" value="S"> Sakit</label>
                         <label style="color: var(--info);"><input type="radio" name="student_status" value="I"> Izin</label>
-                        <label style="color: var(--danger);"><input type="radio" name="student_status" value="A"> Tanpa Keterangan</label>
                     </div>
-                    <input type="text" id="student-ket-manual" placeholder="Tulis alasan keterangan jika Sakit/Izin (opsional)..." style="margin-bottom: 8px;">
+                    <input type="text" id="student-ket-manual" placeholder="Tulis alasan jika Sakit/Izin..." style="margin-bottom: 8px;">
                 </div>
 
                 <button type="submit" id="btn-submit">Masuk Aplikasi</button>
@@ -199,8 +236,11 @@
 
 
     <div id="app-page">
-        <!-- Struktur sidebar, header, dan konten tetap sama seperti aslinya -->
-        <div class="sidebar">
+        <!-- Overlay untuk menu HP -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar Utama -->
+        <div class="sidebar" id="main-sidebar">
             <div>
                 <div class="school-brand">
                     <img src="sega.jpg.jpg" alt="Logo SMPN 3 Balikpapan" class="school-logo">
@@ -236,13 +276,17 @@
             </div>
         </div>
 
+        <!-- Konten Utama -->
         <div class="main-content">
             <div class="header">
-                <div class="profile-section">
-                    <img id="header-profile-pic" src="foto_wahyudi_2.jpeg" alt="Foto Profil" class="profile-pic">
-                    <div class="header-info">
-                        <h2 id="header-user-fullname">Wahyudi Kahar, S.Pd</h2>
-                        <p id="header-user-role"><i class="fas fa-chalkboard-teacher"></i> Wali Kelas IX F</p>
+                <div class="header-left">
+                    <div class="mobile-nav-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+                    <div class="profile-section">
+                        <img id="header-profile-pic" src="foto_wahyudi_2.jpeg" alt="Foto Profil" class="profile-pic">
+                        <div class="header-info">
+                            <h2 id="header-user-fullname">Wahyudi Kahar, S.Pd</h2>
+                            <p id="header-user-role"><i class="fas fa-chalkboard-teacher"></i> Wali Kelas IX F</p>
+                        </div>
                     </div>
                 </div>
                 <div class="time-section">
@@ -250,7 +294,7 @@
                         <div class="clock" id="live-clock">00:00:00</div>
                         <div class="date" id="live-date">Memuat tanggal...</div>
                     </div>
-                    <button onclick="softRefreshApp()" class="btn-action" style="background:var(--info); padding: 12px 15px;" title="Refresh Data Sistem"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button onclick="softRefreshApp()" class="btn-action" style="background:var(--info); padding: 10px;" title="Refresh Data Sistem"><i class="fas fa-sync-alt"></i></button>
                 </div>
             </div>
 
@@ -286,10 +330,12 @@
                 <div class="panels-grid">
                     <div class="panel">
                         <h3><i class="fas fa-list-alt"></i> Pantauan Absensi Terkini</h3>
-                        <table>
-                            <thead><tr><th>Siswa</th><th>Status Hari Ini</th><th>Keterangan</th><th>Waktu Absen</th></tr></thead>
-                            <tbody id="tabel-dashboard-absen"></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Siswa</th><th>Status Hari Ini</th><th>Keterangan</th><th>Waktu Absen</th></tr></thead>
+                                <tbody id="tabel-dashboard-absen"></tbody>
+                            </table>
+                        </div>
                     </div>
                     
                     <div>
@@ -299,32 +345,34 @@
                             
                             <div id="admin-agenda-box" class="hidden admin-only-element" style="border-top:1px dashed #ccc; padding-top: 10px;">
                                 <textarea id="input-agenda" rows="3" style="width:100%; margin-bottom:5px;" placeholder="Ubah agenda kelas di sini..."></textarea>
-                                <div style="display:flex; gap:5px;">
+                                <div style="display:flex; gap:5px; flex-wrap:wrap;">
                                     <button onclick="saveAgenda()" class="btn-action" style="font-size:11px; padding:6px 10px;"><i class="fas fa-save"></i> Save</button>
                                     <button onclick="editAgenda()" class="btn-action" style="background:#f39c12; font-size:11px; padding:6px 10px;"><i class="fas fa-edit"></i> Edit</button>
                                     <button onclick="hapusAgenda()" class="btn-action" style="background:#e74c3c; font-size:11px; padding:6px 10px;"><i class="fas fa-trash"></i> Hapus</button>
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="panel" id="panel-dashboard-catatan" style="border-left: 5px solid var(--info); display: none;">
+                            <h3 style="color: var(--info);"><i class="fas fa-sticky-note"></i> Catatan Khusus Untukmu</h3>
+                            <div style="overflow: hidden; white-space: nowrap; background:#f9f9f9; padding: 12px; border-radius:5px; border:1px solid #ddd;">
+                                <span class="teks-bergerak-dark" id="display-catatan-siswa">Belum ada catatan pribadi.</span>
+                            </div>
+                        </div>
 
                         <div class="panel" style="border-left: 5px solid var(--danger);">
                             <h3 style="color: var(--danger);"><i class="fas fa-user-times"></i> Daftar Siswa Alpa</h3>
-                            <table style="font-size: 13px;">
-                                <thead style="display:none;"><tr><th>Nama</th><th>NISN</th></tr></thead>
-                                <tbody id="tabel-dashboard-alpa"></tbody>
-                            </table>
-                        </div>
-                        
-                        <div class="panel" id="panel-dashboard-catatan" style="border-left: 5px solid var(--info); display: none;">
-                            <h3 style="color: var(--info);"><i class="fas fa-sticky-note"></i> Keterangan / Catatan Siswa</h3>
-                            <div style="overflow: hidden; white-space: nowrap; background:#f9f9f9; padding: 12px; border-radius:5px; border:1px solid #ddd;">
-                                <span class="teks-bergerak-dark" id="display-catatan-siswa">Belum ada catatan pribadi.</span>
+                            <div class="table-responsive">
+                                <table style="font-size: 13px;">
+                                    <thead style="display:none;"><tr><th>Nama</th><th>NISN</th></tr></thead>
+                                    <tbody id="tabel-dashboard-alpa"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="panels-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="panels-grid">
                     <div class="panel">
                         <h3 style="color: var(--primary);"><i class="fas fa-sitemap"></i> Struktur Kelas</h3>
                         <div style="text-align: center;">
@@ -341,7 +389,7 @@
                     </div>
                 </div>
 
-                <div class="panels-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="panels-grid">
                     <div class="panel" id="panel-jadwal-pelajaran-dashboard">
                         <h3 style="color: var(--info);"><i class="fas fa-calendar-alt"></i> Jadwal Mata Pelajaran</h3>
                         <div id="display-jadwal-dashboard" style="text-align: center;">
@@ -351,13 +399,13 @@
                     </div>
                     
                     <div class="panel">
-                        <h3 style="color: var(--secondary);"><i class="fas fa-broom"></i> Foto Petugas Piket (Max 2)</h3>
-                        <div style="display: flex; gap: 10px; justify-content: center;">
-                            <div style="width: 50%; text-align: center;">
+                        <h3 style="color: var(--secondary);"><i class="fas fa-broom"></i> Foto Petugas Piket</h3>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <div style="width: 48%; min-width: 120px; text-align: center;">
                                 <img id="dash-piket-1" class="img-dashboard-preview">
                                 <p id="txt-no-piket-1" class="empty-state-text">Foto 1 Kosong</p>
                             </div>
-                            <div style="width: 50%; text-align: center;">
+                            <div style="width: 48%; min-width: 120px; text-align: center;">
                                 <img id="dash-piket-2" class="img-dashboard-preview">
                                 <p id="txt-no-piket-2" class="empty-state-text">Foto 2 Kosong</p>
                             </div>
@@ -378,27 +426,31 @@
 
                 <div class="panel" id="panel-lunas-dashboard">
                     <h3 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> Daftar Siswa Lunas Uang Kas Kelas (M1-M4)</h3>
-                    <table>
-                        <thead><tr><th>Nama Lengkap Siswa</th><th>NISN</th><th>Status Pembayaran</th></tr></thead>
-                        <tbody id="tabel-dashboard-lunas"></tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Nama Lengkap Siswa</th><th>NISN</th><th>Status Pembayaran</th></tr></thead>
+                            <tbody id="tabel-dashboard-lunas"></tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="panel" id="panel-tunggakan-dashboard">
                     <h3 style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Daftar Tunggakan Uang Kas Siswa (M1-M4)</h3>
-                    <table>
-                        <thead><tr><th>Nama Lengkap Siswa</th><th>Minggu Belum Dibayar</th><th>Total Tunggakan</th></tr></thead>
-                        <tbody id="tabel-dashboard-tunggakan"></tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Nama Lengkap Siswa</th><th>Minggu Belum Dibayar</th><th>Total Tunggakan</th></tr></thead>
+                            <tbody id="tabel-dashboard-tunggakan"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Tab Siswa -->
             <div id="tab-siswa" class="tab-content">
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                        <h3><i class="fas fa-users-cog"></i> Pusat Data Siswa (Khusus Admin)</h3>
-                        <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <h3><i class="fas fa-users-cog"></i> Pusat Data Siswa</h3>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                             <button onclick="toggleFormTambah()" class="btn-action"><i class="fas fa-user-plus"></i> Tambah Manual</button>
                             <input type="file" id="file-excel" accept=".xlsx, .xls, .csv" style="display:none;" onchange="prosesUploadExcel(event)">
                             <button onclick="document.getElementById('file-excel').click()" class="btn-action upload"><i class="fas fa-upload"></i> Upload Excel</button>
@@ -407,7 +459,7 @@
                     </div>
 
                     <div class="form-tambah" id="form-tambah-siswa">
-                        <h4 style="margin-bottom:10px; color:var(--primary);"><i class="fas fa-edit"></i> Form Input Siswa Baru Manual</h4>
+                        <h4 style="margin-bottom:10px; color:var(--primary);"><i class="fas fa-edit"></i> Form Input Siswa Baru</h4>
                         <div class="form-grid">
                             <label>NISN</label> <input type="number" id="input-nis" placeholder="Contoh: 102404">
                             <label>Nama Lengkap</label> <input type="text" id="input-nama" placeholder="Masukkan nama...">
@@ -417,21 +469,23 @@
                         </div>
                         <div style="margin-top: 15px; text-align:right;">
                             <button onclick="toggleFormTambah()" class="btn-action" style="background:#7f8c8d;">Batal</button>
-                            <button onclick="simpanSiswaBaru()" class="btn-action"><i class="fas fa-save"></i> Save Data Siswa</button>
+                            <button onclick="simpanSiswaBaru()" class="btn-action"><i class="fas fa-save"></i> Save Data</button>
                         </div>
                     </div>
 
-                    <table id="tabel-data-siswa-induk">
-                        <thead><tr><th>No</th><th>NISN</th><th>Foto</th><th>Nama Lengkap</th><th>L/P</th><th>No. HP Ortu</th><th>Aksi</th></tr></thead>
-                        <tbody id="tabel-data-siswa"></tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="tabel-data-siswa-induk">
+                            <thead><tr><th>No</th><th>NISN</th><th>Foto</th><th>Nama Lengkap</th><th>L/P</th><th>No. HP Ortu</th><th>Aksi</th></tr></thead>
+                            <tbody id="tabel-data-siswa"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Tab Absensi -->
             <div id="tab-absensi" class="tab-content">
                 <div class="panel" style="background: #e8f5e9; border: 1px solid #27ae60;">
-                    <h4 style="color: #27ae60; margin-bottom: 10px;"><i class="fas fa-link"></i> Pengaturan Sinkronisasi Otomatis</h4>
+                    <h4 style="color: #27ae60; margin-bottom: 10px;"><i class="fas fa-link"></i> Sinkronisasi Otomatis</h4>
                     <p style="font-size: 13px; margin-bottom: 10px;">Pilih hari berjalan saat ini. Jika siswa absen mandiri atau Admin menyimpan absen harian, datanya otomatis terekam ke Buku Rekap Bulanan.</p>
                     <select id="select-active-rekap" onchange="updateActiveRekap()" style="width: 100%; max-width: 400px; padding: 8px;">
                         <option value="-1">-- Matikan Sinkronisasi Otomatis --</option>
@@ -451,33 +505,32 @@
                 </div>
 
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                        <h3><i class="fas fa-calendar-check"></i> Form Absensi Harian (Sync ke Dashboard)</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap;">
+                        <h3><i class="fas fa-calendar-check"></i> Form Absensi Harian</h3>
                         <div>
                             <button onclick="resetAbsensi()" class="btn-action danger"><i class="fas fa-sync"></i> Reset Hadir Semua</button>
                         </div>
                     </div>
                     <form id="form-absensi-harian" onsubmit="simpanAbsensi(event)">
-                        <table>
-                            <thead><tr><th width="20%">Nama Siswa</th><th width="35%">Status Kehadiran</th><th width="25%">Keterangan</th><th width="20%">Waktu Absen</th></tr></thead>
-                            <tbody id="tabel-form-absensi"></tbody>
-                        </table>
-                        <button type="submit" class="btn-action" style="width: 100%; margin-top: 20px; font-size: 16px;"><i class="fas fa-save"></i> Save Absensi & Perbarui Dashboard</button>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Nama Siswa</th><th>Status Kehadiran</th><th>Keterangan</th><th>Waktu Absen</th></tr></thead>
+                                <tbody id="tabel-form-absensi"></tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn-action" style="width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;"><i class="fas fa-save"></i> Save Absensi & Perbarui Dashboard</button>
                     </form>
                 </div>
 
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <h3 style="color: var(--primary); margin:0;"><i class="fas fa-table"></i> Buku Rekap Absensi Bulanan (Sekretaris)</h3>
-                        <div style="display:flex; gap:10px;">
-                            <button id="btn-edit-rekap" onclick="toggleEditRekap()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit Manual Rekap</button>
+                        <div style="display:flex; gap:10px; flex-wrap: wrap;">
+                            <button id="btn-edit-rekap" onclick="toggleEditRekap()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit Manual</button>
                             <button id="btn-save-rekap" onclick="simpanRekapBulanan()" class="btn-action hidden" style="background:var(--primary);"><i class="fas fa-save"></i> Save Rekap</button>
-                            <button onclick="downloadExcelRekapBulanan()" class="btn-action excel"><i class="fas fa-file-excel"></i> Download Excel Rekap</button>
+                            <button onclick="downloadExcelRekapBulanan()" class="btn-action excel"><i class="fas fa-file-excel"></i> Download Excel</button>
                         </div>
                     </div>
-                    <p style="font-size: 13px; color: #555; margin-bottom: 10px;">
-                        Petunjuk: Klik "Edit Manual Rekap" untuk mengubah isian secara manual. Anda dapat mengubah lebar kolom Nama dan NISN dengan menarik ujung kanan garis kolom tersebut.
-                    </p>
                     
                     <div class="table-responsive">
                         <table class="tabel-rekap" id="tabel-rekap-bulanan">
@@ -507,11 +560,11 @@
             <!-- Tab Kas -->
             <div id="tab-kas" class="tab-content">
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-                        <h3><i class="fas fa-wallet"></i> Buku Kas Kelas (Periode Bulanan)</h3>
-                        <div style="display: flex; gap: 10px;">
-                            <button id="btn-download-kas-excel" onclick="downloadExcelKas()" class="btn-action excel hidden"><i class="fas fa-file-excel"></i> Download Excel Laporan</button>
-                            <button onclick="bukaAdminKas()" id="btn-admin-kas" class="btn-action"><i class="fas fa-lock"></i> Mode Admin Kas</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                        <h3><i class="fas fa-wallet"></i> Buku Kas Kelas (Bulanan)</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button id="btn-download-kas-excel" onclick="downloadExcelKas()" class="btn-action excel hidden"><i class="fas fa-file-excel"></i> Excel</button>
+                            <button onclick="bukaAdminKas()" id="btn-admin-kas" class="btn-action"><i class="fas fa-lock"></i> Mode Admin</button>
                         </div>
                     </div>
                     <div class="stats-grid">
@@ -521,15 +574,17 @@
                     </div>
                     <div id="admin-area-kas" class="locked">
                         <div style="margin-bottom: 10px; display: flex; justify-content: flex-end; gap: 10px;">
-                            <button id="btn-save-kas" onclick="simpanKasDariForm()" class="btn-action" style="background: var(--primary); display: none;"><i class="fas fa-save"></i> Save Data Kas</button>
-                            <button onclick="resetKasBulanan()" class="btn-action danger" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-trash-alt"></i> Reset Buku Kas</button>
+                            <button id="btn-save-kas" onclick="simpanKasDariForm()" class="btn-action" style="background: var(--primary); display: none;"><i class="fas fa-save"></i> Save Kas</button>
+                            <button onclick="resetKasBulanan()" class="btn-action danger" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-trash-alt"></i> Reset</button>
                         </div>
-                        <table id="tabel-kas-induk" class="text-center">
-                            <thead>
-                                <tr><th style="text-align:left;">Nama Siswa</th><th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>Sisa Tagihan</th><th>Aksi</th></tr>
-                            </thead>
-                            <tbody id="tabel-body-kas"></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="tabel-kas-induk" class="text-center">
+                                <thead>
+                                    <tr><th style="text-align:left;">Nama Siswa</th><th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>Sisa Tagihan</th><th>Aksi</th></tr>
+                                </thead>
+                                <tbody id="tabel-body-kas"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -558,11 +613,11 @@
                 </div>
 
                 <div class="settings-panel admin-only-setting">
-                    <h3 style="color:var(--danger); margin-bottom:15px;"><i class="fas fa-exclamation-triangle"></i> Pengaturan Panggilan Orang Tua</h3>
+                    <h3 style="color:var(--danger); margin-bottom:15px;"><i class="fas fa-exclamation-triangle"></i> Panggilan Orang Tua</h3>
                     <div class="admin-control-box" style="display:block; margin: 0;">
-                        <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--danger);">Pilih Siswa yang Dipanggil (Bisa lebih dari 1):</label>
+                        <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--danger);">Pilih Siswa yang Dipanggil:</label>
                         <div id="checkbox-panggilan-ortu" style="max-height: 120px; overflow-y: auto; background:#fff; border:1px solid #ccc; padding:8px; border-radius:4px; margin-bottom:15px;"></div>
-                        <div style="display:flex; gap:10px;">
+                        <div style="display:flex; gap:10px; flex-wrap: wrap;">
                             <button onclick="savePanggilanOrtu()" class="btn-action danger"><i class="fas fa-save"></i> Save</button>
                             <button onclick="editPanggilanOrtu()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
                             <button onclick="hapusPanggilanOrtu()" class="btn-action" style="background:#7f8c8d;"><i class="fas fa-trash"></i> Hapus Semua</button>
@@ -571,10 +626,10 @@
                 </div>
 
                 <div class="settings-panel admin-only-setting">
-                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-bullhorn"></i> Pengaturan Info Terbaru Dashboard</h3>
+                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-bullhorn"></i> Info Terbaru Dashboard</h3>
                     <div class="admin-control-box" style="margin: 0; display: block;">
                         <input type="text" id="input-pengumuman" placeholder="Tulis pengumuman baru di sini..." style="margin-bottom: 12px;">
-                        <div style="display:flex; gap:10px;">
+                        <div style="display:flex; gap:10px; flex-wrap: wrap;">
                             <button onclick="savePengumuman()" class="btn-action"><i class="fas fa-save"></i> Save</button>
                             <button onclick="editPengumuman()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
                             <button onclick="hapusPengumuman()" class="btn-action" style="background:#e74c3c;"><i class="fas fa-trash"></i> Hapus</button>
@@ -585,10 +640,10 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sitemap"></i> Pengaturan Struktur Kelas</h3>
                     <div class="form-group">
-                        <label>Upload Gambar Struktur Kelas (JPG/PNG)</label>
+                        <label>Upload Gambar Struktur Kelas (Maks. otomatis dikompres)</label>
                         <input type="file" id="input-struktur" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-struktur', 'tempStrukturBase64')">
-                        <img id="preview-img-struktur" class="img-dashboard-preview" style="max-height: 250px;">
-                        <div style="margin-top: 15px; display:flex; gap: 10px;">
+                        <img id="preview-img-struktur" class="img-dashboard-preview">
+                        <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn-action upload" onclick="saveImageToLocal('strukturKelas', window.tempStrukturBase64, 'Struktur Kelas')"><i class="fas fa-save"></i> Save Struktur</button>
                             <button class="btn-action danger" onclick="deleteImageFromLocal('strukturKelas', 'preview-img-struktur')"><i class="fas fa-trash"></i> Hapus Struktur</button>
                         </div>
@@ -598,10 +653,10 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-calendar-alt"></i> Pengaturan Jadwal Pelajaran</h3>
                     <div class="form-group">
-                        <label>Upload Jadwal Pelajaran (JPG/PNG)</label>
+                        <label>Upload Jadwal Pelajaran (Maks. otomatis dikompres)</label>
                         <input type="file" id="input-jadwal" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-jadwal', 'tempJadwalBase64')">
-                        <img id="preview-img-jadwal" class="img-dashboard-preview" style="max-height: 250px;">
-                        <div style="margin-top: 15px; display:flex; gap: 10px;">
+                        <img id="preview-img-jadwal" class="img-dashboard-preview">
+                        <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn-action upload" onclick="saveImageToLocal('jadwalPelajaran', window.tempJadwalBase64, 'Jadwal Pelajaran')"><i class="fas fa-save"></i> Save Jadwal</button>
                             <button class="btn-action danger" onclick="deleteImageFromLocal('jadwalPelajaran', 'preview-img-jadwal')"><i class="fas fa-trash"></i> Hapus Jadwal</button>
                         </div>
@@ -611,46 +666,46 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-calendar-day"></i> Pengaturan Jadwal Piket Harian</h3>
                     <div class="form-group">
-                        <label>Upload Gambar Jadwal Piket (JPG/PNG)</label>
+                        <label>Upload Gambar Jadwal Piket (Maks. otomatis dikompres)</label>
                         <input type="file" id="input-jadwal-piket" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-jadwal-piket', 'tempJadwalPiketBase64')">
-                        <img id="preview-img-jadwal-piket" class="img-dashboard-preview" style="max-height: 250px;">
-                        <div style="margin-top: 15px; display:flex; gap: 10px;">
+                        <img id="preview-img-jadwal-piket" class="img-dashboard-preview">
+                        <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn-action upload" onclick="saveImageToLocal('jadwalPiket', window.tempJadwalPiketBase64, 'Jadwal Piket')"><i class="fas fa-save"></i> Save Jadwal Piket</button>
-                            <button class="btn-action danger" onclick="deleteImageFromLocal('jadwalPiket', 'preview-img-jadwal-piket')"><i class="fas fa-trash"></i> Hapus Jadwal Piket</button>
+                            <button class="btn-action danger" onclick="deleteImageFromLocal('jadwalPiket', 'preview-img-jadwal-piket')"><i class="fas fa-trash"></i> Hapus Piket</button>
                         </div>
                     </div>
                 </div>
                 
                 <div class="settings-panel">
                     <h3 style="color:var(--secondary); margin-bottom:15px;"><i class="fas fa-edit"></i> Catatan Petugas Piket</h3>
-                    <p style="font-size:13px; color:#555; margin-bottom:10px;">Fitur text ini dapat diedit langsung oleh petugas piket, tampil tepat di bawah foto petugas piket pada dashboard utama (Tebal, Arial Black, Bergerak).</p>
+                    <p style="font-size:13px; color:#555; margin-bottom:10px;">Fitur text ini tampil tepat di bawah foto petugas piket pada dashboard utama.</p>
                     <div class="form-group">
                         <textarea id="input-catatan-piket" rows="3" placeholder="Tulis pesan atau instruksi dari petugas piket di sini..."></textarea>
                     </div>
-                    <div style="display:flex; gap: 10px;">
+                    <div style="display:flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn-action upload" onclick="saveCatatanPiket()"><i class="fas fa-save"></i> Save Teks Piket</button>
                         <button class="btn-action danger" onclick="hapusCatatanPiket()"><i class="fas fa-trash"></i> Hapus Teks</button>
                     </div>
                 </div>
 
                 <div class="settings-panel">
-                    <h3 style="color:var(--secondary); margin-bottom:15px;"><i class="fas fa-broom"></i> Upload Foto Petugas Piket (Maks 2 Foto JPG)</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <h3 style="color:var(--secondary); margin-bottom:15px;"><i class="fas fa-broom"></i> Upload Foto Petugas Piket</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                         <div class="form-group" style="background:#f4f9f8; padding:15px; border-radius:8px;">
-                            <label>Slot Foto 1 (Hanya .jpg)</label>
-                            <input type="file" accept=".jpg, .jpeg" onchange="handleImageUpload(event, 'preview-img-piket-1', 'tempPiket1Base64')">
+                            <label>Slot Foto 1 (.jpg / .png)</label>
+                            <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-1', 'tempPiket1Base64')">
                             <img id="preview-img-piket-1" class="img-dashboard-preview" style="max-height: 150px;">
                             <div style="margin-top: 10px; display:flex; gap: 5px; flex-wrap: wrap;">
-                                <button class="btn-action upload" onclick="saveImageToLocal('fotoPiket1', window.tempPiket1Base64, 'Foto Piket 1')"><i class="fas fa-save"></i> Save / Edit</button>
+                                <button class="btn-action upload" onclick="saveImageToLocal('fotoPiket1', window.tempPiket1Base64, 'Foto Piket 1')"><i class="fas fa-save"></i> Save</button>
                                 <button class="btn-action danger" onclick="deleteImageFromLocal('fotoPiket1', 'preview-img-piket-1')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
                         <div class="form-group" style="background:#f4f9f8; padding:15px; border-radius:8px;">
-                            <label>Slot Foto 2 (Hanya .jpg)</label>
-                            <input type="file" accept=".jpg, .jpeg" onchange="handleImageUpload(event, 'preview-img-piket-2', 'tempPiket2Base64')">
+                            <label>Slot Foto 2 (.jpg / .png)</label>
+                            <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-2', 'tempPiket2Base64')">
                             <img id="preview-img-piket-2" class="img-dashboard-preview" style="max-height: 150px;">
                             <div style="margin-top: 10px; display:flex; gap: 5px; flex-wrap: wrap;">
-                                <button class="btn-action upload" onclick="saveImageToLocal('fotoPiket2', window.tempPiket2Base64, 'Foto Piket 2')"><i class="fas fa-save"></i> Save / Edit</button>
+                                <button class="btn-action upload" onclick="saveImageToLocal('fotoPiket2', window.tempPiket2Base64, 'Foto Piket 2')"><i class="fas fa-save"></i> Save</button>
                                 <button class="btn-action danger" onclick="deleteImageFromLocal('fotoPiket2', 'preview-img-piket-2')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
@@ -658,21 +713,21 @@
                 </div>
 
                 <div class="settings-panel admin-only-setting">
-                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sticky-note"></i> Keterangan / Catatan Siswa</h3>
-                    <p style="font-size:13px; color:#555; margin-bottom:10px;">Fitur text berbentuk keterangan siswa yang diisi oleh admin. Tampil di dashboard siswa secara bergerak.</p>
+                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sticky-note"></i> Catatan Khusus Siswa</h3>
+                    <p style="font-size:13px; color:#555; margin-bottom:10px;">Fitur text berbentuk keterangan siswa yang diisi oleh admin. Tampil eksklusif hanya pada saat siswa yang bersangkutan login ke sistem.</p>
                     
                     <div class="form-group admin-only-element" id="admin-catatan-selector" style="display:none; margin-bottom:15px; padding:10px; background:#e4f0ec; border-radius:5px;">
-                        <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--primary);">Pilih Siswa yang akan diubah catatannya (Bisa lebih dari 1):</label>
+                        <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--primary);">Pilih Siswa (Bisa lebih dari 1):</label>
                         <div id="checkbox-siswa-catatan" style="max-height: 150px; overflow-y: auto; background:#fff; border:1px solid #ccc; padding:8px; border-radius:4px;"></div>
                     </div>
 
                     <div class="form-group">
                         <label id="label-catatan-teks">Isi Catatan Keterangan:</label>
-                        <textarea id="input-catatan-siswa" rows="4" placeholder="Tulis quote, target belajar, atau keterangan di sini..."></textarea>
+                        <textarea id="input-catatan-siswa" rows="4" placeholder="Tulis pesan, target belajar, peringatan di sini..."></textarea>
                     </div>
-                    <div style="display:flex; gap: 10px;">
-                        <button class="btn-action upload" onclick="saveCatatanSiswa()"><i class="fas fa-save"></i> Save / Edit Teks</button>
-                        <button class="btn-action danger" onclick="hapusCatatanSiswa()"><i class="fas fa-trash"></i> Hapus Teks</button>
+                    <div style="display:flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-action upload" onclick="saveCatatanSiswa()"><i class="fas fa-save"></i> Save Pesan</button>
+                        <button class="btn-action danger" onclick="hapusCatatanSiswa()"><i class="fas fa-trash"></i> Hapus Pesan</button>
                     </div>
                 </div>
 
@@ -681,14 +736,43 @@
         </div>
     </div>
 
-    <!-- SCRIPT JAVASCRIPT DIRAPIKAN DAN DIPERBAIKI -->
     <script>
-        // Variabel global untuk menyimpan base64 gambar sementara saat dipilih
         window.tempStrukturBase64 = ""; 
         window.tempJadwalBase64 = ""; 
         window.tempJadwalPiketBase64 = ""; 
         window.tempPiket1Base64 = ""; 
         window.tempPiket2Base64 = "";
+
+        // --- MANAJEMEN KOMPRESI GAMBAR (Pencegahan Memori Penuh di HP) ---
+        function compressImageAndProcess(file, callback) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800; 
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > MAX_WIDTH) {
+                        height = height * (MAX_WIDTH / width);
+                        width = MAX_WIDTH;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convert dengan kualitas 70% agar ringan di localstorage HP
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    callback(compressedBase64);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
 
         // --- WIDGET WAKTU REAL-TIME ---
         function updateTime() {
@@ -716,6 +800,14 @@
             return new Date().toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }); 
         }
 
+        // --- MENU TOGGLE MOBILE ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+
         // --- MANAJEMEN STATE APLIKASI ---
         let currentRole = "";
         let isAdminLoggedIn = false;
@@ -739,17 +831,52 @@
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(dataSiswa)
             }).then(res => console.log("Berhasil simpan ke Cloud!"))
-              .catch(err => console.error("Gagal:", err));
+              .catch(err => console.error("Gagal sinkron Cloud:", err));
         }
 
-        // --- BAGIAN YANG DIPERBAIKI: Menghapus duplikasi kode yang menyebabkan Syntax Error ---
         let dataSiswa = JSON.parse(localStorage.getItem('dataSiswaMaster'));
         if (!dataSiswa || dataSiswa.length === 0) {
             dataSiswa = defaultSiswa; 
             simpanDataKeCloud();
         }
 
-        // --- LOAD DATA AWAL & RECOVERY SESI ---
+        // Memuat seluruh pengaturan local storage setiap kali ada perubahan/refresh
+        function loadSettingsFromLocal() {
+            // Load Rekap
+            let savedRekapDay = localStorage.getItem('activeRekapDay'); 
+            if(savedRekapDay) document.getElementById('select-active-rekap').value = savedRekapDay;
+            
+            // Load Pengumuman
+            let savedPengumuman = localStorage.getItem('pengumuman'); 
+            let dispPengumuman = document.getElementById('display-pengumuman');
+            if(dispPengumuman) dispPengumuman.innerText = savedPengumuman || "Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin...";
+            
+            // Load Agenda
+            let savedAgenda = localStorage.getItem('agendaKelas'); 
+            let dispAgenda = document.getElementById('display-agenda');
+            if(dispAgenda) dispAgenda.innerText = savedAgenda || "Tidak ada agenda kelas saat ini.";
+            
+            // Load Foto Profil
+            let savedFotoWali = localStorage.getItem('fotoWaliKelas'); 
+            if(savedFotoWali) { 
+                document.getElementById('header-profile-pic').src = savedFotoWali; 
+                let previewFoto = document.getElementById('preview-foto');
+                if (previewFoto) previewFoto.src = savedFotoWali; 
+            }
+            
+            // Load Catatan Piket
+            let savedCatatanPiket = localStorage.getItem('catatanPiket');
+            let dashPiket = document.getElementById('dash-catatan-piket'); 
+            if(dashPiket) dashPiket.innerText = savedCatatanPiket || "Belum ada catatan petugas piket.";
+            let inpPiket = document.getElementById('input-catatan-piket'); 
+            if(inpPiket) inpPiket.value = savedCatatanPiket || "";
+
+            // Render semua gambar tersimpan (Jadwal, Struktur, dll) agar update di dashboard siswa
+            renderSemuaGambar();
+            // Load catatan personal bagi masing-masing akun (terutama siswa)
+            loadCatatanDashboard();
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             fetch(CLOUD_URL)
                 .then(res => res.json())
@@ -761,13 +888,24 @@
                     jalankanSistemAwal();
                 })
                 .catch(err => {
-                    console.log("Offline / Gagal ambil Cloud. Pakai data lokal.");
                     jalankanSistemAwal();
                 });
         });
 
+        // Sinkronisasi otomatis antar tab secara real-time
+        window.addEventListener('storage', function(e) {
+            let trackedKeys = ['pengumuman', 'agendaKelas', 'fotoWaliKelas', 'catatanPiket', 'jadwalPelajaran', 'strukturKelas', 'jadwalPiket', 'fotoPiket1', 'fotoPiket2'];
+            if (trackedKeys.includes(e.key) || e.key === 'dataSiswaMaster') {
+                if(e.key === 'dataSiswaMaster' && e.newValue) {
+                    dataSiswa = JSON.parse(e.newValue);
+                }
+                loadSettingsFromLocal();
+                renderAllViews();
+            }
+        });
+
         function jalankanSistemAwal() {
-            // Migrasi schema untuk menambahkan properti baru dengan aman
+            // Migrasi schema
             dataSiswa.forEach(s => {
                 if(!s.kasTanggal) s.kasTanggal = ["", "", "", ""];
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
@@ -777,32 +915,8 @@
             });
             localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
 
-            // Load Global Settings
-            let savedRekapDay = localStorage.getItem('activeRekapDay'); 
-            if(savedRekapDay) document.getElementById('select-active-rekap').value = savedRekapDay;
-            
-            let savedPengumuman = localStorage.getItem('pengumuman'); 
-            if(savedPengumuman) document.getElementById('display-pengumuman').innerText = savedPengumuman;
-            
-            let savedAgenda = localStorage.getItem('agendaKelas'); 
-            if(savedAgenda) document.getElementById('display-agenda').innerText = savedAgenda;
-            
-            let savedFotoWali = localStorage.getItem('fotoWaliKelas'); 
-            if(savedFotoWali) { 
-                document.getElementById('header-profile-pic').src = savedFotoWali; 
-                document.getElementById('preview-foto').src = savedFotoWali; 
-            }
-            
-            // Load Catatan Piket
-            let savedCatatanPiket = localStorage.getItem('catatanPiket');
-            if (savedCatatanPiket) {
-                let dash = document.getElementById('dash-catatan-piket'); 
-                if(dash) dash.innerText = savedCatatanPiket;
-                let inp = document.getElementById('input-catatan-piket'); 
-                if(inp) inp.value = savedCatatanPiket;
-            }
-
-            renderSemuaGambar();
+            // Muat seluruh pengaturan lokal untuk memastikan sinkronisasi jalan
+            loadSettingsFromLocal();
             renderTabelAbsensi4Minggu();
             
             let sessionLoggedIn = localStorage.getItem('siwali_logged_in');
@@ -834,16 +948,10 @@
             document.querySelectorAll('.admin-only-element').forEach(el => el.classList.remove('hidden'));
             
             let lockSiswa = document.getElementById('lock-siswa');
-            if(lockSiswa) {
-                lockSiswa.className = "fas fa-check-circle"; 
-                lockSiswa.style.color = "#45B69C";
-            }
+            if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "#45B69C"; }
             
             let lockAbsensi = document.getElementById('lock-absensi');
-            if(lockAbsensi) {
-                lockAbsensi.className = "fas fa-check-circle"; 
-                lockAbsensi.style.color = "#45B69C";
-            }
+            if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "#45B69C"; }
             
             populateCheckboxSiswaCatatan();
             let adminCatatanSelector = document.getElementById('admin-catatan-selector');
@@ -855,6 +963,8 @@
         function renderAllViews() {
             dataSiswa.sort((a, b) => a.nama.localeCompare(b.nama));
             simpanDataKeCloud();
+            
+            // Pastikan kita merender ulang semua informasi dashboard
             renderDashboard(); 
             renderDataSiswa(); 
             renderFormAbsensi(); 
@@ -863,8 +973,6 @@
             renderTunggakanDashboard(); 
             renderLunasDashboard(); 
             handleRoleVisibility(); 
-            renderSemuaGambar(); 
-            loadCatatanDashboard();
         }
 
         function handleRoleVisibility() {
@@ -882,8 +990,10 @@
 
         function softRefreshApp() { 
             dataSiswa = JSON.parse(localStorage.getItem('dataSiswaMaster')) || defaultSiswa; 
+            // Pastikan memuat ulang file dan text local storage ke dashboard
+            loadSettingsFromLocal();
             renderAllViews(); 
-            alert("Data aplikasi berhasil diperbarui secara real-time!"); 
+            alert("Data aplikasi (termasuk gambar & pesan) berhasil disinkronisasi & diperbarui!"); 
         }
 
         // --- INTERAKSI LOGIN ---
@@ -952,7 +1062,6 @@
                     alert("Username/Password Salah!"); return; 
                 }
             } else {
-                // Untuk Sekretaris dan Bendahara
                 isAdminLoggedIn = false; 
                 alert("Login berhasil sebagai " + role.toUpperCase());
             }
@@ -963,7 +1072,9 @@
             localStorage.setItem('siwali_is_admin', isAdminLoggedIn ? 'true' : 'false'); 
             localStorage.setItem('siwali_active_tab', 'dashboard');
             
-            updateHeaderProfileInfo(); 
+            updateHeaderProfileInfo();
+            // Penting: Tarik data setingan dan render ulang
+            loadSettingsFromLocal(); 
             renderAllViews(); 
             
             let music = document.getElementById('bg-music-mars'); 
@@ -982,6 +1093,15 @@
             let menuLi = document.getElementById('menu-' + tabName); 
             if(menuLi) menuLi.classList.add('active');
             localStorage.setItem('siwali_active_tab', tabName);
+            
+            // Auto close sidebar on mobile
+            document.getElementById('main-sidebar').classList.remove('show');
+            document.querySelector('.sidebar-overlay').classList.remove('show');
+
+            // Refresh settings if dashboard is clicked
+            if (tabName === 'dashboard') {
+                loadSettingsFromLocal();
+            }
         }
 
         function switchTabSecured(tabName) {
@@ -1003,13 +1123,12 @@
         }
 
         // --- DASHBOARD WIDGETS ---
-        
         function populateCheckboxPanggilanOrtu() {
             let container = document.getElementById('checkbox-panggilan-ortu');
             if(!container) return;
             container.innerHTML = "";
             dataSiswa.forEach(s => {
-                container.innerHTML += `<label style="display:block; margin-bottom:5px; cursor:pointer;"><input type="checkbox" value="${s.nis}" class="cb-panggilan-ortu" ${s.panggilanOrtu ? 'checked' : ''}> ${s.nama}</label>`;
+                container.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-panggilan-ortu" ${s.panggilanOrtu ? 'checked' : ''}> ${s.nama}</label>`;
             });
         }
         
@@ -1044,16 +1163,17 @@
             if(!teks.trim()) return; 
             localStorage.setItem('pengumuman', teks); 
             document.getElementById('display-pengumuman').innerText = teks; 
-            alert("Pengumuman baru disimpan!"); 
+            alert("Pengumuman baru disimpan dan tersinkronisasi ke Dashboard Siswa!"); 
         }
         
         function editPengumuman() { 
-            document.getElementById('input-pengumuman').value = document.getElementById('display-pengumuman').innerText; 
+            let cur = document.getElementById('display-pengumuman').innerText;
+            document.getElementById('input-pengumuman').value = (cur === "Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin...") ? "" : cur; 
         }
         
         function hapusPengumuman() { 
             localStorage.removeItem('pengumuman'); 
-            document.getElementById('display-pengumuman').innerText = "Tidak ada pengumuman."; 
+            document.getElementById('display-pengumuman').innerText = "Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin..."; 
             document.getElementById('input-pengumuman').value = ""; 
         }
         
@@ -1062,10 +1182,12 @@
             if(!teks.trim()) return; 
             localStorage.setItem('agendaKelas', teks); 
             document.getElementById('display-agenda').innerText = teks; 
+            alert("Agenda kelas telah diperbarui untuk siswa!");
         }
         
         function editAgenda() { 
-            document.getElementById('input-agenda').value = document.getElementById('display-agenda').innerText; 
+            let cur = document.getElementById('display-agenda').innerText;
+            document.getElementById('input-agenda').value = (cur === "Tidak ada agenda kelas saat ini.") ? "" : cur; 
         }
         
         function hapusAgenda() { 
@@ -1233,14 +1355,10 @@
 
         function uploadFotoSiswa(event, index) { 
             const file = event.target.files[0]; 
-            if (file) { 
-                const reader = new FileReader(); 
-                reader.onload = function(e) { 
-                    dataSiswa[index].foto = e.target.result; 
-                    renderAllViews(); 
-                }; 
-                reader.readAsDataURL(file); 
-            } 
+            compressImageAndProcess(file, function(base64Data) {
+                dataSiswa[index].foto = base64Data; 
+                renderAllViews(); 
+            });
         }
 
         function renderDataSiswa() {
@@ -1255,8 +1373,8 @@
                     <td><strong>${siswa.nama}</strong><br><input type="file" accept="image/*" onchange="uploadFotoSiswa(event, ${index})" style="font-size:10px; margin-top:5px; width:150px;"></td>
                     <td>${siswa.jk}</td>
                     <td>${siswa.hp || "-"}</td>
-                    <td class="action-btns">
-                        <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer; margin-right:5px;"><i class="fab fa-whatsapp"></i></button>
+                    <td class="action-btns" style="display:flex; gap:5px;">
+                        <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fab fa-whatsapp"></i></button>
                         <button onclick="deleteSiswa(${index})" style="background:var(--danger); border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>`;
@@ -1318,14 +1436,14 @@
                     <td><div class="avatar-container"><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"><strong>${siswa.nama}</strong></div></td>
                     <td>
                         <div class="radio-group">
-                            <label style="color: var(--secondary);"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> Hadir</label>
-                            <label style="color: var(--warning);"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> Sakit</label>
-                            <label style="color: var(--info);"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> Izin</label>
-                            <label style="color: var(--danger);"><input type="radio" name="status_${index}" value="A" ${siswa.status==='A'?'checked':''}> Alpa</label>
+                            <label style="color: var(--secondary);"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> H</label>
+                            <label style="color: var(--warning);"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> S</label>
+                            <label style="color: var(--info);"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> I</label>
+                            <label style="color: var(--danger);"><input type="radio" name="status_${index}" value="A" ${siswa.status==='A'?'checked':''}> A</label>
                         </div>
                     </td>
                     <td><input type="text" id="ket_${index}" value="${siswa.ket || ''}" placeholder="Alasan..."></td>
-                    <td><span style="font-size:12px; color:#555;">${siswa.waktuAbsen || '-'}</span></td>
+                    <td><span style="font-size:11px; color:#555;">${siswa.waktuAbsen || '-'}</span></td>
                 </tr>`;
             });
         }
@@ -1422,7 +1540,7 @@
             
             if (isEditing) { 
                 inputs.forEach(inp => inp.disabled = true); 
-                btnEdit.innerHTML = '<i class="fas fa-edit"></i> Edit Manual Rekap'; 
+                btnEdit.innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
                 btnSave.classList.add('hidden'); 
                 renderTabelAbsensi4Minggu(); 
             } else { 
@@ -1446,7 +1564,7 @@
             
             simpanDataKeCloud(); 
             inputs.forEach(inp => inp.disabled = true); 
-            document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual Rekap'; 
+            document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
             document.getElementById('btn-save-rekap').classList.add('hidden'); 
             renderTabelAbsensi4Minggu(); 
             alert("Buku Rekap Bulanan berhasil diperbarui secara manual!");
@@ -1494,9 +1612,9 @@
                 let pesanTagihan = `Halo Bapak/Ibu, menginfokan mengenai tabungan Uang Kas Kelas untuk anak Anda *${s.nama}*, saat ini tercatat memiliki sisa tunggakan sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon untuk diselesaikan, terima kasih.`;
                 
                 tbody.innerHTML += `<tr>
-                    <td style="text-align:left;"><strong>${s.nama}</strong></td>
+                    <td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>
                     ${checkboxes}
-                    <td style="color:var(--danger); font-weight:bold;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td>
+                    <td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td>
                     <td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td>
                 </tr>`;
             });
@@ -1515,7 +1633,7 @@
             if(pass === "admin123") { 
                 isAdminKasUnlocked = true; 
                 document.getElementById('admin-area-kas').classList.remove('locked'); 
-                document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-unlock"></i> Mode Admin Aktif'; 
+                document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-unlock"></i> Admin Aktif'; 
                 document.getElementById('btn-save-kas').style.display = "inline-block"; 
             } else { 
                 alert("Password Salah!"); 
@@ -1543,7 +1661,7 @@
             simpanDataKeCloud(); 
             isAdminKasUnlocked = false; 
             document.getElementById('admin-area-kas').classList.add('locked'); 
-            document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin Kas'; 
+            document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin'; 
             document.getElementById('btn-save-kas').style.display = "none"; 
             renderAllViews(); 
             alert("Data Buku Kas Berhasil Disimpan Permanen!"); 
@@ -1589,42 +1707,47 @@
 
         // --- PENGATURAN SYSTEM, GAMBAR, JADWAL & TEXT SISWA ---
         function previewDanSimpanFoto(event) { 
-            var reader = new FileReader(); 
-            reader.onload = function(){ 
-                document.getElementById('preview-foto').src = reader.result; 
-                document.getElementById('header-profile-pic').src = reader.result; 
-                localStorage.setItem('fotoWaliKelas', reader.result); 
-                alert("Foto profil sistem berhasil disimpan!"); 
-            }; 
-            if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]); 
+            const file = event.target.files[0];
+            compressImageAndProcess(file, function(base64Data) {
+                document.getElementById('preview-foto').src = base64Data; 
+                document.getElementById('header-profile-pic').src = base64Data; 
+                localStorage.setItem('fotoWaliKelas', base64Data); 
+                alert("Foto profil berhasil disimpan dan dikompresi otomatis!"); 
+            });
         }
         
         function handleImageUpload(event, previewId, globalVarName) {
             const file = event.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    window[globalVarName] = e.target.result;
-                    document.getElementById(previewId).src = window[globalVarName];
-                    document.getElementById(previewId).style.display = "block";
-                };
-                reader.readAsDataURL(file);
-            }
+            compressImageAndProcess(file, function(base64Data) {
+                window[globalVarName] = base64Data;
+                let preview = document.getElementById(previewId);
+                if(preview) {
+                    preview.src = base64Data;
+                    preview.style.display = "inline-block";
+                }
+            });
         }
 
         function saveImageToLocal(storageKey, base64Data, labelName) {
-            if(!base64Data) { alert(`Pilih gambar (JPG/PNG) untuk ${labelName} terlebih dahulu!`); return; }
-            localStorage.setItem(storageKey, base64Data);
-            renderSemuaGambar();
-            alert(`${labelName} berhasil disimpan & terintegrasi ke Dashboard!`);
+            if(!base64Data) { alert(`Pilih gambar untuk ${labelName} terlebih dahulu!`); return; }
+            try {
+                localStorage.setItem(storageKey, base64Data);
+                renderSemuaGambar();
+                alert(`${labelName} berhasil tersimpan & terhubung ke Dashboard Siswa!`);
+            } catch (e) {
+                alert("Gagal menyimpan! Memori perangkat Anda penuh, silakan hapus foto yang tidak diperlukan.");
+            }
         }
 
         function deleteImageFromLocal(storageKey, previewId) {
             localStorage.removeItem(storageKey);
-            document.getElementById(previewId).src = "";
-            document.getElementById(previewId).style.display = "none";
+            let preview = document.getElementById(previewId);
+            if(preview) {
+                preview.src = "";
+                preview.style.display = "none";
+            }
             renderSemuaGambar();
-            alert(`Data berhasil dihapus!`);
+            alert(`Data gambar berhasil dihapus!`);
         }
 
         function renderSemuaGambar() {
@@ -1645,7 +1768,7 @@
                 if(saved) {
                     if(dImg) { dImg.src = saved; dImg.style.display = "inline-block"; }
                     if(dTxt) { dTxt.style.display = "none"; }
-                    if(sImg) { sImg.src = saved; sImg.style.display = "block"; window[c.tempVar] = saved; }
+                    if(sImg) { sImg.src = saved; sImg.style.display = "inline-block"; window[c.tempVar] = saved; }
                 } else {
                     if(dImg) { dImg.style.display = "none"; }
                     if(dTxt) { dTxt.style.display = "block"; }
@@ -1659,7 +1782,7 @@
             if(!teks.trim()) { alert("Isi catatan kosong!"); return; }
             localStorage.setItem('catatanPiket', teks);
             document.getElementById('dash-catatan-piket').innerText = teks;
-            alert("Catatan petugas piket berhasil disimpan!");
+            alert("Catatan petugas piket berhasil disimpan & tersinkron!");
         }
         
         function hapusCatatanPiket() {
@@ -1674,7 +1797,7 @@
             if(!sel) return;
             sel.innerHTML = "";
             dataSiswa.forEach(s => {
-                sel.innerHTML += `<label style="display:block; margin-bottom:5px; cursor:pointer;"><input type="checkbox" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`;
+                sel.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`;
             });
         }
 
@@ -1694,7 +1817,7 @@
             });
 
             simpanDataKeCloud();
-            alert("Catatan berhasil disimpan!");
+            alert("Pesan/catatan personal berhasil tersimpan!");
             loadCatatanDashboard();
         }
 
@@ -1705,7 +1828,19 @@
 
         function loadCatatanDashboard() {
             let panel = document.getElementById('panel-dashboard-catatan');
-            panel.style.display = "none"; 
+            if (currentRole === 'siswa') {
+                // Tampilkan catatan HANYA bila siswa sedang login dan memiliki pesan personal
+                let nis = localStorage.getItem('siwali_logged_student_nis');
+                let s = dataSiswa.find(x => x.nis === nis);
+                if (s && s.catatan && s.catatan.trim() !== "") {
+                    panel.style.display = "block";
+                    document.getElementById('display-catatan-siswa').innerText = s.catatan;
+                } else {
+                    panel.style.display = "none";
+                }
+            } else {
+                panel.style.display = "none"; 
+            }
         }
 
         document.addEventListener('keydown', function(e) { 
