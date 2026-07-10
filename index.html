@@ -753,8 +753,25 @@
             dataSiswa = defaultSiswa; simpanDataKeCloud();
         }
 
-        // --- LOAD DATA AWAL & RECOVERY SESI ---
+     // --- LOAD DATA AWAL & RECOVERY SESI ---
         window.addEventListener('DOMContentLoaded', () => {
+            // Ambil data dari Google Sheets saat aplikasi pertama kali dibuka
+            fetch(CLOUD_URL)
+                .then(res => res.json())
+                .then(cloudData => {
+                    if(cloudData && cloudData.length > 0) {
+                        dataSiswa = cloudData; // Timpa data lokal dengan data dari cloud
+                        localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+                    }
+                    jalankanSistemAwal();
+                })
+                .catch(err => {
+                    console.log("Offline / Gagal ambil Cloud. Pakai data lokal.");
+                    jalankanSistemAwal();
+                });
+        });
+
+        function jalankanSistemAwal() {
             // Migrasi schema untuk menambahkan properti baru dengan aman
             dataSiswa.forEach(s => {
                 if(!s.kasTanggal) s.kasTanggal = ["", "", "", ""];
@@ -763,7 +780,7 @@
                 if(typeof s.catatan === 'undefined') s.catatan = "";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
             });
-            simpanDataKeCloud();
+            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
 
             // Load Global Settings
             let savedRekapDay = localStorage.getItem('activeRekapDay'); if(savedRekapDay) document.getElementById('select-active-rekap').value = savedRekapDay;
@@ -799,7 +816,7 @@
                 renderAllViews();
                 checkRole();
             }
-        });
+        }
 
         function unlockAdminFeatures() {
             document.querySelectorAll('.admin-only-element').forEach(el => el.classList.remove('hidden'));
