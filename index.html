@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SI-WALI - SMPN 3 Balikpapan</title>
+    <title>SI-WALI - Kelas Digital</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
@@ -39,8 +39,8 @@
         /* --- SIDEBAR & NAVBAR MOBILE --- */
         .sidebar { width: 260px; background-color: var(--primary); color: var(--white); min-height: 100vh; padding: 20px 0; position: fixed; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s ease; }
         .school-brand { text-align: center; padding: 10px 20px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
-        .school-logo { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 10px; border: 3px solid var(--secondary); background-color: var(--white); object-fit: cover; }
-        .school-brand h3 { font-size: 16px; color: var(--white); }
+        .school-logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 3px solid var(--secondary); background-color: var(--white); object-fit: cover; }
+        .school-brand h3 { font-size: 14px; color: var(--white); }
         .sidebar ul { list-style: none; }
         .sidebar ul li { padding: 15px 25px; transition: 0.3s; cursor: pointer; border-left: 4px solid transparent; font-size: 15px; display: flex; align-items: center; justify-content: space-between; }
         .sidebar ul li div { display: flex; align-items: center; }
@@ -61,11 +61,11 @@
         .header-left { display: flex; align-items: center; }
         .profile-section { display: flex; align-items: center; }
         .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--secondary); }
-        .header-info h2 { color: var(--primary); font-size: 20px; margin-bottom: 3px;}
-        .header-info p { color: #555; font-size: 14px; font-weight: bold; background-color: var(--bg-light); display: inline-block; padding: 4px 10px; border-radius: 15px;}
+        .header-info h2 { color: var(--primary); font-size: 18px; margin-bottom: 3px;}
+        .header-info p { color: #555; font-size: 13px; font-weight: bold; background-color: var(--bg-light); display: inline-block; padding: 4px 10px; border-radius: 15px;}
         .time-section { text-align: right; background-color: var(--bg-light); padding: 10px 20px; border-radius: 8px; border-left: 4px solid var(--secondary); display: flex; align-items: center; gap: 15px;}
-        .time-section .clock { font-size: 24px; font-weight: bold; color: var(--primary); }
-        .time-section .date { font-size: 13px; color: #555; }
+        .time-section .clock { font-size: 20px; font-weight: bold; color: var(--primary); }
+        .time-section .date { font-size: 12px; color: #555; }
         
         .cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .card { background-color: var(--white); padding: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
@@ -130,15 +130,10 @@
         .form-tambah { background: #fdfdfd; padding: 15px; border: 1px dashed var(--secondary); border-radius: 8px; margin-bottom: 20px; display: none; }
         .form-grid { display: grid; grid-template-columns: 1fr 2fr 1fr 2fr; gap: 15px; align-items: center; }
         
-        .settings-panel { background-color: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; margin-bottom: 20px;}
-        .profile-edit { display: flex; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;}
-        .profile-edit img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--secondary); }
-        .upload-btn-wrapper { position: relative; overflow: hidden; display: inline-block; }
-        .btn-upload { border: none; background-color: var(--primary); color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .upload-btn-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
-        .form-group { margin-bottom: 20px; width: 100%; }
-        .form-group label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 8px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;}
+        .settings-panel { background-color: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; margin-bottom: 20px;}
+        .form-group { margin-bottom: 15px; width: 100%; }
+        .form-group label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 8px; font-size: 14px;}
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;}
         
         /* Image Preview Dashboard */
         .img-dashboard-preview { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top:10px; display: none; height: auto;}
@@ -243,8 +238,9 @@
         <div class="sidebar" id="main-sidebar">
             <div>
                 <div class="school-brand">
-                    <img src="sega.jpg.jpg" alt="Logo SMPN 3 Balikpapan" class="school-logo">
-                    <h3>SMP Negeri 3 Balikpapan</h3>
+                    <img id="sidebar-logo" src="https://ui-avatars.com/api/?name=School&background=114B5F&color=fff" alt="Logo" class="school-logo">
+                    <h3 id="sidebar-nama-sekolah">Belum Diatur</h3>
+                    <p id="sidebar-alamat-sekolah" style="font-size: 11px; color: #ddd; margin-top:5px; line-height: 1.3;">-</p>
                 </div>
                 <ul>
                     <li id="menu-dashboard" class="active" onclick="switchTab('dashboard')">
@@ -282,10 +278,10 @@
                 <div class="header-left">
                     <div class="mobile-nav-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
                     <div class="profile-section">
-                        <img id="header-profile-pic" src="foto_wahyudi_2.jpeg" alt="Foto Profil" class="profile-pic">
+                        <img id="header-profile-pic" src="https://ui-avatars.com/api/?name=Wali&background=45B69C&color=fff" alt="Foto Profil" class="profile-pic">
                         <div class="header-info">
-                            <h2 id="header-user-fullname">Wahyudi Kahar, S.Pd</h2>
-                            <p id="header-user-role"><i class="fas fa-chalkboard-teacher"></i> Wali Kelas IX F</p>
+                            <h2 id="header-user-fullname">Belum Diatur</h2>
+                            <p id="header-user-role"><i class="fas fa-chalkboard-teacher"></i> <span id="header-nama-kelas">Wali Kelas</span></p>
                         </div>
                     </div>
                 </div>
@@ -294,7 +290,7 @@
                         <div class="clock" id="live-clock">00:00:00</div>
                         <div class="date" id="live-date">Memuat tanggal...</div>
                     </div>
-                    <button onclick="softRefreshApp()" class="btn-action" style="background:var(--info); padding: 10px;" title="Refresh Data Sistem"><i class="fas fa-sync-alt"></i></button>
+                    <button onclick="softRefreshApp()" class="btn-action" style="background:var(--info); padding: 10px;" title="Tarik Data dari Cloud"><i class="fas fa-cloud-download-alt"></i></button>
                 </div>
             </div>
 
@@ -315,7 +311,7 @@
                     <div class="pengumuman-card">
                         <i class="fas fa-info-circle" style="color:white; margin-right:15px; font-size:24px; z-index: 2; background:var(--primary); padding-right:5px;"></i>
                         <div class="marquee-container">
-                            <span class="teks-bergerak" id="display-pengumuman">Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin...</span>
+                            <span class="teks-bergerak" id="display-pengumuman">Silakan tunggu info terbaru dari admin...</span>
                         </div>
                     </div>
                 </div>
@@ -333,7 +329,9 @@
                         <div class="table-responsive">
                             <table>
                                 <thead><tr><th>Siswa</th><th>Status Hari Ini</th><th>Keterangan</th><th>Waktu Absen</th></tr></thead>
-                                <tbody id="tabel-dashboard-absen"></tbody>
+                                <tbody id="tabel-dashboard-absen">
+                                    <tr><td colspan="4" style="text-align:center;">Belum ada data diinput.</td></tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -341,7 +339,7 @@
                     <div>
                         <div class="panel">
                             <h3 style="color: #E63946;"><i class="fas fa-bell"></i> Agenda Kelas</h3>
-                            <div id="display-agenda" style="font-size: 14px; color: #555; line-height: 1.6; white-space: pre-line; margin-bottom: 10px;"></div>
+                            <div id="display-agenda" style="font-size: 14px; color: #555; line-height: 1.6; white-space: pre-line; margin-bottom: 10px;">Belum ada agenda.</div>
                             
                             <div id="admin-agenda-box" class="hidden admin-only-element" style="border-top:1px dashed #ccc; padding-top: 10px;">
                                 <textarea id="input-agenda" rows="3" style="width:100%; margin-bottom:5px;" placeholder="Ubah agenda kelas di sini..."></textarea>
@@ -365,7 +363,9 @@
                             <div class="table-responsive">
                                 <table style="font-size: 13px;">
                                     <thead style="display:none;"><tr><th>Nama</th><th>NISN</th></tr></thead>
-                                    <tbody id="tabel-dashboard-alpa"></tbody>
+                                    <tbody id="tabel-dashboard-alpa">
+                                        <tr><td colspan="2" style="text-align:center;">-</td></tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -415,21 +415,15 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="panel" id="panel-instagram">
-                    <h3 style="color: #bc1888;"><i class="fab fa-instagram"></i> Integrasi Instagram Resmi</h3>
-                    <div class="instagram-grid">
-                        <a href="https://www.instagram.com/smpn3balikpapan?igsh=MXJiNGQ4NnRvYWRuag==" target="_blank" class="instagram-btn"><i class="fab fa-instagram" style="font-size: 18px;"></i> SMP NEGERI 3 BALIKPAPAN</a>
-                        <a href="https://www.instagram.com/festabasmp3bpn?igsh=MTVwM29vcGhqM3Vteg==" target="_blank" class="instagram-btn"><i class="fab fa-instagram" style="font-size: 18px;"></i> Festival Seni Teater dan Budaya</a>
-                    </div>
-                </div>
 
                 <div class="panel" id="panel-lunas-dashboard">
                     <h3 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> Daftar Siswa Lunas Uang Kas Kelas (M1-M4)</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Nama Lengkap Siswa</th><th>NISN</th><th>Status Pembayaran</th></tr></thead>
-                            <tbody id="tabel-dashboard-lunas"></tbody>
+                            <tbody id="tabel-dashboard-lunas">
+                                <tr><td colspan="3" style="text-align:center;">Belum ada data.</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -439,7 +433,9 @@
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Nama Lengkap Siswa</th><th>Minggu Belum Dibayar</th><th>Total Tunggakan</th></tr></thead>
-                            <tbody id="tabel-dashboard-tunggakan"></tbody>
+                            <tbody id="tabel-dashboard-tunggakan">
+                                <tr><td colspan="3" style="text-align:center;">Belum ada data.</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -476,7 +472,9 @@
                     <div class="table-responsive">
                         <table id="tabel-data-siswa-induk">
                             <thead><tr><th>No</th><th>NISN</th><th>Foto</th><th>Nama Lengkap</th><th>L/P</th><th>No. HP Ortu</th><th>Aksi</th></tr></thead>
-                            <tbody id="tabel-data-siswa"></tbody>
+                            <tbody id="tabel-data-siswa">
+                                <tr><td colspan="7" style="text-align:center;">Belum ada data siswa. Silakan tambahkan.</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -515,7 +513,9 @@
                         <div class="table-responsive">
                             <table>
                                 <thead><tr><th>Nama Siswa</th><th>Status Kehadiran</th><th>Keterangan</th><th>Waktu Absen</th></tr></thead>
-                                <tbody id="tabel-form-absensi"></tbody>
+                                <tbody id="tabel-form-absensi">
+                                    <tr><td colspan="4" style="text-align:center;">Belum ada data siswa.</td></tr>
+                                </tbody>
                             </table>
                         </div>
                         <button type="submit" class="btn-action" style="width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;"><i class="fas fa-save"></i> Save Absensi & Perbarui Dashboard</button>
@@ -582,7 +582,9 @@
                                 <thead>
                                     <tr><th style="text-align:left;">Nama Siswa</th><th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>Sisa Tagihan</th><th>Aksi</th></tr>
                                 </thead>
-                                <tbody id="tabel-body-kas"></tbody>
+                                <tbody id="tabel-body-kas">
+                                    <tr><td colspan="7" style="text-align:center;">Belum ada data.</td></tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -592,23 +594,50 @@
             <!-- Tab Pengaturan -->
             <div id="tab-pengaturan" class="tab-content">
                 <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-cog"></i> Pengaturan Sistem</h2>
+
+                <!-- PENAMBAHAN: PANEL IDENTITAS SEKOLAH -->
+                <div class="settings-panel admin-only-setting">
+                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-school"></i> Pengaturan Identitas Sekolah</h3>
+                    <div class="form-group">
+                        <label>Nama Sekolah</label>
+                        <input type="text" id="input-nama-sekolah" placeholder="Contoh: SMP Negeri 3 Balikpapan">
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat / Deskripsi Singkat Sekolah</label>
+                        <input type="text" id="input-alamat-sekolah" placeholder="Contoh: Jl. Sudirman, Balikpapan">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Logo Sekolah (Maks. otomatis dikompres)</label>
+                        <input type="file" id="input-logo-sekolah" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-logo-sekolah', 'tempLogoSekolah')">
+                        <img id="preview-logo-sekolah" class="img-dashboard-preview" style="max-height: 100px;">
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                        <button onclick="saveSekolah()" class="btn-action"><i class="fas fa-save"></i> Save & Sinkron</button>
+                        <button onclick="editSekolah()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="hapusSekolah()" class="btn-action danger"><i class="fas fa-trash"></i> Hapus Semua</button>
+                    </div>
+                </div>
                 
+                <!-- PERUBAHAN: PROFIL WALI KELAS KINI MANUAL -->
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-user-edit"></i> Profil Wali Kelas</h3>
-                    <div class="profile-edit">
-                        <img id="preview-foto" src="foto_wahyudi_2.jpeg" alt="Foto Profil">
-                        <div class="upload-btn-wrapper" id="box-upload-foto-wali">
-                            <button class="btn-upload"><i class="fas fa-camera"></i> Ganti Foto Profil</button>
-                            <input type="file" id="input-foto" accept="image/*" onchange="previewDanSimpanFoto(event)">
-                        </div>
+                    <div class="form-group">
+                        <label>Nama Wali Kelas & Gelar</label>
+                        <input type="text" id="input-nama-wali" placeholder="Contoh: Wahyudi Kahar, S.Pd">
                     </div>
                     <div class="form-group">
-                        <label>Nama Lengkap & Gelar</label>
-                        <input type="text" value="Wahyudi Kahar, S.Pd" readonly>
+                        <label>Wali Kelas (Nama Kelas)</label>
+                        <input type="text" id="input-nama-kelas" placeholder="Contoh: IX F">
                     </div>
                     <div class="form-group">
-                        <label>Wali Kelas</label>
-                        <input type="text" value="IX F" readonly>
+                        <label>Upload Foto Profil (Maks. otomatis dikompres)</label>
+                        <input type="file" id="input-foto-wali" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-foto-wali', 'tempFotoWali')">
+                        <img id="preview-foto-wali" class="img-dashboard-preview" style="max-height: 100px;">
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                        <button onclick="saveWaliKelas()" class="btn-action"><i class="fas fa-save"></i> Save & Sinkron</button>
+                        <button onclick="editWaliKelas()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="hapusWaliKelas()" class="btn-action danger"><i class="fas fa-trash"></i> Hapus Semua</button>
                     </div>
                 </div>
 
@@ -618,7 +647,7 @@
                         <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--danger);">Pilih Siswa yang Dipanggil:</label>
                         <div id="checkbox-panggilan-ortu" style="max-height: 120px; overflow-y: auto; background:#fff; border:1px solid #ccc; padding:8px; border-radius:4px; margin-bottom:15px;"></div>
                         <div style="display:flex; gap:10px; flex-wrap: wrap;">
-                            <button onclick="savePanggilanOrtu()" class="btn-action danger"><i class="fas fa-save"></i> Save</button>
+                            <button onclick="savePanggilanOrtu()" class="btn-action danger"><i class="fas fa-save"></i> Save & Sinkron</button>
                             <button onclick="editPanggilanOrtu()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
                             <button onclick="hapusPanggilanOrtu()" class="btn-action" style="background:#7f8c8d;"><i class="fas fa-trash"></i> Hapus Semua</button>
                         </div>
@@ -630,7 +659,7 @@
                     <div class="admin-control-box" style="margin: 0; display: block;">
                         <input type="text" id="input-pengumuman" placeholder="Tulis pengumuman baru di sini..." style="margin-bottom: 12px;">
                         <div style="display:flex; gap:10px; flex-wrap: wrap;">
-                            <button onclick="savePengumuman()" class="btn-action"><i class="fas fa-save"></i> Save</button>
+                            <button onclick="savePengumuman()" class="btn-action"><i class="fas fa-save"></i> Save & Sinkron</button>
                             <button onclick="editPengumuman()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
                             <button onclick="hapusPengumuman()" class="btn-action" style="background:#e74c3c;"><i class="fas fa-trash"></i> Hapus</button>
                         </div>
@@ -640,12 +669,12 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sitemap"></i> Pengaturan Struktur Kelas</h3>
                     <div class="form-group">
-                        <label>Upload Gambar Struktur Kelas (Maks. otomatis dikompres)</label>
+                        <label>Upload Gambar Struktur Kelas</label>
                         <input type="file" id="input-struktur" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-struktur', 'tempStrukturBase64')">
                         <img id="preview-img-struktur" class="img-dashboard-preview">
                         <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
-                            <button class="btn-action upload" onclick="saveImageToLocal('strukturKelas', window.tempStrukturBase64, 'Struktur Kelas')"><i class="fas fa-save"></i> Save Struktur</button>
-                            <button class="btn-action danger" onclick="deleteImageFromLocal('strukturKelas', 'preview-img-struktur')"><i class="fas fa-trash"></i> Hapus Struktur</button>
+                            <button class="btn-action upload" onclick="saveImageToSettings('strukturKelas', window.tempStrukturBase64, 'Struktur Kelas')"><i class="fas fa-save"></i> Save Struktur</button>
+                            <button class="btn-action danger" onclick="deleteImageFromSettings('strukturKelas', 'preview-img-struktur')"><i class="fas fa-trash"></i> Hapus Struktur</button>
                         </div>
                     </div>
                 </div>
@@ -653,12 +682,12 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-calendar-alt"></i> Pengaturan Jadwal Pelajaran</h3>
                     <div class="form-group">
-                        <label>Upload Jadwal Pelajaran (Maks. otomatis dikompres)</label>
+                        <label>Upload Jadwal Pelajaran</label>
                         <input type="file" id="input-jadwal" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-jadwal', 'tempJadwalBase64')">
                         <img id="preview-img-jadwal" class="img-dashboard-preview">
                         <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
-                            <button class="btn-action upload" onclick="saveImageToLocal('jadwalPelajaran', window.tempJadwalBase64, 'Jadwal Pelajaran')"><i class="fas fa-save"></i> Save Jadwal</button>
-                            <button class="btn-action danger" onclick="deleteImageFromLocal('jadwalPelajaran', 'preview-img-jadwal')"><i class="fas fa-trash"></i> Hapus Jadwal</button>
+                            <button class="btn-action upload" onclick="saveImageToSettings('jadwalPelajaran', window.tempJadwalBase64, 'Jadwal Pelajaran')"><i class="fas fa-save"></i> Save Jadwal</button>
+                            <button class="btn-action danger" onclick="deleteImageFromSettings('jadwalPelajaran', 'preview-img-jadwal')"><i class="fas fa-trash"></i> Hapus Jadwal</button>
                         </div>
                     </div>
                 </div>
@@ -666,12 +695,12 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-calendar-day"></i> Pengaturan Jadwal Piket Harian</h3>
                     <div class="form-group">
-                        <label>Upload Gambar Jadwal Piket (Maks. otomatis dikompres)</label>
+                        <label>Upload Gambar Jadwal Piket</label>
                         <input type="file" id="input-jadwal-piket" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-jadwal-piket', 'tempJadwalPiketBase64')">
                         <img id="preview-img-jadwal-piket" class="img-dashboard-preview">
                         <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
-                            <button class="btn-action upload" onclick="saveImageToLocal('jadwalPiket', window.tempJadwalPiketBase64, 'Jadwal Piket')"><i class="fas fa-save"></i> Save Jadwal Piket</button>
-                            <button class="btn-action danger" onclick="deleteImageFromLocal('jadwalPiket', 'preview-img-jadwal-piket')"><i class="fas fa-trash"></i> Hapus Piket</button>
+                            <button class="btn-action upload" onclick="saveImageToSettings('jadwalPiket', window.tempJadwalPiketBase64, 'Jadwal Piket')"><i class="fas fa-save"></i> Save Jadwal Piket</button>
+                            <button class="btn-action danger" onclick="deleteImageFromSettings('jadwalPiket', 'preview-img-jadwal-piket')"><i class="fas fa-trash"></i> Hapus Piket</button>
                         </div>
                     </div>
                 </div>
@@ -696,8 +725,8 @@
                             <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-1', 'tempPiket1Base64')">
                             <img id="preview-img-piket-1" class="img-dashboard-preview" style="max-height: 150px;">
                             <div style="margin-top: 10px; display:flex; gap: 5px; flex-wrap: wrap;">
-                                <button class="btn-action upload" onclick="saveImageToLocal('fotoPiket1', window.tempPiket1Base64, 'Foto Piket 1')"><i class="fas fa-save"></i> Save</button>
-                                <button class="btn-action danger" onclick="deleteImageFromLocal('fotoPiket1', 'preview-img-piket-1')"><i class="fas fa-trash"></i> Hapus</button>
+                                <button class="btn-action upload" onclick="saveImageToSettings('fotoPiket1', window.tempPiket1Base64, 'Foto Piket 1')"><i class="fas fa-save"></i> Save</button>
+                                <button class="btn-action danger" onclick="deleteImageFromSettings('fotoPiket1', 'preview-img-piket-1')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
                         <div class="form-group" style="background:#f4f9f8; padding:15px; border-radius:8px;">
@@ -705,8 +734,8 @@
                             <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-2', 'tempPiket2Base64')">
                             <img id="preview-img-piket-2" class="img-dashboard-preview" style="max-height: 150px;">
                             <div style="margin-top: 10px; display:flex; gap: 5px; flex-wrap: wrap;">
-                                <button class="btn-action upload" onclick="saveImageToLocal('fotoPiket2', window.tempPiket2Base64, 'Foto Piket 2')"><i class="fas fa-save"></i> Save</button>
-                                <button class="btn-action danger" onclick="deleteImageFromLocal('fotoPiket2', 'preview-img-piket-2')"><i class="fas fa-trash"></i> Hapus</button>
+                                <button class="btn-action upload" onclick="saveImageToSettings('fotoPiket2', window.tempPiket2Base64, 'Foto Piket 2')"><i class="fas fa-save"></i> Save</button>
+                                <button class="btn-action danger" onclick="deleteImageFromSettings('fotoPiket2', 'preview-img-piket-2')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
                     </div>
@@ -737,13 +766,17 @@
     </div>
 
     <script>
+        // Variabel global gambar sementara
         window.tempStrukturBase64 = ""; 
         window.tempJadwalBase64 = ""; 
         window.tempJadwalPiketBase64 = ""; 
         window.tempPiket1Base64 = ""; 
         window.tempPiket2Base64 = "";
+        window.tempLogoSekolah = "";
+        window.tempFotoWali = "";
 
-        // --- MANAJEMEN KOMPRESI GAMBAR (Pencegahan Memori Penuh di HP) ---
+        // --- MANAJEMEN KOMPRESI GAMBAR (AGRESIF UTK MENCEGAH GOOGLE SHEET ERROR) ---
+        // Karena satu sel A1 di G-Sheet memuat limit ~50rb karakter, kita harus sangat menekan ukuran gambar.
         function compressImageAndProcess(file, callback) {
             if (!file) return;
             const reader = new FileReader();
@@ -751,7 +784,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800; 
+                    const MAX_WIDTH = 400; // Resolusi ditekan lebih jauh untuk keamanan Cloud 
                     let width = img.width;
                     let height = img.height;
                     
@@ -765,8 +798,8 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // Convert dengan kualitas 70% agar ringan di localstorage HP
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    // Convert dengan kualitas 50%
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
                     callback(compressedBase64);
                 };
                 img.src = e.target.result;
@@ -800,7 +833,6 @@
             return new Date().toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }); 
         }
 
-        // --- MENU TOGGLE MOBILE ---
         function toggleSidebar() {
             const sidebar = document.getElementById('main-sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
@@ -808,104 +840,138 @@
             overlay.classList.toggle('show');
         }
 
-        // --- MANAJEMEN STATE APLIKASI ---
+        // --- MANAJEMEN STATE APLIKASI CLOUD ---
         let currentRole = "";
         let isAdminLoggedIn = false;
         let isAdminKasUnlocked = false;
         const iuranKasPerMinggu = 5000;
         const totalMingguKas = 4;
 
-        const defaultSiswa = [
-            { nis: "102401", nama: "Ahmad Fauzi", jk: "L", hp: "08123456789", foto: "", status: "H", ket: "", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false },
-            { nis: "102402", nama: "Budi Santoso", jk: "L", hp: "08987654321", foto: "", status: "A", ket: "Tanpa Keterangan", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false },
-            { nis: "102403", nama: "Citra Lestari", jk: "P", hp: "08571122334", foto: "", status: "S", ket: "Demam Berdarah", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false }
-        ];
+        // Data akan murni kosong jika belum diinput sama sekali
+        let dataSiswa = [];
+        
+        // Seluruh pengaturan sekarang dibungkus secara terpusat agar sinkron ke CLOUD
+        let globalSettings = {
+            pengumuman: "",
+            agendaKelas: "",
+            jadwalPelajaran: "",
+            strukturKelas: "",
+            jadwalPiket: "",
+            fotoPiket1: "",
+            fotoPiket2: "",
+            catatanPiket: "",
+            namaWaliKelas: "",
+            namaKelas: "",
+            fotoWaliKelas: "",
+            namaSekolah: "",
+            alamatSekolah: "",
+            logoSekolah: ""
+        };
         
         const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxVv9_x9wuM2-VkacVwul5hnjbXM6Por_yunr_Wp5-j_4hQUsh0o6eFzOts6uIF7hUkww/exec"; 
 
         function simpanDataKeCloud() {
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+            const payload = {
+                siswa: dataSiswa,
+                settings: globalSettings
+            };
+            let payloadStr = JSON.stringify(payload);
+            
+            // Peringatan Keamanan Limit Sel Google Sheets (Maksimal 50.000 karakter)
+            if (payloadStr.length > 45000) {
+                alert("Peringatan: Total keseluruhan data (terutama gambar) sudah mendekati batas maksimal sistem Cloud Spreadsheet! Proses simpan mungkin gagal. Disarankan untuk menghapus gambar lama jika terjadi error.");
+            }
+
+            localStorage.setItem('siwali_data_master', payloadStr);
             fetch(CLOUD_URL, {
                 redirect: "follow",
                 method: 'POST',
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify(dataSiswa)
-            }).then(res => console.log("Berhasil simpan ke Cloud!"))
-              .catch(err => console.error("Gagal sinkron Cloud:", err));
-        }
-
-        let dataSiswa = JSON.parse(localStorage.getItem('dataSiswaMaster'));
-        if (!dataSiswa || dataSiswa.length === 0) {
-            dataSiswa = defaultSiswa; 
-            simpanDataKeCloud();
-        }
-
-        // Memuat seluruh pengaturan local storage setiap kali ada perubahan/refresh
-        function loadSettingsFromLocal() {
-            // Load Rekap
-            let savedRekapDay = localStorage.getItem('activeRekapDay'); 
-            if(savedRekapDay) document.getElementById('select-active-rekap').value = savedRekapDay;
-            
-            // Load Pengumuman
-            let savedPengumuman = localStorage.getItem('pengumuman'); 
-            let dispPengumuman = document.getElementById('display-pengumuman');
-            if(dispPengumuman) dispPengumuman.innerText = savedPengumuman || "Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin...";
-            
-            // Load Agenda
-            let savedAgenda = localStorage.getItem('agendaKelas'); 
-            let dispAgenda = document.getElementById('display-agenda');
-            if(dispAgenda) dispAgenda.innerText = savedAgenda || "Tidak ada agenda kelas saat ini.";
-            
-            // Load Foto Profil
-            let savedFotoWali = localStorage.getItem('fotoWaliKelas'); 
-            if(savedFotoWali) { 
-                document.getElementById('header-profile-pic').src = savedFotoWali; 
-                let previewFoto = document.getElementById('preview-foto');
-                if (previewFoto) previewFoto.src = savedFotoWali; 
-            }
-            
-            // Load Catatan Piket
-            let savedCatatanPiket = localStorage.getItem('catatanPiket');
-            let dashPiket = document.getElementById('dash-catatan-piket'); 
-            if(dashPiket) dashPiket.innerText = savedCatatanPiket || "Belum ada catatan petugas piket.";
-            let inpPiket = document.getElementById('input-catatan-piket'); 
-            if(inpPiket) inpPiket.value = savedCatatanPiket || "";
-
-            // Render semua gambar tersimpan (Jadwal, Struktur, dll) agar update di dashboard siswa
-            renderSemuaGambar();
-            // Load catatan personal bagi masing-masing akun (terutama siswa)
-            loadCatatanDashboard();
+                body: payloadStr
+            }).then(res => console.log("Berhasil simpan paket ke Cloud!"))
+              .catch(err => alert("Gagal sinkron Cloud! Periksa koneksi atau ukuran gambar."));
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             fetch(CLOUD_URL)
-                .then(res => res.json())
-                .then(cloudData => {
-                    if(cloudData && cloudData.length > 0) {
-                        dataSiswa = cloudData; 
-                        localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
+                .then(res => res.text()) // Tarik sebagai text dulu karena bisa array atau object baru
+                .then(textData => {
+                    if(textData && textData.trim() !== "") {
+                        let parsedData = JSON.parse(textData);
+                        
+                        // Migrasi jika Cloud masih menyimpan array versi lama
+                        if (Array.isArray(parsedData)) {
+                            dataSiswa = parsedData;
+                        } else if (parsedData && parsedData.siswa) {
+                            // Struktur Baru
+                            dataSiswa = parsedData.siswa;
+                            globalSettings = Object.assign(globalSettings, parsedData.settings);
+                        }
+                        localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings}));
                     }
                     jalankanSistemAwal();
                 })
                 .catch(err => {
+                    // Fallback offline
+                    let localStr = localStorage.getItem('siwali_data_master');
+                    if (localStr) {
+                        let localData = JSON.parse(localStr);
+                        if (Array.isArray(localData)) { dataSiswa = localData; }
+                        else if (localData.siswa) {
+                            dataSiswa = localData.siswa;
+                            globalSettings = Object.assign(globalSettings, localData.settings);
+                        }
+                    }
                     jalankanSistemAwal();
                 });
         });
 
-        // Sinkronisasi otomatis antar tab secara real-time
-        window.addEventListener('storage', function(e) {
-            let trackedKeys = ['pengumuman', 'agendaKelas', 'fotoWaliKelas', 'catatanPiket', 'jadwalPelajaran', 'strukturKelas', 'jadwalPiket', 'fotoPiket1', 'fotoPiket2'];
-            if (trackedKeys.includes(e.key) || e.key === 'dataSiswaMaster') {
-                if(e.key === 'dataSiswaMaster' && e.newValue) {
-                    dataSiswa = JSON.parse(e.newValue);
+        // Merender semua UI yang bergantung dari globalSettings
+        function loadSettingsToUI() {
+            // Dashboard Teks
+            let dispPengumuman = document.getElementById('display-pengumuman');
+            if(dispPengumuman) dispPengumuman.innerText = globalSettings.pengumuman || "Silakan tunggu info terbaru dari admin...";
+            
+            let dispAgenda = document.getElementById('display-agenda');
+            if(dispAgenda) dispAgenda.innerText = globalSettings.agendaKelas || "Belum ada agenda.";
+            
+            let dashPiket = document.getElementById('dash-catatan-piket'); 
+            if(dashPiket) dashPiket.innerText = globalSettings.catatanPiket || "Belum ada catatan petugas piket.";
+
+            // Header (Profil Wali)
+            document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
+            document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
+            if(globalSettings.fotoWaliKelas) {
+                document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
+                let previewWali = document.getElementById('preview-foto-wali');
+                if(previewWali) {
+                    previewWali.src = globalSettings.fotoWaliKelas;
+                    previewWali.style.display = "inline-block";
                 }
-                loadSettingsFromLocal();
-                renderAllViews();
+            } else {
+                document.getElementById('header-profile-pic').src = "https://ui-avatars.com/api/?name=Wali&background=45B69C&color=fff";
             }
-        });
+
+            // Sidebar & Identitas (Sekolah)
+            document.getElementById('sidebar-nama-sekolah').innerText = globalSettings.namaSekolah || "Belum Diatur";
+            document.getElementById('sidebar-alamat-sekolah').innerText = globalSettings.alamatSekolah || "-";
+            if(globalSettings.logoSekolah) {
+                document.getElementById('sidebar-logo').src = globalSettings.logoSekolah;
+                let previewLogo = document.getElementById('preview-logo-sekolah');
+                if(previewLogo) {
+                    previewLogo.src = globalSettings.logoSekolah;
+                    previewLogo.style.display = "inline-block";
+                }
+            } else {
+                document.getElementById('sidebar-logo').src = "https://ui-avatars.com/api/?name=School&background=114B5F&color=fff";
+            }
+
+            renderSemuaGambarGlobal();
+            loadCatatanDashboard();
+        }
 
         function jalankanSistemAwal() {
-            // Migrasi schema
+            // Pembersihan/migrasi skema array siswa
             dataSiswa.forEach(s => {
                 if(!s.kasTanggal) s.kasTanggal = ["", "", "", ""];
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
@@ -913,10 +979,9 @@
                 if(typeof s.catatan === 'undefined') s.catatan = "";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
             });
-            localStorage.setItem('dataSiswaMaster', JSON.stringify(dataSiswa));
-
-            // Muat seluruh pengaturan lokal untuk memastikan sinkronisasi jalan
-            loadSettingsFromLocal();
+            
+            // Muat settingan sinkronisasi cloud
+            loadSettingsToUI();
             renderTabelAbsensi4Minggu();
             
             let sessionLoggedIn = localStorage.getItem('siwali_logged_in');
@@ -925,8 +990,18 @@
                 isAdminLoggedIn = localStorage.getItem('siwali_is_admin') === "true";
                 
                 if (isAdminLoggedIn) unlockAdminFeatures();
-                updateHeaderProfileInfo();
                 
+                // Set Header bagi siswa
+                if (currentRole === "siswa") {
+                    let nis = localStorage.getItem('siwali_logged_student_nis'); 
+                    let sData = dataSiswa.find(x => x.nis === nis);
+                    if (sData) { 
+                        document.getElementById('header-user-fullname').innerText = sData.nama; 
+                        document.getElementById('header-nama-kelas').innerText = "Siswa Kelas " + (globalSettings.namaKelas || ""); 
+                        if(sData.foto) document.getElementById('header-profile-pic').src = sData.foto; 
+                    }
+                }
+
                 document.getElementById('login-page').style.display = "none";
                 document.getElementById('app-page').style.display = "block";
                 
@@ -962,9 +1037,8 @@
 
         function renderAllViews() {
             dataSiswa.sort((a, b) => a.nama.localeCompare(b.nama));
-            simpanDataKeCloud();
+            // Jangan simpan saat dirender agar tidak spam post request, post hanya saat data diubah manual
             
-            // Pastikan kita merender ulang semua informasi dashboard
             renderDashboard(); 
             renderDataSiswa(); 
             renderFormAbsensi(); 
@@ -988,12 +1062,23 @@
             }
         }
 
-        function softRefreshApp() { 
-            dataSiswa = JSON.parse(localStorage.getItem('dataSiswaMaster')) || defaultSiswa; 
-            // Pastikan memuat ulang file dan text local storage ke dashboard
-            loadSettingsFromLocal();
-            renderAllViews(); 
-            alert("Data aplikasi (termasuk gambar & pesan) berhasil disinkronisasi & diperbarui!"); 
+        function softRefreshApp() {
+            // Tarik paksa data Cloud terbaru
+            fetch(CLOUD_URL)
+                .then(res => res.text())
+                .then(textData => {
+                    let parsed = JSON.parse(textData);
+                    if(parsed && parsed.siswa) {
+                        dataSiswa = parsed.siswa;
+                        globalSettings = Object.assign(globalSettings, parsed.settings);
+                    }
+                    localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings}));
+                    loadSettingsToUI();
+                    renderAllViews(); 
+                    alert("Seluruh Data, Info & Gambar berhasil disinkronisasi langsung dari Cloud!"); 
+                }).catch(err => {
+                    alert("Sedang Offline, gagal menarik dari Cloud.");
+                });
         }
 
         // --- INTERAKSI LOGIN ---
@@ -1043,12 +1128,18 @@
                     if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; 
                     else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
                     
-                    let activeRekapDay = parseInt(localStorage.getItem('activeRekapDay') || "-1");
+                    let activeRekapDay = parseInt(document.getElementById('select-active-rekap').value || "-1");
                     if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekap[activeRekapDay] = statusSiswa; }
                     
                     simpanDataKeCloud(); 
                     document.getElementById('student-ket-manual').value = ""; 
                     localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); 
+                    
+                    // Set identitas siswa di header
+                    document.getElementById('header-user-fullname').innerText = targetSiswa.nama; 
+                    document.getElementById('header-nama-kelas').innerText = "Siswa Kelas " + (globalSettings.namaKelas || ""); 
+                    if(targetSiswa.foto) document.getElementById('header-profile-pic').src = targetSiswa.foto;
+
                     alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
                 } else { 
                     alert("Password (NISN) yang Anda masukkan salah!"); return; 
@@ -1057,7 +1148,13 @@
                 if(usernameVal === "admin" && pass === "admin123") { 
                     isAdminLoggedIn = true; 
                     unlockAdminFeatures(); 
-                    alert("Selamat datang Bapak Wali Kelas!"); 
+                    
+                    // Set identitas Wali di Header dari global Settings
+                    document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
+                    document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
+                    if(globalSettings.fotoWaliKelas) document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
+
+                    alert("Selamat datang Bapak/Ibu Wali Kelas!"); 
                 } else { 
                     alert("Username/Password Salah!"); return; 
                 }
@@ -1072,9 +1169,8 @@
             localStorage.setItem('siwali_is_admin', isAdminLoggedIn ? 'true' : 'false'); 
             localStorage.setItem('siwali_active_tab', 'dashboard');
             
-            updateHeaderProfileInfo();
-            // Penting: Tarik data setingan dan render ulang
-            loadSettingsFromLocal(); 
+            // Tarik data ulang
+            loadSettingsToUI(); 
             renderAllViews(); 
             
             let music = document.getElementById('bg-music-mars'); 
@@ -1085,7 +1181,6 @@
             switchTab('dashboard');
         }
 
-        // --- NAVIGASI ---
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
@@ -1094,14 +1189,8 @@
             if(menuLi) menuLi.classList.add('active');
             localStorage.setItem('siwali_active_tab', tabName);
             
-            // Auto close sidebar on mobile
             document.getElementById('main-sidebar').classList.remove('show');
             document.querySelector('.sidebar-overlay').classList.remove('show');
-
-            // Refresh settings if dashboard is clicked
-            if (tabName === 'dashboard') {
-                loadSettingsFromLocal();
-            }
         }
 
         function switchTabSecured(tabName) {
@@ -1139,7 +1228,7 @@
                 if(s) s.panggilanOrtu = cb.checked;
             });
             simpanDataKeCloud(); 
-            alert("Data panggilan orang tua berhasil disimpan!");
+            alert("Data panggilan orang tua berhasil disimpan ke Cloud!");
             renderDashboard(); 
         }
         
@@ -1158,43 +1247,114 @@
             alert("Silakan ubah centang pada nama siswa dan klik 'Save'.");
         }
 
+        // SISTEM TERPUSAT (MENYIMPAN KE CLOUD)
         function savePengumuman() { 
             let teks = document.getElementById('input-pengumuman').value; 
             if(!teks.trim()) return; 
-            localStorage.setItem('pengumuman', teks); 
-            document.getElementById('display-pengumuman').innerText = teks; 
-            alert("Pengumuman baru disimpan dan tersinkronisasi ke Dashboard Siswa!"); 
+            globalSettings.pengumuman = teks;
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            alert("Pengumuman berhasil disinkronisasi ke Cloud!"); 
         }
-        
         function editPengumuman() { 
-            let cur = document.getElementById('display-pengumuman').innerText;
-            document.getElementById('input-pengumuman').value = (cur === "Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin...") ? "" : cur; 
+            document.getElementById('input-pengumuman').value = globalSettings.pengumuman || ""; 
         }
-        
         function hapusPengumuman() { 
-            localStorage.removeItem('pengumuman'); 
-            document.getElementById('display-pengumuman').innerText = "Selamat datang di SI-WALI SMPN 3 Balikpapan. Silakan tunggu info dari admin..."; 
+            globalSettings.pengumuman = "";
             document.getElementById('input-pengumuman').value = ""; 
+            simpanDataKeCloud();
+            loadSettingsToUI();
         }
         
         function saveAgenda() { 
             let teks = document.getElementById('input-agenda').value; 
             if(!teks.trim()) return; 
-            localStorage.setItem('agendaKelas', teks); 
-            document.getElementById('display-agenda').innerText = teks; 
-            alert("Agenda kelas telah diperbarui untuk siswa!");
+            globalSettings.agendaKelas = teks;
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            alert("Agenda kelas tersinkron!");
         }
-        
         function editAgenda() { 
-            let cur = document.getElementById('display-agenda').innerText;
-            document.getElementById('input-agenda').value = (cur === "Tidak ada agenda kelas saat ini.") ? "" : cur; 
+            document.getElementById('input-agenda').value = globalSettings.agendaKelas || ""; 
         }
-        
         function hapusAgenda() { 
-            localStorage.removeItem('agendaKelas'); 
-            document.getElementById('display-agenda').innerText = "Tidak ada agenda kelas saat ini."; 
+            globalSettings.agendaKelas = "";
             document.getElementById('input-agenda').value = ""; 
+            simpanDataKeCloud();
+            loadSettingsToUI();
         }
+
+        function saveSekolah() {
+            let nama = document.getElementById('input-nama-sekolah').value;
+            let alamat = document.getElementById('input-alamat-sekolah').value;
+            
+            if (nama.trim()) globalSettings.namaSekolah = nama;
+            if (alamat.trim()) globalSettings.alamatSekolah = alamat;
+            if (window.tempLogoSekolah) globalSettings.logoSekolah = window.tempLogoSekolah;
+            
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            alert("Pengaturan Sekolah tersimpan ke Cloud!");
+        }
+        function editSekolah() {
+            document.getElementById('input-nama-sekolah').value = globalSettings.namaSekolah || "";
+            document.getElementById('input-alamat-sekolah').value = globalSettings.alamatSekolah || "";
+        }
+        function hapusSekolah() {
+            globalSettings.namaSekolah = "";
+            globalSettings.alamatSekolah = "";
+            globalSettings.logoSekolah = "";
+            document.getElementById('input-nama-sekolah').value = "";
+            document.getElementById('input-alamat-sekolah').value = "";
+            let pLogo = document.getElementById('preview-logo-sekolah');
+            if(pLogo) { pLogo.src = ""; pLogo.style.display = "none"; }
+            
+            simpanDataKeCloud();
+            loadSettingsToUI();
+        }
+
+        function saveWaliKelas() {
+            let nama = document.getElementById('input-nama-wali').value;
+            let kelas = document.getElementById('input-nama-kelas').value;
+            
+            if (nama.trim()) globalSettings.namaWaliKelas = nama;
+            if (kelas.trim()) globalSettings.namaKelas = kelas;
+            if (window.tempFotoWali) globalSettings.fotoWaliKelas = window.tempFotoWali;
+            
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            
+            // Set header admin
+            if (currentRole === "admin") {
+                document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
+                document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
+                if(globalSettings.fotoWaliKelas) document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
+            }
+            alert("Profil Wali Kelas tersimpan ke Cloud!");
+        }
+        function editWaliKelas() {
+            document.getElementById('input-nama-wali').value = globalSettings.namaWaliKelas || "";
+            document.getElementById('input-nama-kelas').value = globalSettings.namaKelas || "";
+        }
+        function hapusWaliKelas() {
+            globalSettings.namaWaliKelas = "";
+            globalSettings.namaKelas = "";
+            globalSettings.fotoWaliKelas = "";
+            document.getElementById('input-nama-wali').value = "";
+            document.getElementById('input-nama-kelas').value = "";
+            let pFoto = document.getElementById('preview-foto-wali');
+            if(pFoto) { pFoto.src = ""; pFoto.style.display = "none"; }
+            
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            
+            if (currentRole === "admin") {
+                document.getElementById('header-user-fullname').innerText = "Belum Diatur"; 
+                document.getElementById('header-nama-kelas').innerText = "Wali Kelas"; 
+                document.getElementById('header-profile-pic').src = "https://ui-avatars.com/api/?name=Wali&background=45B69C&color=fff"; 
+            }
+        }
+
 
         function getStatusBadge(status) {
             if(status === 'H') return '<span class="badge bg-green">Hadir</span>'; 
@@ -1216,7 +1376,7 @@
             let hadir = 0, tidakHadir = 0, totalAlpa = 0;
             
             if(dataSiswa.length === 0) { 
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada data.</td></tr>`; 
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada data diinput.</td></tr>`; 
             } else {
                 dataSiswa.forEach(siswa => {
                     let nama = siswa.nama || "Tanpa Nama";
@@ -1235,7 +1395,8 @@
                     }
                 });
             }
-            if(totalAlpa === 0) tbodyAlpa.innerHTML = `<tr><td colspan="2" style="text-align:center; color:var(--secondary); font-weight:bold;">Bersih dari Alpa!</td></tr>`;
+            if (dataSiswa.length > 0 && totalAlpa === 0) tbodyAlpa.innerHTML = `<tr><td colspan="2" style="text-align:center; color:var(--secondary); font-weight:bold;">Bersih dari Alpa!</td></tr>`;
+            else if (dataSiswa.length === 0) tbodyAlpa.innerHTML = `<tr><td colspan="2" style="text-align:center;">-</td></tr>`;
             
             document.getElementById('dash-total-siswa').innerText = dataSiswa.length + " Anak"; 
             document.getElementById('dash-hadir').innerText = hadir + " Anak"; 
@@ -1263,21 +1424,6 @@
             }
         }
 
-        function updateHeaderProfileInfo() {
-            if (currentRole === "siswa") {
-                let nis = localStorage.getItem('siwali_logged_student_nis'); 
-                let sData = dataSiswa.find(x => x.nis === nis);
-                if (sData) { 
-                    document.getElementById('header-user-fullname').innerText = sData.nama; 
-                    document.getElementById('header-user-role').innerHTML = `<i class="fas fa-user-graduate"></i> Siswa Kelas IX F`; 
-                    if(sData.foto) document.getElementById('header-profile-pic').src = sData.foto; 
-                }
-            } else { 
-                document.getElementById('header-user-fullname').innerText = "Wahyudi Kahar, S.Pd"; 
-                document.getElementById('header-user-role').innerHTML = `<i class="fas fa-chalkboard-teacher"></i> Wali Kelas IX F`; 
-            }
-        }
-
         function prosesLogout() {
             if (confirm("Yakin ingin keluar?")) { 
                 localStorage.removeItem('siwali_logged_in'); 
@@ -1294,13 +1440,15 @@
             tbody.innerHTML = ""; 
             let adaLunas = false;
             
-            dataSiswa.forEach(s => { 
-                if (s.kas.filter(Boolean).length === totalMingguKas) { 
-                    adaLunas = true; 
-                    tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas Sempurna (M1-M4)</span></td></tr>`; 
-                } 
-            });
-            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#777;">Belum ada yang lunas.</td></tr>`;
+            if(dataSiswa.length > 0) {
+                dataSiswa.forEach(s => { 
+                    if (s.kas.filter(Boolean).length === totalMingguKas) { 
+                        adaLunas = true; 
+                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas Sempurna (M1-M4)</span></td></tr>`; 
+                    } 
+                });
+            }
+            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#777;">Belum ada data siswa lunas.</td></tr>`;
         }
 
         function renderTunggakanDashboard() {
@@ -1308,16 +1456,19 @@
             tbody.innerHTML = ""; 
             let adaTunggakan = false;
             
-            dataSiswa.forEach(s => {
-                let sisaMinggu = totalMingguKas - s.kas.filter(Boolean).length;
-                if (sisaMinggu > 0) {
-                    adaTunggakan = true; 
-                    let listMinggu = []; 
-                    for(let i=0; i<totalMingguKas; i++) if(!s.kas[i]) listMinggu.push(`M${i+1}`);
-                    tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
-                }
-            });
-            if(!adaTunggakan) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-weight:bold;">Seluruh siswa telah lunas.</td></tr>`;
+            if(dataSiswa.length > 0) {
+                dataSiswa.forEach(s => {
+                    let sisaMinggu = totalMingguKas - s.kas.filter(Boolean).length;
+                    if (sisaMinggu > 0) {
+                        adaTunggakan = true; 
+                        let listMinggu = []; 
+                        for(let i=0; i<totalMingguKas; i++) if(!s.kas[i]) listMinggu.push(`M${i+1}`);
+                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
+                    }
+                });
+            }
+            if(!adaTunggakan && dataSiswa.length > 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-weight:bold;">Seluruh siswa telah lunas.</td></tr>`;
+            else if (dataSiswa.length === 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada data tunggakan.</td></tr>`;
         }
 
         // --- PUSAT DATA SISWA ---
@@ -1342,6 +1493,7 @@
             document.getElementById('input-hp').value = ""; 
             
             toggleFormTambah(); 
+            simpanDataKeCloud();
             renderAllViews(); 
             alert("Siswa baru berhasil ditambahkan!");
         }
@@ -1349,6 +1501,7 @@
         function deleteSiswa(index) { 
             if(confirm("Hapus permanen data siswa ini?")) { 
                 dataSiswa.splice(index, 1); 
+                simpanDataKeCloud();
                 renderAllViews(); 
             } 
         }
@@ -1357,6 +1510,7 @@
             const file = event.target.files[0]; 
             compressImageAndProcess(file, function(base64Data) {
                 dataSiswa[index].foto = base64Data; 
+                simpanDataKeCloud();
                 renderAllViews(); 
             });
         }
@@ -1364,21 +1518,25 @@
         function renderDataSiswa() {
             let tbody = document.getElementById('tabel-data-siswa'); 
             tbody.innerHTML = "";
-            dataSiswa.forEach((siswa, index) => {
-                let waNumber = (siswa.hp || "").startsWith('0') ? (siswa.hp || "").substring(1) : (siswa.hp || "");
-                tbody.innerHTML += `<tr>
-                    <td>${index + 1}</td>
-                    <td>${siswa.nis}</td>
-                    <td><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"></td>
-                    <td><strong>${siswa.nama}</strong><br><input type="file" accept="image/*" onchange="uploadFotoSiswa(event, ${index})" style="font-size:10px; margin-top:5px; width:150px;"></td>
-                    <td>${siswa.jk}</td>
-                    <td>${siswa.hp || "-"}</td>
-                    <td class="action-btns" style="display:flex; gap:5px;">
-                        <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fab fa-whatsapp"></i></button>
-                        <button onclick="deleteSiswa(${index})" style="background:var(--danger); border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
+            if (dataSiswa.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data siswa. Silakan tambahkan.</td></tr>`;
+            } else {
+                dataSiswa.forEach((siswa, index) => {
+                    let waNumber = (siswa.hp || "").startsWith('0') ? (siswa.hp || "").substring(1) : (siswa.hp || "");
+                    tbody.innerHTML += `<tr>
+                        <td>${index + 1}</td>
+                        <td>${siswa.nis}</td>
+                        <td><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"></td>
+                        <td><strong>${siswa.nama}</strong><br><input type="file" accept="image/*" onchange="uploadFotoSiswa(event, ${index})" style="font-size:10px; margin-top:5px; width:150px;"></td>
+                        <td>${siswa.jk}</td>
+                        <td>${siswa.hp || "-"}</td>
+                        <td class="action-btns" style="display:flex; gap:5px;">
+                            <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fab fa-whatsapp"></i></button>
+                            <button onclick="deleteSiswa(${index})" style="background:var(--danger); border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                });
+            }
         }
 
         function prosesUploadExcel(event) {
@@ -1401,6 +1559,7 @@
                 });
                 
                 if (countAdded > 0) { 
+                    simpanDataKeCloud();
                     renderAllViews(); 
                     alert(`Sukses! ${countAdded} data masuk.`); 
                 } 
@@ -1423,7 +1582,9 @@
 
         // --- ABSENSI FORM KELAS & REKAP BULANAN ---
         function updateActiveRekap() { 
-            localStorage.setItem('activeRekapDay', document.getElementById('select-active-rekap').value); 
+            // Save current choice back to select
+            let current = document.getElementById('select-active-rekap').value;
+            // No strict need to save to cloud, this is just local toggle tool for admin
         }
 
         function renderFormAbsensi() {
@@ -1431,27 +1592,31 @@
             if(!tbody) return; 
             tbody.innerHTML = "";
             
-            dataSiswa.forEach((siswa, index) => {
-                tbody.innerHTML += `<tr>
-                    <td><div class="avatar-container"><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"><strong>${siswa.nama}</strong></div></td>
-                    <td>
-                        <div class="radio-group">
-                            <label style="color: var(--secondary);"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> H</label>
-                            <label style="color: var(--warning);"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> S</label>
-                            <label style="color: var(--info);"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> I</label>
-                            <label style="color: var(--danger);"><input type="radio" name="status_${index}" value="A" ${siswa.status==='A'?'checked':''}> A</label>
-                        </div>
-                    </td>
-                    <td><input type="text" id="ket_${index}" value="${siswa.ket || ''}" placeholder="Alasan..."></td>
-                    <td><span style="font-size:11px; color:#555;">${siswa.waktuAbsen || '-'}</span></td>
-                </tr>`;
-            });
+            if (dataSiswa.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada data siswa.</td></tr>`;
+            } else {
+                dataSiswa.forEach((siswa, index) => {
+                    tbody.innerHTML += `<tr>
+                        <td><div class="avatar-container"><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"><strong>${siswa.nama}</strong></div></td>
+                        <td>
+                            <div class="radio-group">
+                                <label style="color: var(--secondary);"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> H</label>
+                                <label style="color: var(--warning);"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> S</label>
+                                <label style="color: var(--info);"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> I</label>
+                                <label style="color: var(--danger);"><input type="radio" name="status_${index}" value="A" ${siswa.status==='A'?'checked':''}> A</label>
+                            </div>
+                        </td>
+                        <td><input type="text" id="ket_${index}" value="${siswa.ket || ''}" placeholder="Alasan..."></td>
+                        <td><span style="font-size:11px; color:#555;">${siswa.waktuAbsen || '-'}</span></td>
+                    </tr>`;
+                });
+            }
         }
 
         function simpanAbsensi(e) {
             e.preventDefault(); 
             let updateTimeStr = getWaktuSekarang(); 
-            let activeRekapDay = parseInt(localStorage.getItem('activeRekapDay') || "-1");
+            let activeRekapDay = parseInt(document.getElementById('select-active-rekap').value || "-1");
             
             dataSiswa.forEach((siswa, index) => {
                 let newStatus = document.querySelector(`input[name="status_${index}"]:checked`).value;
@@ -1468,7 +1633,7 @@
             simpanDataKeCloud(); 
             renderDashboard(); 
             renderTabelAbsensi4Minggu(); 
-            alert("Data Absensi Harian tersimpan! Dashboard dan Rekap Bulanan otomatis diperbarui."); 
+            alert("Data Absensi Harian tersimpan! Dashboard dan Rekap Bulanan otomatis diperbarui ke Cloud."); 
             switchTab('dashboard');
         }
 
@@ -1479,6 +1644,7 @@
                     s.ket = ''; 
                     s.waktuAbsen = "-"; 
                 }); 
+                simpanDataKeCloud();
                 renderAllViews(); 
             } 
         }
@@ -1488,8 +1654,9 @@
             if (!tbody) return; 
             let html = '';
             
-            for (let i = 0; i < 40; i++) {
-                let siswa = dataSiswa[i] || { nama: '', nis: '', jk: '', rekap: Array(20).fill("") }; 
+            let totalShow = Math.max(dataSiswa.length, 1);
+            for (let i = 0; i < totalShow; i++) {
+                let siswa = dataSiswa[i] || { nama: '-', nis: '-', jk: '-', rekap: Array(20).fill("") }; 
                 if (!siswa.rekap) siswa.rekap = Array(20).fill("");
                 
                 html += `<tr>
@@ -1509,7 +1676,7 @@
                 </tr>`;
             }
             tbody.innerHTML = html; 
-            for (let i = 0; i < 40; i++) hitungRekapBaris(i); 
+            for (let i = 0; i < totalShow; i++) hitungRekapBaris(i); 
         }
 
         function hitungRekapBaris(indexBaris) {
@@ -1567,7 +1734,7 @@
             document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
             document.getElementById('btn-save-rekap').classList.add('hidden'); 
             renderTabelAbsensi4Minggu(); 
-            alert("Buku Rekap Bulanan berhasil diperbarui secara manual!");
+            alert("Buku Rekap Bulanan berhasil diperbarui secara manual ke Cloud!");
         }
 
         function downloadExcelRekapBulanan() {
@@ -1595,29 +1762,33 @@
             tbody.innerHTML = ""; 
             let totalTerkumpul = 0, totalTunggakan = 0, jumlahSiswaMenunggak = 0;
             
-            dataSiswa.forEach((s, idx) => {
-                let centang = s.kas.filter(Boolean).length; 
-                let sisaTagihan = (totalMingguKas - centang) * iuranKasPerMinggu; 
-                
-                totalTerkumpul += (centang * iuranKasPerMinggu); 
-                totalTunggakan += sisaTagihan; 
-                if(sisaTagihan > 0) jumlahSiswaMenunggak++;
-                
-                let checkboxes = ""; 
-                for(let i=0; i < totalMingguKas; i++) { 
-                    checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" data-student="${idx}" data-week="${i}" ${s.kas[i] ? 'checked' : ''}></td>`; 
-                }
-                
-                let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
-                let pesanTagihan = `Halo Bapak/Ibu, menginfokan mengenai tabungan Uang Kas Kelas untuk anak Anda *${s.nama}*, saat ini tercatat memiliki sisa tunggakan sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon untuk diselesaikan, terima kasih.`;
-                
-                tbody.innerHTML += `<tr>
-                    <td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>
-                    ${checkboxes}
-                    <td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td>
-                    <td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td>
-                </tr>`;
-            });
+            if (dataSiswa.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data.</td></tr>`;
+            } else {
+                dataSiswa.forEach((s, idx) => {
+                    let centang = s.kas.filter(Boolean).length; 
+                    let sisaTagihan = (totalMingguKas - centang) * iuranKasPerMinggu; 
+                    
+                    totalTerkumpul += (centang * iuranKasPerMinggu); 
+                    totalTunggakan += sisaTagihan; 
+                    if(sisaTagihan > 0) jumlahSiswaMenunggak++;
+                    
+                    let checkboxes = ""; 
+                    for(let i=0; i < totalMingguKas; i++) { 
+                        checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" data-student="${idx}" data-week="${i}" ${s.kas[i] ? 'checked' : ''}></td>`; 
+                    }
+                    
+                    let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
+                    let pesanTagihan = `Halo Bapak/Ibu, menginfokan mengenai tabungan Uang Kas Kelas untuk anak Anda *${s.nama}*, saat ini tercatat memiliki sisa tunggakan sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon untuk diselesaikan, terima kasih.`;
+                    
+                    tbody.innerHTML += `<tr>
+                        <td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>
+                        ${checkboxes}
+                        <td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td>
+                        <td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td>
+                    </tr>`;
+                });
+            }
             
             document.getElementById('total-semua').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); 
             document.getElementById('display-kas').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); 
@@ -1664,7 +1835,7 @@
             document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin'; 
             document.getElementById('btn-save-kas').style.display = "none"; 
             renderAllViews(); 
-            alert("Data Buku Kas Berhasil Disimpan Permanen!"); 
+            alert("Data Buku Kas Berhasil Disimpan Permanen ke Cloud!"); 
         }
 
         function downloadExcelKas() {
@@ -1701,21 +1872,12 @@
                     s.kas = [false, false, false, false]; 
                     s.kasTanggal = ["", "", "", ""]; 
                 }); 
+                simpanDataKeCloud();
                 renderAllViews(); 
             } 
         }
 
         // --- PENGATURAN SYSTEM, GAMBAR, JADWAL & TEXT SISWA ---
-        function previewDanSimpanFoto(event) { 
-            const file = event.target.files[0];
-            compressImageAndProcess(file, function(base64Data) {
-                document.getElementById('preview-foto').src = base64Data; 
-                document.getElementById('header-profile-pic').src = base64Data; 
-                localStorage.setItem('fotoWaliKelas', base64Data); 
-                alert("Foto profil berhasil disimpan dan dikompresi otomatis!"); 
-            });
-        }
-        
         function handleImageUpload(event, previewId, globalVarName) {
             const file = event.target.files[0];
             compressImageAndProcess(file, function(base64Data) {
@@ -1728,29 +1890,27 @@
             });
         }
 
-        function saveImageToLocal(storageKey, base64Data, labelName) {
+        function saveImageToSettings(settingKey, base64Data, labelName) {
             if(!base64Data) { alert(`Pilih gambar untuk ${labelName} terlebih dahulu!`); return; }
-            try {
-                localStorage.setItem(storageKey, base64Data);
-                renderSemuaGambar();
-                alert(`${labelName} berhasil tersimpan & terhubung ke Dashboard Siswa!`);
-            } catch (e) {
-                alert("Gagal menyimpan! Memori perangkat Anda penuh, silakan hapus foto yang tidak diperlukan.");
-            }
+            globalSettings[settingKey] = base64Data;
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            alert(`${labelName} berhasil tersimpan ke Cloud & terhubung ke Dashboard Siswa!`);
         }
 
-        function deleteImageFromLocal(storageKey, previewId) {
-            localStorage.removeItem(storageKey);
+        function deleteImageFromSettings(settingKey, previewId) {
+            globalSettings[settingKey] = "";
             let preview = document.getElementById(previewId);
             if(preview) {
                 preview.src = "";
                 preview.style.display = "none";
             }
-            renderSemuaGambar();
-            alert(`Data gambar berhasil dihapus!`);
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            alert(`Data gambar berhasil dihapus dari Cloud!`);
         }
 
-        function renderSemuaGambar() {
+        function renderSemuaGambarGlobal() {
             const configs = [
                 { key: 'jadwalPelajaran', dashImg: 'dash-jadwal-pelajaran', dashTxt: 'txt-no-jadwal', setImg: 'preview-img-jadwal', tempVar: 'tempJadwalBase64' },
                 { key: 'strukturKelas', dashImg: 'dash-struktur', dashTxt: 'txt-no-struktur', setImg: 'preview-img-struktur', tempVar: 'tempStrukturBase64' },
@@ -1760,7 +1920,7 @@
             ];
 
             configs.forEach(c => {
-                let saved = localStorage.getItem(c.key);
+                let saved = globalSettings[c.key];
                 let dImg = document.getElementById(c.dashImg); 
                 let dTxt = document.getElementById(c.dashTxt);
                 let sImg = document.getElementById(c.setImg);
@@ -1780,15 +1940,17 @@
         function saveCatatanPiket() {
             let teks = document.getElementById('input-catatan-piket').value;
             if(!teks.trim()) { alert("Isi catatan kosong!"); return; }
-            localStorage.setItem('catatanPiket', teks);
-            document.getElementById('dash-catatan-piket').innerText = teks;
-            alert("Catatan petugas piket berhasil disimpan & tersinkron!");
+            globalSettings.catatanPiket = teks;
+            simpanDataKeCloud();
+            loadSettingsToUI();
+            alert("Catatan petugas piket berhasil disinkron!");
         }
         
         function hapusCatatanPiket() {
-            localStorage.removeItem('catatanPiket');
+            globalSettings.catatanPiket = "";
             document.getElementById('input-catatan-piket').value = "";
-            document.getElementById('dash-catatan-piket').innerText = "Belum ada catatan petugas piket.";
+            simpanDataKeCloud();
+            loadSettingsToUI();
             alert("Catatan petugas piket dihapus.");
         }
 
