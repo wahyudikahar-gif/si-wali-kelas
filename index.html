@@ -202,10 +202,6 @@
             <p class="subtitle">Portal Login & Presensi Mandiri</p>
 
             <form onsubmit="prosesLogin(event)">
-                <div id="input-username-container">
-                    <input type="text" id="login-username" placeholder="Username" required>
-                </div>
-                <input type="password" id="login-password" placeholder="Password" required>
                 <select id="roleSelect" onchange="checkRole()" required>
                     <option value="" disabled selected>Pilih Hak Akses Anda...</option>
                     <option value="admin">Wali Kelas (Admin)</option>
@@ -213,6 +209,12 @@
                     <option value="bendahara">Bendahara (Keuangan)</option>
                     <option value="siswa">Siswa (Absen Mandiri)</option>
                 </select>
+
+                <div id="input-username-container">
+                    <input type="text" id="login-username" placeholder="Pilih Role di atas dulu" disabled required>
+                </div>
+                
+                <input type="password" id="login-password" placeholder="Password / NISN" required>
                 
                 <div id="student-features">
                     <p style="font-size: 14px; color: var(--primary); font-weight: bold; margin-top: 10px; margin-bottom: 5px; text-align: left;">Pilih Kehadiran Hari Ini:</p>
@@ -595,7 +597,6 @@
             <div id="tab-pengaturan" class="tab-content">
                 <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-cog"></i> Pengaturan Sistem</h2>
 
-                <!-- PENAMBAHAN: PANEL IDENTITAS SEKOLAH -->
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-school"></i> Pengaturan Identitas Sekolah</h3>
                     <div class="form-group">
@@ -607,7 +608,7 @@
                         <input type="text" id="input-alamat-sekolah" placeholder="Contoh: Jl. Sudirman, Balikpapan">
                     </div>
                     <div class="form-group">
-                        <label>Upload Logo Sekolah (Maks. otomatis dikompres)</label>
+                        <label>Upload Logo Sekolah</label>
                         <input type="file" id="input-logo-sekolah" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-logo-sekolah', 'tempLogoSekolah')">
                         <img id="preview-logo-sekolah" class="img-dashboard-preview" style="max-height: 100px;">
                     </div>
@@ -618,7 +619,6 @@
                     </div>
                 </div>
                 
-                <!-- PERUBAHAN: PROFIL WALI KELAS KINI MANUAL -->
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-user-edit"></i> Profil Wali Kelas</h3>
                     <div class="form-group">
@@ -630,7 +630,7 @@
                         <input type="text" id="input-nama-kelas" placeholder="Contoh: IX F">
                     </div>
                     <div class="form-group">
-                        <label>Upload Foto Profil (Maks. otomatis dikompres)</label>
+                        <label>Upload Foto Profil</label>
                         <input type="file" id="input-foto-wali" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-foto-wali', 'tempFotoWali')">
                         <img id="preview-foto-wali" class="img-dashboard-preview" style="max-height: 100px;">
                     </div>
@@ -775,8 +775,7 @@
         window.tempLogoSekolah = "";
         window.tempFotoWali = "";
 
-        // --- MANAJEMEN KOMPRESI GAMBAR (AGRESIF UTK MENCEGAH GOOGLE SHEET ERROR) ---
-        // Karena satu sel A1 di G-Sheet memuat limit ~50rb karakter, kita harus sangat menekan ukuran gambar.
+        // --- KOMPRESI GAMBAR LEBIH BAIK UTK CLOUD ---
         function compressImageAndProcess(file, callback) {
             if (!file) return;
             const reader = new FileReader();
@@ -784,7 +783,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400; // Resolusi ditekan lebih jauh untuk keamanan Cloud 
+                    const MAX_WIDTH = 800; // Resolusi tetap bagus, namun ukuran ringan
                     let width = img.width;
                     let height = img.height;
                     
@@ -798,8 +797,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // Convert dengan kualitas 50%
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
                     callback(compressedBase64);
                 };
                 img.src = e.target.result;
@@ -807,7 +805,6 @@
             reader.readAsDataURL(file);
         }
 
-        // --- WIDGET WAKTU REAL-TIME ---
         function updateTime() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -840,158 +837,113 @@
             overlay.classList.toggle('show');
         }
 
-        // --- MANAJEMEN STATE APLIKASI CLOUD ---
+        // --- STATE APLIKASI ---
         let currentRole = "";
         let isAdminLoggedIn = false;
         let isAdminKasUnlocked = false;
         const iuranKasPerMinggu = 5000;
         const totalMingguKas = 4;
 
-        // Data akan murni kosong jika belum diinput sama sekali
+        // Data akan murni kosong sebelum admin mengisi
         let dataSiswa = [];
-        
-        // Seluruh pengaturan sekarang dibungkus secara terpusat agar sinkron ke CLOUD
         let globalSettings = {
-            pengumuman: "",
-            agendaKelas: "",
-            jadwalPelajaran: "",
-            strukturKelas: "",
-            jadwalPiket: "",
-            fotoPiket1: "",
-            fotoPiket2: "",
-            catatanPiket: "",
-            namaWaliKelas: "",
-            namaKelas: "",
-            fotoWaliKelas: "",
-            namaSekolah: "",
-            alamatSekolah: "",
-            logoSekolah: ""
+            pengumuman: "", agendaKelas: "", jadwalPelajaran: "", strukturKelas: "", jadwalPiket: "", fotoPiket1: "",
+            fotoPiket2: "", catatanPiket: "", namaWaliKelas: "", namaKelas: "", fotoWaliKelas: "", namaSekolah: "",
+            alamatSekolah: "", logoSekolah: ""
         };
         
         const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxVv9_x9wuM2-VkacVwul5hnjbXM6Por_yunr_Wp5-j_4hQUsh0o6eFzOts6uIF7hUkww/exec"; 
 
+        // Fungsi Simpan yang Aman & Anti Crash
         function simpanDataKeCloud() {
-            const payload = {
-                siswa: dataSiswa,
-                settings: globalSettings
-            };
+            const payload = { siswa: dataSiswa, settings: globalSettings };
             let payloadStr = JSON.stringify(payload);
             
-            // Peringatan Keamanan Limit Sel Google Sheets (Maksimal 50.000 karakter)
-            if (payloadStr.length > 45000) {
-                alert("Peringatan: Total keseluruhan data (terutama gambar) sudah mendekati batas maksimal sistem Cloud Spreadsheet! Proses simpan mungkin gagal. Disarankan untuk menghapus gambar lama jika terjadi error.");
+            try {
+                localStorage.setItem('siwali_data_master', payloadStr);
+            } catch(e) {
+                console.error("Local storage penuh", e);
             }
 
-            localStorage.setItem('siwali_data_master', payloadStr);
             fetch(CLOUD_URL, {
                 redirect: "follow",
                 method: 'POST',
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: payloadStr
-            }).then(res => console.log("Berhasil simpan paket ke Cloud!"))
-              .catch(err => alert("Gagal sinkron Cloud! Periksa koneksi atau ukuran gambar."));
+            }).then(res => console.log("Berhasil simpan ke Cloud!"))
+              .catch(err => alert("Gagal sinkron Cloud! Periksa koneksi internet Anda."));
         }
 
+        // INIT SYSTEM DENGAN TRY CATCH SUPER AMAN (Anti-Freeze di Login)
         window.addEventListener('DOMContentLoaded', () => {
             fetch(CLOUD_URL)
-                .then(res => res.text()) // Tarik sebagai text dulu karena bisa array atau object baru
+                .then(res => res.text()) 
                 .then(textData => {
-                    if(textData && textData.trim() !== "") {
-                        let parsedData = JSON.parse(textData);
-                        
-                        // Migrasi jika Cloud masih menyimpan array versi lama
-                        if (Array.isArray(parsedData)) {
-                            dataSiswa = parsedData;
-                        } else if (parsedData && parsedData.siswa) {
-                            // Struktur Baru
-                            dataSiswa = parsedData.siswa;
-                            globalSettings = Object.assign(globalSettings, parsedData.settings);
+                    try {
+                        if(textData && textData.trim() !== "" && textData.trim() !== "Sukses") {
+                            let parsedData = JSON.parse(textData);
+                            if (Array.isArray(parsedData)) {
+                                dataSiswa = parsedData;
+                            } else if (parsedData && parsedData.siswa) {
+                                dataSiswa = parsedData.siswa;
+                                if(parsedData.settings) {
+                                    globalSettings = Object.assign(globalSettings, parsedData.settings);
+                                }
+                            }
+                            localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings}));
                         }
-                        localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings}));
+                    } catch (e) {
+                        console.error("Gagal membaca database cloud:", e);
+                        loadLocalDataSafely();
                     }
                     jalankanSistemAwal();
                 })
                 .catch(err => {
-                    // Fallback offline
-                    let localStr = localStorage.getItem('siwali_data_master');
-                    if (localStr) {
-                        let localData = JSON.parse(localStr);
-                        if (Array.isArray(localData)) { dataSiswa = localData; }
-                        else if (localData.siswa) {
-                            dataSiswa = localData.siswa;
-                            globalSettings = Object.assign(globalSettings, localData.settings);
-                        }
-                    }
+                    console.error("Cloud Error / Offline:", err);
+                    loadLocalDataSafely();
                     jalankanSistemAwal();
                 });
         });
 
-        // Merender semua UI yang bergantung dari globalSettings
-        function loadSettingsToUI() {
-            // Dashboard Teks
-            let dispPengumuman = document.getElementById('display-pengumuman');
-            if(dispPengumuman) dispPengumuman.innerText = globalSettings.pengumuman || "Silakan tunggu info terbaru dari admin...";
-            
-            let dispAgenda = document.getElementById('display-agenda');
-            if(dispAgenda) dispAgenda.innerText = globalSettings.agendaKelas || "Belum ada agenda.";
-            
-            let dashPiket = document.getElementById('dash-catatan-piket'); 
-            if(dashPiket) dashPiket.innerText = globalSettings.catatanPiket || "Belum ada catatan petugas piket.";
-
-            // Header (Profil Wali)
-            document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
-            document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
-            if(globalSettings.fotoWaliKelas) {
-                document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
-                let previewWali = document.getElementById('preview-foto-wali');
-                if(previewWali) {
-                    previewWali.src = globalSettings.fotoWaliKelas;
-                    previewWali.style.display = "inline-block";
+        function loadLocalDataSafely() {
+            try {
+                let localStr = localStorage.getItem('siwali_data_master');
+                if (localStr) {
+                    let localData = JSON.parse(localStr);
+                    if (Array.isArray(localData)) { dataSiswa = localData; }
+                    else if (localData && localData.siswa) {
+                        dataSiswa = localData.siswa;
+                        if(localData.settings) globalSettings = Object.assign(globalSettings, localData.settings);
+                    }
                 }
-            } else {
-                document.getElementById('header-profile-pic').src = "https://ui-avatars.com/api/?name=Wali&background=45B69C&color=fff";
+            } catch(e) {
+                console.error("Data lokal rusak.");
             }
-
-            // Sidebar & Identitas (Sekolah)
-            document.getElementById('sidebar-nama-sekolah').innerText = globalSettings.namaSekolah || "Belum Diatur";
-            document.getElementById('sidebar-alamat-sekolah').innerText = globalSettings.alamatSekolah || "-";
-            if(globalSettings.logoSekolah) {
-                document.getElementById('sidebar-logo').src = globalSettings.logoSekolah;
-                let previewLogo = document.getElementById('preview-logo-sekolah');
-                if(previewLogo) {
-                    previewLogo.src = globalSettings.logoSekolah;
-                    previewLogo.style.display = "inline-block";
-                }
-            } else {
-                document.getElementById('sidebar-logo').src = "https://ui-avatars.com/api/?name=School&background=114B5F&color=fff";
-            }
-
-            renderSemuaGambarGlobal();
-            loadCatatanDashboard();
         }
 
         function jalankanSistemAwal() {
-            // Pembersihan/migrasi skema array siswa
+            // Pastikan data siswa adalah array agar fungsi tidak crash
+            if (!Array.isArray(dataSiswa)) dataSiswa = [];
+            
             dataSiswa.forEach(s => {
+                if(!s.kas) s.kas = [false, false, false, false];
                 if(!s.kasTanggal) s.kasTanggal = ["", "", "", ""];
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
-                if(!s.rekap || s.rekap.length !== 20) s.rekap = Array(20).fill("");
+                if(!s.rekap || !Array.isArray(s.rekap) || s.rekap.length !== 20) s.rekap = Array(20).fill("");
                 if(typeof s.catatan === 'undefined') s.catatan = "";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
             });
             
-            // Muat settingan sinkronisasi cloud
             loadSettingsToUI();
             renderTabelAbsensi4Minggu();
             
             let sessionLoggedIn = localStorage.getItem('siwali_logged_in');
             if (sessionLoggedIn === "true") {
-                currentRole = localStorage.getItem('siwali_role');
+                currentRole = localStorage.getItem('siwali_role') || "";
                 isAdminLoggedIn = localStorage.getItem('siwali_is_admin') === "true";
                 
                 if (isAdminLoggedIn) unlockAdminFeatures();
                 
-                // Set Header bagi siswa
                 if (currentRole === "siswa") {
                     let nis = localStorage.getItem('siwali_logged_student_nis'); 
                     let sData = dataSiswa.find(x => x.nis === nis);
@@ -1014,74 +966,53 @@
                     if(music && music.paused) { music.play().catch(e => console.log("Autoplay ditolak")); } 
                 }, { once: true });
             } else {
+                // Berada di layar login
+                document.getElementById('login-username').disabled = false;
                 renderAllViews();
                 checkRole();
             }
         }
 
-        function unlockAdminFeatures() {
-            document.querySelectorAll('.admin-only-element').forEach(el => el.classList.remove('hidden'));
+        function loadSettingsToUI() {
+            let dispPengumuman = document.getElementById('display-pengumuman');
+            if(dispPengumuman) dispPengumuman.innerText = globalSettings.pengumuman || "Silakan tunggu info terbaru dari admin...";
             
-            let lockSiswa = document.getElementById('lock-siswa');
-            if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "#45B69C"; }
+            let dispAgenda = document.getElementById('display-agenda');
+            if(dispAgenda) dispAgenda.innerText = globalSettings.agendaKelas || "Belum ada agenda.";
             
-            let lockAbsensi = document.getElementById('lock-absensi');
-            if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "#45B69C"; }
-            
-            populateCheckboxSiswaCatatan();
-            let adminCatatanSelector = document.getElementById('admin-catatan-selector');
-            if(adminCatatanSelector) adminCatatanSelector.style.display = "block";
-            
-            populateCheckboxPanggilanOrtu();
-        }
+            let dashPiket = document.getElementById('dash-catatan-piket'); 
+            if(dashPiket) dashPiket.innerText = globalSettings.catatanPiket || "Belum ada catatan petugas piket.";
 
-        function renderAllViews() {
-            dataSiswa.sort((a, b) => a.nama.localeCompare(b.nama));
-            // Jangan simpan saat dirender agar tidak spam post request, post hanya saat data diubah manual
-            
-            renderDashboard(); 
-            renderDataSiswa(); 
-            renderFormAbsensi(); 
-            renderTabelAbsensi4Minggu(); 
-            renderKas(); 
-            renderTunggakanDashboard(); 
-            renderLunasDashboard(); 
-            handleRoleVisibility(); 
-        }
-
-        function handleRoleVisibility() {
-            const btnDownloadKasExcel = document.getElementById('btn-download-kas-excel');
-            document.querySelectorAll('.admin-only-setting').forEach(el => {
-                if(currentRole === 'siswa') el.style.display = 'none'; 
-                else el.style.display = 'block';
-            });
-            if (currentRole === "admin" || currentRole === "bendahara") { 
-                if (btnDownloadKasExcel) btnDownloadKasExcel.classList.remove('hidden'); 
-            } else { 
-                if (btnDownloadKasExcel) btnDownloadKasExcel.classList.add('hidden'); 
+            document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
+            document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
+            if(globalSettings.fotoWaliKelas) {
+                document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
+                let previewWali = document.getElementById('preview-foto-wali');
+                if(previewWali) {
+                    previewWali.src = globalSettings.fotoWaliKelas;
+                    previewWali.style.display = "inline-block";
+                }
+            } else {
+                document.getElementById('header-profile-pic').src = "https://ui-avatars.com/api/?name=Wali&background=45B69C&color=fff";
             }
+
+            document.getElementById('sidebar-nama-sekolah').innerText = globalSettings.namaSekolah || "Belum Diatur";
+            document.getElementById('sidebar-alamat-sekolah').innerText = globalSettings.alamatSekolah || "-";
+            if(globalSettings.logoSekolah) {
+                document.getElementById('sidebar-logo').src = globalSettings.logoSekolah;
+                let previewLogo = document.getElementById('preview-logo-sekolah');
+                if(previewLogo) {
+                    previewLogo.src = globalSettings.logoSekolah;
+                    previewLogo.style.display = "inline-block";
+                }
+            } else {
+                document.getElementById('sidebar-logo').src = "https://ui-avatars.com/api/?name=School&background=114B5F&color=fff";
+            }
+
+            renderSemuaGambarGlobal();
+            loadCatatanDashboard();
         }
 
-        function softRefreshApp() {
-            // Tarik paksa data Cloud terbaru
-            fetch(CLOUD_URL)
-                .then(res => res.text())
-                .then(textData => {
-                    let parsed = JSON.parse(textData);
-                    if(parsed && parsed.siswa) {
-                        dataSiswa = parsed.siswa;
-                        globalSettings = Object.assign(globalSettings, parsed.settings);
-                    }
-                    localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings}));
-                    loadSettingsToUI();
-                    renderAllViews(); 
-                    alert("Seluruh Data, Info & Gambar berhasil disinkronisasi langsung dari Cloud!"); 
-                }).catch(err => {
-                    alert("Sedang Offline, gagal menarik dari Cloud.");
-                });
-        }
-
-        // --- INTERAKSI LOGIN ---
         function checkRole() {
             var role = document.getElementById("roleSelect").value;
             var studentArea = document.getElementById("student-features");
@@ -1091,7 +1022,14 @@
             if (role === "siswa") {
                 let selectHTML = `<select id="login-username" required style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #D3D3D3; border-radius: 5px; font-size: 14px;">`;
                 selectHTML += `<option value="" disabled selected>-- Pilih Nama Anda (Siswa) --</option>`;
-                dataSiswa.forEach(siswa => { selectHTML += `<option value="${siswa.nis}">${siswa.nama}</option>`; }); 
+                
+                if (dataSiswa && dataSiswa.length > 0) {
+                    dataSiswa.forEach(siswa => { 
+                        selectHTML += `<option value="${siswa.nis}">${siswa.nama}</option>`; 
+                    });
+                } else {
+                    selectHTML += `<option value="" disabled>Data kosong, tunggu Admin mengisi data!</option>`;
+                }
                 selectHTML += `</select>`;
                 
                 usernameContainer.innerHTML = selectHTML;
@@ -1111,16 +1049,19 @@
         function prosesLogin(e) {
             e.preventDefault();
             let role = document.getElementById("roleSelect").value;
-            let usernameVal = document.getElementById("login-username").value;
+            let elUsername = document.getElementById("login-username");
+            let usernameVal = elUsername ? elUsername.value : "";
             let pass = document.getElementById("login-password").value;
             
             if(!role) { alert("Silakan pilih hak akses terlebih dahulu!"); return; }
+            if(!usernameVal) { alert("Username / Nama Siswa harus diisi!"); return; }
 
             if (role === "siswa") {
                 let targetSiswa = dataSiswa.find(s => s.nis === usernameVal);
                 if (targetSiswa && pass === targetSiswa.nis) {
                     isAdminLoggedIn = false;
-                    let statusSiswa = document.querySelector('input[name="student_status"]:checked').value; 
+                    let statSiswaObj = document.querySelector('input[name="student_status"]:checked');
+                    let statusSiswa = statSiswaObj ? statSiswaObj.value : "H"; 
                     let ketManual = document.getElementById('student-ket-manual').value.trim();
                     targetSiswa.status = statusSiswa; 
                     targetSiswa.waktuAbsen = getWaktuSekarang(); 
@@ -1128,35 +1069,34 @@
                     if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; 
                     else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
                     
-                    let activeRekapDay = parseInt(document.getElementById('select-active-rekap').value || "-1");
+                    let rekapEl = document.getElementById('select-active-rekap');
+                    let activeRekapDay = parseInt(rekapEl ? rekapEl.value : "-1");
                     if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekap[activeRekapDay] = statusSiswa; }
                     
                     simpanDataKeCloud(); 
                     document.getElementById('student-ket-manual').value = ""; 
                     localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); 
                     
-                    // Set identitas siswa di header
                     document.getElementById('header-user-fullname').innerText = targetSiswa.nama; 
                     document.getElementById('header-nama-kelas').innerText = "Siswa Kelas " + (globalSettings.namaKelas || ""); 
                     if(targetSiswa.foto) document.getElementById('header-profile-pic').src = targetSiswa.foto;
 
                     alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
                 } else { 
-                    alert("Password (NISN) yang Anda masukkan salah!"); return; 
+                    alert("Sandi (NISN) yang Anda masukkan salah!"); return; 
                 }
             } else if (role === "admin") {
-                if(usernameVal === "admin" && pass === "admin123") { 
+                if (usernameVal === "admin" && pass === "admin123") { 
                     isAdminLoggedIn = true; 
                     unlockAdminFeatures(); 
                     
-                    // Set identitas Wali di Header dari global Settings
                     document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
                     document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
                     if(globalSettings.fotoWaliKelas) document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
 
                     alert("Selamat datang Bapak/Ibu Wali Kelas!"); 
                 } else { 
-                    alert("Username/Password Salah!"); return; 
+                    alert("Username / Password Salah!"); return; 
                 }
             } else {
                 isAdminLoggedIn = false; 
@@ -1169,7 +1109,6 @@
             localStorage.setItem('siwali_is_admin', isAdminLoggedIn ? 'true' : 'false'); 
             localStorage.setItem('siwali_active_tab', 'dashboard');
             
-            // Tarik data ulang
             loadSettingsToUI(); 
             renderAllViews(); 
             
@@ -1179,6 +1118,65 @@
             document.getElementById('login-page').style.display = "none"; 
             document.getElementById('app-page').style.display = "block"; 
             switchTab('dashboard');
+        }
+
+        // FUNGSI LAINNYA TETAP SAMA (SUDAH AMAN)
+        function unlockAdminFeatures() {
+            document.querySelectorAll('.admin-only-element').forEach(el => el.classList.remove('hidden'));
+            
+            let lockSiswa = document.getElementById('lock-siswa');
+            if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "#45B69C"; }
+            let lockAbsensi = document.getElementById('lock-absensi');
+            if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "#45B69C"; }
+            
+            populateCheckboxSiswaCatatan();
+            let adminCatatanSelector = document.getElementById('admin-catatan-selector');
+            if(adminCatatanSelector) adminCatatanSelector.style.display = "block";
+            populateCheckboxPanggilanOrtu();
+        }
+
+        function renderAllViews() {
+            if(dataSiswa.length > 0) dataSiswa.sort((a, b) => a.nama.localeCompare(b.nama));
+            renderDashboard(); 
+            renderDataSiswa(); 
+            renderFormAbsensi(); 
+            renderTabelAbsensi4Minggu(); 
+            renderKas(); 
+            renderTunggakanDashboard(); 
+            renderLunasDashboard(); 
+            handleRoleVisibility(); 
+        }
+
+        function handleRoleVisibility() {
+            const btnDownloadKasExcel = document.getElementById('btn-download-kas-excel');
+            document.querySelectorAll('.admin-only-setting').forEach(el => {
+                if(currentRole === 'siswa') el.style.display = 'none'; else el.style.display = 'block';
+            });
+            if (currentRole === "admin" || currentRole === "bendahara") { 
+                if (btnDownloadKasExcel) btnDownloadKasExcel.classList.remove('hidden'); 
+            } else { 
+                if (btnDownloadKasExcel) btnDownloadKasExcel.classList.add('hidden'); 
+            }
+        }
+
+        function softRefreshApp() {
+            fetch(CLOUD_URL).then(res => res.text()).then(textData => {
+                try {
+                    let parsed = JSON.parse(textData);
+                    if(parsed && parsed.siswa) {
+                        dataSiswa = parsed.siswa;
+                        globalSettings = Object.assign(globalSettings, parsed.settings || {});
+                        localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings}));
+                        loadSettingsToUI();
+                        renderAllViews(); 
+                        alert("Sinkronisasi Berhasil! Semua data & gambar termuat dari Cloud."); 
+                    }
+                } catch(e) {
+                    alert("Sedang Offline atau Data Cloud kosong.");
+                }
+            }).catch(err => {
+                alert("Koneksi bermasalah.");
+            });
         }
 
         function switchTab(tabName) {
@@ -1191,27 +1189,27 @@
             
             document.getElementById('main-sidebar').classList.remove('show');
             document.querySelector('.sidebar-overlay').classList.remove('show');
+            if (tabName === 'dashboard') loadSettingsToUI();
         }
 
         function switchTabSecured(tabName) {
             if (!isAdminLoggedIn) {
                 if (currentRole === "siswa") { 
-                    alert("Akses Ditolak! Anda masuk sebagai Siswa dan tidak memiliki izin membuka menu ini."); return; 
+                    alert("Akses Ditolak! Fitur ini hanya untuk admin."); return; 
                 }
-                let checkPass = prompt("PERINGATAN! Fitur ini membutuhkan hak akses Wali Kelas.\nMasukkan Password Admin:");
+                let checkPass = prompt("Masukkan Password Admin:");
                 if (checkPass === "admin123") { 
                     isAdminLoggedIn = true; 
                     unlockAdminFeatures(); 
                     localStorage.setItem('siwali_is_admin', 'true'); 
                     alert("Akses Admin Terbuka."); 
                 } else { 
-                    alert("Password Salah! Anda tidak diizinkan masuk."); return; 
+                    alert("Password Salah!"); return; 
                 }
             }
             switchTab(tabName);
         }
 
-        // --- DASHBOARD WIDGETS ---
         function populateCheckboxPanggilanOrtu() {
             let container = document.getElementById('checkbox-panggilan-ortu');
             if(!container) return;
@@ -1220,141 +1218,82 @@
                 container.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-panggilan-ortu" ${s.panggilanOrtu ? 'checked' : ''}> ${s.nama}</label>`;
             });
         }
-        
         function savePanggilanOrtu() { 
             let checkboxes = document.querySelectorAll('.cb-panggilan-ortu');
             checkboxes.forEach(cb => {
                 let s = dataSiswa.find(x => x.nis === cb.value);
                 if(s) s.panggilanOrtu = cb.checked;
             });
-            simpanDataKeCloud(); 
-            alert("Data panggilan orang tua berhasil disimpan ke Cloud!");
-            renderDashboard(); 
+            simpanDataKeCloud(); alert("Tersimpan ke Cloud!"); renderDashboard(); 
         }
-        
         function hapusPanggilanOrtu() { 
-            if(confirm("Hapus semua panggilan orang tua?")) {
-                dataSiswa.forEach(s => s.panggilanOrtu = false);
-                simpanDataKeCloud();
-                populateCheckboxPanggilanOrtu();
-                renderDashboard();
-                alert("Semua panggilan telah dihapus.");
-            }
+            if(confirm("Hapus semua?")) { dataSiswa.forEach(s => s.panggilanOrtu = false); simpanDataKeCloud(); populateCheckboxPanggilanOrtu(); renderDashboard(); }
         }
-        
-        function editPanggilanOrtu() {
-            populateCheckboxPanggilanOrtu();
-            alert("Silakan ubah centang pada nama siswa dan klik 'Save'.");
-        }
+        function editPanggilanOrtu() { populateCheckboxPanggilanOrtu(); alert("Ubah centang lalu Save."); }
 
-        // SISTEM TERPUSAT (MENYIMPAN KE CLOUD)
         function savePengumuman() { 
             let teks = document.getElementById('input-pengumuman').value; 
-            if(!teks.trim()) return; 
-            globalSettings.pengumuman = teks;
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert("Pengumuman berhasil disinkronisasi ke Cloud!"); 
+            if(!teks.trim()) return; globalSettings.pengumuman = teks; simpanDataKeCloud(); loadSettingsToUI(); alert("Tersinkronisasi ke Cloud!"); 
         }
-        function editPengumuman() { 
-            document.getElementById('input-pengumuman').value = globalSettings.pengumuman || ""; 
-        }
-        function hapusPengumuman() { 
-            globalSettings.pengumuman = "";
-            document.getElementById('input-pengumuman').value = ""; 
-            simpanDataKeCloud();
-            loadSettingsToUI();
-        }
+        function editPengumuman() { document.getElementById('input-pengumuman').value = globalSettings.pengumuman || ""; }
+        function hapusPengumuman() { globalSettings.pengumuman = ""; document.getElementById('input-pengumuman').value = ""; simpanDataKeCloud(); loadSettingsToUI(); }
         
         function saveAgenda() { 
             let teks = document.getElementById('input-agenda').value; 
-            if(!teks.trim()) return; 
-            globalSettings.agendaKelas = teks;
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert("Agenda kelas tersinkron!");
+            if(!teks.trim()) return; globalSettings.agendaKelas = teks; simpanDataKeCloud(); loadSettingsToUI(); alert("Tersinkronisasi!");
         }
-        function editAgenda() { 
-            document.getElementById('input-agenda').value = globalSettings.agendaKelas || ""; 
-        }
-        function hapusAgenda() { 
-            globalSettings.agendaKelas = "";
-            document.getElementById('input-agenda').value = ""; 
-            simpanDataKeCloud();
-            loadSettingsToUI();
-        }
+        function editAgenda() { document.getElementById('input-agenda').value = globalSettings.agendaKelas || ""; }
+        function hapusAgenda() { globalSettings.agendaKelas = ""; document.getElementById('input-agenda').value = ""; simpanDataKeCloud(); loadSettingsToUI(); }
 
         function saveSekolah() {
             let nama = document.getElementById('input-nama-sekolah').value;
             let alamat = document.getElementById('input-alamat-sekolah').value;
-            
             if (nama.trim()) globalSettings.namaSekolah = nama;
             if (alamat.trim()) globalSettings.alamatSekolah = alamat;
             if (window.tempLogoSekolah) globalSettings.logoSekolah = window.tempLogoSekolah;
-            
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert("Pengaturan Sekolah tersimpan ke Cloud!");
+            simpanDataKeCloud(); loadSettingsToUI(); alert("Pengaturan Sekolah tersimpan!");
         }
         function editSekolah() {
             document.getElementById('input-nama-sekolah').value = globalSettings.namaSekolah || "";
             document.getElementById('input-alamat-sekolah').value = globalSettings.alamatSekolah || "";
         }
         function hapusSekolah() {
-            globalSettings.namaSekolah = "";
-            globalSettings.alamatSekolah = "";
-            globalSettings.logoSekolah = "";
-            document.getElementById('input-nama-sekolah').value = "";
-            document.getElementById('input-alamat-sekolah').value = "";
-            let pLogo = document.getElementById('preview-logo-sekolah');
-            if(pLogo) { pLogo.src = ""; pLogo.style.display = "none"; }
-            
-            simpanDataKeCloud();
-            loadSettingsToUI();
+            globalSettings.namaSekolah = ""; globalSettings.alamatSekolah = ""; globalSettings.logoSekolah = "";
+            document.getElementById('input-nama-sekolah').value = ""; document.getElementById('input-alamat-sekolah').value = "";
+            let pLogo = document.getElementById('preview-logo-sekolah'); if(pLogo) { pLogo.src = ""; pLogo.style.display = "none"; }
+            simpanDataKeCloud(); loadSettingsToUI();
         }
 
         function saveWaliKelas() {
             let nama = document.getElementById('input-nama-wali').value;
             let kelas = document.getElementById('input-nama-kelas').value;
-            
             if (nama.trim()) globalSettings.namaWaliKelas = nama;
             if (kelas.trim()) globalSettings.namaKelas = kelas;
             if (window.tempFotoWali) globalSettings.fotoWaliKelas = window.tempFotoWali;
+            simpanDataKeCloud(); loadSettingsToUI();
             
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            
-            // Set header admin
             if (currentRole === "admin") {
                 document.getElementById('header-user-fullname').innerText = globalSettings.namaWaliKelas || "Belum Diatur"; 
                 document.getElementById('header-nama-kelas').innerText = globalSettings.namaKelas || "Wali Kelas"; 
                 if(globalSettings.fotoWaliKelas) document.getElementById('header-profile-pic').src = globalSettings.fotoWaliKelas; 
             }
-            alert("Profil Wali Kelas tersimpan ke Cloud!");
+            alert("Profil Wali Kelas tersimpan!");
         }
         function editWaliKelas() {
             document.getElementById('input-nama-wali').value = globalSettings.namaWaliKelas || "";
             document.getElementById('input-nama-kelas').value = globalSettings.namaKelas || "";
         }
         function hapusWaliKelas() {
-            globalSettings.namaWaliKelas = "";
-            globalSettings.namaKelas = "";
-            globalSettings.fotoWaliKelas = "";
-            document.getElementById('input-nama-wali').value = "";
-            document.getElementById('input-nama-kelas').value = "";
-            let pFoto = document.getElementById('preview-foto-wali');
-            if(pFoto) { pFoto.src = ""; pFoto.style.display = "none"; }
-            
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            
+            globalSettings.namaWaliKelas = ""; globalSettings.namaKelas = ""; globalSettings.fotoWaliKelas = "";
+            document.getElementById('input-nama-wali').value = ""; document.getElementById('input-nama-kelas').value = "";
+            let pFoto = document.getElementById('preview-foto-wali'); if(pFoto) { pFoto.src = ""; pFoto.style.display = "none"; }
+            simpanDataKeCloud(); loadSettingsToUI();
             if (currentRole === "admin") {
                 document.getElementById('header-user-fullname').innerText = "Belum Diatur"; 
                 document.getElementById('header-nama-kelas').innerText = "Wali Kelas"; 
                 document.getElementById('header-profile-pic').src = "https://ui-avatars.com/api/?name=Wali&background=45B69C&color=fff"; 
             }
         }
-
 
         function getStatusBadge(status) {
             if(status === 'H') return '<span class="badge bg-green">Hadir</span>'; 
@@ -1371,8 +1310,7 @@
         function renderDashboard() {
             let tbody = document.getElementById('tabel-dashboard-absen'); 
             let tbodyAlpa = document.getElementById('tabel-dashboard-alpa');
-            tbody.innerHTML = ""; 
-            tbodyAlpa.innerHTML = "";
+            tbody.innerHTML = ""; tbodyAlpa.innerHTML = "";
             let hadir = 0, tidakHadir = 0, totalAlpa = 0;
             
             if(dataSiswa.length === 0) { 
@@ -1408,128 +1346,93 @@
                 let s = dataSiswa.find(x => x.nis === nis);
                 if (s && s.panggilanOrtu) {
                     panelPanggilan.style.display = "block";
-                    document.getElementById('display-panggilan-ortu').innerText = "PANGGILAN ORANG TUA KEPADA: " + s.nama + " - HARAP SEGERA MENGHADAP WALI KELAS.";
-                } else {
-                    panelPanggilan.style.display = "none";
-                }
+                    document.getElementById('display-panggilan-ortu').innerText = "PANGGILAN ORANG TUA: " + s.nama + " - MENGHADAP WALI KELAS.";
+                } else { panelPanggilan.style.display = "none"; }
             } else {
                 panelPanggilan.style.display = "block";
                 let terpanggil = dataSiswa.filter(s => s.panggilanOrtu).map(s => s.nama);
                 if (terpanggil.length > 0) {
-                    document.getElementById('display-panggilan-ortu').innerText = "SISWA TERPANGGIL: " + terpanggil.join(", ") + " - HARAP MENGHADAP WALI KELAS.";
-                } else {
-                    document.getElementById('display-panggilan-ortu').innerText = "BELUM ADA PANGGILAN ORANG TUA SAAT INI.";
-                }
+                    document.getElementById('display-panggilan-ortu').innerText = "SISWA TERPANGGIL: " + terpanggil.join(", ");
+                } else { document.getElementById('display-panggilan-ortu').innerText = "BELUM ADA PANGGILAN ORANG TUA."; }
                 populateCheckboxPanggilanOrtu();
             }
         }
 
         function prosesLogout() {
             if (confirm("Yakin ingin keluar?")) { 
-                localStorage.removeItem('siwali_logged_in'); 
-                localStorage.removeItem('siwali_role'); 
-                localStorage.removeItem('siwali_is_admin'); 
-                localStorage.removeItem('siwali_active_tab'); 
+                localStorage.removeItem('siwali_logged_in'); localStorage.removeItem('siwali_role'); 
+                localStorage.removeItem('siwali_is_admin'); localStorage.removeItem('siwali_active_tab'); 
                 localStorage.removeItem('siwali_logged_student_nis'); 
                 location.reload(); 
             }
         }
 
         function renderLunasDashboard() {
-            let tbody = document.getElementById('tabel-dashboard-lunas'); 
-            tbody.innerHTML = ""; 
-            let adaLunas = false;
-            
+            let tbody = document.getElementById('tabel-dashboard-lunas'); tbody.innerHTML = ""; let adaLunas = false;
             if(dataSiswa.length > 0) {
                 dataSiswa.forEach(s => { 
-                    if (s.kas.filter(Boolean).length === totalMingguKas) { 
+                    if (s.kas && s.kas.filter(Boolean).length === totalMingguKas) { 
                         adaLunas = true; 
-                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas Sempurna (M1-M4)</span></td></tr>`; 
+                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas (M1-M4)</span></td></tr>`; 
                     } 
                 });
             }
-            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#777;">Belum ada data siswa lunas.</td></tr>`;
+            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#777;">Belum ada data.</td></tr>`;
         }
 
         function renderTunggakanDashboard() {
-            let tbody = document.getElementById('tabel-dashboard-tunggakan'); 
-            tbody.innerHTML = ""; 
-            let adaTunggakan = false;
-            
+            let tbody = document.getElementById('tabel-dashboard-tunggakan'); tbody.innerHTML = ""; let adaTunggakan = false;
             if(dataSiswa.length > 0) {
                 dataSiswa.forEach(s => {
-                    let sisaMinggu = totalMingguKas - s.kas.filter(Boolean).length;
+                    let sisaMinggu = s.kas ? (totalMingguKas - s.kas.filter(Boolean).length) : 0;
                     if (sisaMinggu > 0) {
-                        adaTunggakan = true; 
-                        let listMinggu = []; 
+                        adaTunggakan = true; let listMinggu = []; 
                         for(let i=0; i<totalMingguKas; i++) if(!s.kas[i]) listMinggu.push(`M${i+1}`);
                         tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
                     }
                 });
             }
-            if(!adaTunggakan && dataSiswa.length > 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-weight:bold;">Seluruh siswa telah lunas.</td></tr>`;
-            else if (dataSiswa.length === 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada data tunggakan.</td></tr>`;
+            if(!adaTunggakan && dataSiswa.length > 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-weight:bold;">Semua lunas.</td></tr>`;
+            else if (dataSiswa.length === 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada data.</td></tr>`;
         }
 
-        // --- PUSAT DATA SISWA ---
         function toggleFormTambah() { 
             let form = document.getElementById('form-tambah-siswa'); 
             form.style.display = form.style.display === "block" ? "none" : "block"; 
         }
 
         function simpanSiswaBaru() {
-            let nis = document.getElementById('input-nis').value; 
-            let nama = document.getElementById('input-nama').value; 
-            let jk = document.getElementById('input-jk').value; 
-            let hp = document.getElementById('input-hp').value || "-";
-            
-            if(!nis || !nama) { alert("NISN dan Nama wajib diisi!"); return; } 
+            let nis = document.getElementById('input-nis').value; let nama = document.getElementById('input-nama').value; 
+            let jk = document.getElementById('input-jk').value; let hp = document.getElementById('input-hp').value || "-";
+            if(!nis || !nama) { alert("NISN dan Nama wajib!"); return; } 
             if (dataSiswa.find(s => s.nis == nis)) { alert("NISN sudah digunakan!"); return; }
             
             dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false });
-            
-            document.getElementById('input-nis').value = ""; 
-            document.getElementById('input-nama').value = ""; 
-            document.getElementById('input-hp').value = ""; 
-            
-            toggleFormTambah(); 
-            simpanDataKeCloud();
-            renderAllViews(); 
-            alert("Siswa baru berhasil ditambahkan!");
+            document.getElementById('input-nis').value = ""; document.getElementById('input-nama').value = ""; document.getElementById('input-hp').value = ""; 
+            toggleFormTambah(); simpanDataKeCloud(); renderAllViews(); alert("Siswa baru tersimpan!");
         }
 
         function deleteSiswa(index) { 
-            if(confirm("Hapus permanen data siswa ini?")) { 
-                dataSiswa.splice(index, 1); 
-                simpanDataKeCloud();
-                renderAllViews(); 
-            } 
+            if(confirm("Hapus permanen siswa ini?")) { dataSiswa.splice(index, 1); simpanDataKeCloud(); renderAllViews(); } 
         }
 
         function uploadFotoSiswa(event, index) { 
             const file = event.target.files[0]; 
-            compressImageAndProcess(file, function(base64Data) {
-                dataSiswa[index].foto = base64Data; 
-                simpanDataKeCloud();
-                renderAllViews(); 
-            });
+            compressImageAndProcess(file, function(base64Data) { dataSiswa[index].foto = base64Data; simpanDataKeCloud(); renderAllViews(); });
         }
 
         function renderDataSiswa() {
-            let tbody = document.getElementById('tabel-data-siswa'); 
-            tbody.innerHTML = "";
+            let tbody = document.getElementById('tabel-data-siswa'); tbody.innerHTML = "";
             if (dataSiswa.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data siswa. Silakan tambahkan.</td></tr>`;
             } else {
                 dataSiswa.forEach((siswa, index) => {
                     let waNumber = (siswa.hp || "").startsWith('0') ? (siswa.hp || "").substring(1) : (siswa.hp || "");
                     tbody.innerHTML += `<tr>
-                        <td>${index + 1}</td>
-                        <td>${siswa.nis}</td>
+                        <td>${index + 1}</td><td>${siswa.nis}</td>
                         <td><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"></td>
                         <td><strong>${siswa.nama}</strong><br><input type="file" accept="image/*" onchange="uploadFotoSiswa(event, ${index})" style="font-size:10px; margin-top:5px; width:150px;"></td>
-                        <td>${siswa.jk}</td>
-                        <td>${siswa.hp || "-"}</td>
+                        <td>${siswa.jk}</td><td>${siswa.hp || "-"}</td>
                         <td class="action-btns" style="display:flex; gap:5px;">
                             <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fab fa-whatsapp"></i></button>
                             <button onclick="deleteSiswa(${index})" style="background:var(--danger); border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fas fa-trash"></i></button>
@@ -1540,58 +1443,35 @@
         }
 
         function prosesUploadExcel(event) {
-            const file = event.target.files[0]; 
-            if (!file) return; 
-            const reader = new FileReader();
-            
+            const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
             reader.onload = function(e) {
                 const data = new Uint8Array(e.target.result); 
                 const jsonSiswa = XLSX.utils.sheet_to_json(XLSX.read(data, {type: 'array'}).Sheets[XLSX.read(data, {type: 'array'}).SheetNames[0]]); 
                 let countAdded = 0;
-                
                 jsonSiswa.forEach(row => { 
-                    let nis = row['NISN'] || row['nisn'] || row['NIS'] || ''; 
-                    let nama = row['Nama'] || row['nama'] || row['Nama Lengkap'] || '';
+                    let nis = row['NISN'] || row['nisn'] || row['NIS'] || ''; let nama = row['Nama'] || row['nama'] || row['Nama Lengkap'] || '';
                     if (nis && nama && !dataSiswa.find(s => s.nis == nis)) {
                         dataSiswa.push({ nis: String(nis), nama: String(nama), jk: String(row['L/P'] || 'L').toUpperCase(), hp: String(row['HP'] || '-'), foto: "", status: "H", ket: "", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false }); 
                         countAdded++;
                     }
                 });
-                
-                if (countAdded > 0) { 
-                    simpanDataKeCloud();
-                    renderAllViews(); 
-                    alert(`Sukses! ${countAdded} data masuk.`); 
-                } 
+                if (countAdded > 0) { simpanDataKeCloud(); renderAllViews(); alert(`Sukses! ${countAdded} data masuk.`); } 
                 event.target.value = '';
             }; 
             reader.readAsArrayBuffer(file);
         }
 
         function downloadExcelSiswa() {
-            let tableHTML = `<table border="1"><tr><th>No</th><th>NISN</th><th>Nama Lengkap</th><th>L/P</th><th>No. HP Orang Tua</th></tr>`; 
-            dataSiswa.forEach((s, idx) => { 
-                tableHTML += `<tr><td>${idx+1}</td><td>${s.nis}</td><td>${s.nama}</td><td>${s.jk}</td><td>${s.hp || '-'}</td></tr>`; 
-            }); 
+            let tableHTML = `<table border="1"><tr><th>No</th><th>NISN</th><th>Nama Lengkap</th><th>L/P</th><th>No. HP</th></tr>`; 
+            dataSiswa.forEach((s, idx) => { tableHTML += `<tr><td>${idx+1}</td><td>${s.nis}</td><td>${s.nama}</td><td>${s.jk}</td><td>${s.hp || '-'}</td></tr>`; }); 
             tableHTML += `</table>`;
-            let link = document.createElement("a"); 
-            link.download = "Laporan_Siswa.xls"; 
-            link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); 
-            link.click();
+            let link = document.createElement("a"); link.download = "Laporan_Siswa.xls"; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); link.click();
         }
 
-        // --- ABSENSI FORM KELAS & REKAP BULANAN ---
-        function updateActiveRekap() { 
-            // Save current choice back to select
-            let current = document.getElementById('select-active-rekap').value;
-            // No strict need to save to cloud, this is just local toggle tool for admin
-        }
+        function updateActiveRekap() { }
 
         function renderFormAbsensi() {
-            let tbody = document.getElementById('tabel-form-absensi'); 
-            if(!tbody) return; 
-            tbody.innerHTML = "";
-            
+            let tbody = document.getElementById('tabel-form-absensi'); if(!tbody) return; tbody.innerHTML = "";
             if (dataSiswa.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada data siswa.</td></tr>`;
             } else {
@@ -1616,81 +1496,51 @@
         function simpanAbsensi(e) {
             e.preventDefault(); 
             let updateTimeStr = getWaktuSekarang(); 
-            let activeRekapDay = parseInt(document.getElementById('select-active-rekap').value || "-1");
+            let elRekap = document.getElementById('select-active-rekap');
+            let activeRekapDay = parseInt(elRekap ? elRekap.value : "-1");
             
             dataSiswa.forEach((siswa, index) => {
-                let newStatus = document.querySelector(`input[name="status_${index}"]:checked`).value;
-                if(siswa.status !== newStatus || siswa.waktuAbsen === "-") { 
-                    siswa.waktuAbsen = updateTimeStr; 
-                }
+                let checkEl = document.querySelector(`input[name="status_${index}"]:checked`);
+                let newStatus = checkEl ? checkEl.value : 'H';
+                if(siswa.status !== newStatus || siswa.waktuAbsen === "-") { siswa.waktuAbsen = updateTimeStr; }
                 siswa.status = newStatus; 
-                siswa.ket = document.getElementById(`ket_${index}`).value;
-                if(activeRekapDay >= 0 && activeRekapDay < 20) { 
-                    siswa.rekap[activeRekapDay] = newStatus; 
-                }
+                let ketEl = document.getElementById(`ket_${index}`);
+                siswa.ket = ketEl ? ketEl.value : "";
+                if(activeRekapDay >= 0 && activeRekapDay < 20) { siswa.rekap[activeRekapDay] = newStatus; }
             });
             
-            simpanDataKeCloud(); 
-            renderDashboard(); 
-            renderTabelAbsensi4Minggu(); 
-            alert("Data Absensi Harian tersimpan! Dashboard dan Rekap Bulanan otomatis diperbarui ke Cloud."); 
-            switchTab('dashboard');
+            simpanDataKeCloud(); renderDashboard(); renderTabelAbsensi4Minggu(); 
+            alert("Absensi tersimpan!"); switchTab('dashboard');
         }
 
         function resetAbsensi() { 
             if(confirm("Atur ulang status harian semua jadi HADIR?")) { 
-                dataSiswa.forEach(s => { 
-                    s.status = 'H'; 
-                    s.ket = ''; 
-                    s.waktuAbsen = "-"; 
-                }); 
-                simpanDataKeCloud();
-                renderAllViews(); 
+                dataSiswa.forEach(s => { s.status = 'H'; s.ket = ''; s.waktuAbsen = "-"; }); 
+                simpanDataKeCloud(); renderAllViews(); 
             } 
         }
 
         function renderTabelAbsensi4Minggu() {
-            let tbody = document.getElementById('body-rekap-absensi'); 
-            if (!tbody) return; 
-            let html = '';
-            
+            let tbody = document.getElementById('body-rekap-absensi'); if (!tbody) return; let html = '';
             let totalShow = Math.max(dataSiswa.length, 1);
             for (let i = 0; i < totalShow; i++) {
                 let siswa = dataSiswa[i] || { nama: '-', nis: '-', jk: '-', rekap: Array(20).fill("") }; 
                 if (!siswa.rekap) siswa.rekap = Array(20).fill("");
                 
-                html += `<tr>
-                    <td style="white-space:nowrap;">${i + 1}</td>
-                    <td style="white-space:nowrap; text-align:left;">${siswa.nama}</td>
-                    <td style="white-space:nowrap;">${siswa.nis}</td>
-                    <td style="white-space:nowrap;">${siswa.jk}</td>`;
-                
-                for(let d = 0; d < 20; d++) { 
-                    html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${siswa.rekap[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled></td>`; 
-                }
-                html += `
-                    <td id="total-h-${i}" style="font-weight:bold; color:#27ae60; background:#e8f8f5;">0</td>
-                    <td id="total-s-${i}" style="font-weight:bold; color:#f39c12; background:#fef5e7;">0</td>
-                    <td id="total-i-${i}" style="font-weight:bold; color:#2980b9; background:#ebf5fb;">0</td>
-                    <td id="total-a-${i}" style="font-weight:bold; color:#e74c3c; background:#fdedec;">0</td>
-                </tr>`;
+                html += `<tr><td style="white-space:nowrap;">${i + 1}</td><td style="white-space:nowrap; text-align:left;">${siswa.nama}</td><td style="white-space:nowrap;">${siswa.nis}</td><td style="white-space:nowrap;">${siswa.jk}</td>`;
+                for(let d = 0; d < 20; d++) { html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${siswa.rekap[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled></td>`; }
+                html += `<td id="total-h-${i}" style="font-weight:bold; color:#27ae60; background:#e8f8f5;">0</td><td id="total-s-${i}" style="font-weight:bold; color:#f39c12; background:#fef5e7;">0</td><td id="total-i-${i}" style="font-weight:bold; color:#2980b9; background:#ebf5fb;">0</td><td id="total-a-${i}" style="font-weight:bold; color:#e74c3c; background:#fdedec;">0</td></tr>`;
             }
-            tbody.innerHTML = html; 
-            for (let i = 0; i < totalShow; i++) hitungRekapBaris(i); 
+            tbody.innerHTML = html; for (let i = 0; i < totalShow; i++) hitungRekapBaris(i); 
         }
 
         function hitungRekapBaris(indexBaris) {
             let semuaInputHari = document.querySelectorAll(`.baris-absen-${indexBaris}`); 
             let hadir = 0, sakit = 0, izin = 0, alpa = 0;
-            
             semuaInputHari.forEach(input => { 
                 let nilai = input.value.toUpperCase(); 
-                if (nilai === 'H') hadir++; 
-                else if (nilai === 'S') sakit++; 
-                else if (nilai === 'I') izin++; 
-                else if (nilai === 'A') alpa++; 
+                if (nilai === 'H') hadir++; else if (nilai === 'S') sakit++; else if (nilai === 'I') izin++; else if (nilai === 'A') alpa++; 
             });
-            
             let idH = document.getElementById(`total-h-${indexBaris}`); if(idH) idH.innerText = hadir; 
             let idS = document.getElementById(`total-s-${indexBaris}`); if(idS) idS.innerText = sakit; 
             let idI = document.getElementById(`total-i-${indexBaris}`); if(idI) idI.innerText = izin; 
@@ -1698,98 +1548,59 @@
         }
 
         function toggleEditRekap() {
-            let inputs = document.querySelectorAll('.input-absen'); 
-            if (inputs.length === 0) return; 
-            
-            let btnEdit = document.getElementById('btn-edit-rekap'); 
-            let btnSave = document.getElementById('btn-save-rekap'); 
+            let inputs = document.querySelectorAll('.input-absen'); if (inputs.length === 0) return; 
+            let btnEdit = document.getElementById('btn-edit-rekap'); let btnSave = document.getElementById('btn-save-rekap'); 
             let isEditing = !inputs[0].disabled;
-            
             if (isEditing) { 
-                inputs.forEach(inp => inp.disabled = true); 
-                btnEdit.innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
-                btnSave.classList.add('hidden'); 
-                renderTabelAbsensi4Minggu(); 
+                inputs.forEach(inp => inp.disabled = true); btnEdit.innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; btnSave.classList.add('hidden'); renderTabelAbsensi4Minggu(); 
             } else { 
-                inputs.forEach(inp => inp.disabled = false); 
-                btnEdit.innerHTML = '<i class="fas fa-times"></i> Batal Edit'; 
-                btnSave.classList.remove('hidden'); 
+                inputs.forEach(inp => inp.disabled = false); btnEdit.innerHTML = '<i class="fas fa-times"></i> Batal Edit'; btnSave.classList.remove('hidden'); 
             }
         }
 
         function simpanRekapBulanan() {
             let inputs = document.querySelectorAll('.input-absen');
             inputs.forEach(inp => { 
-                let sIdx = parseInt(inp.getAttribute('data-siswa-idx')); 
-                let dIdx = parseInt(inp.getAttribute('data-day-idx')); 
+                let sIdx = parseInt(inp.getAttribute('data-siswa-idx')); let dIdx = parseInt(inp.getAttribute('data-day-idx')); 
                 let val = inp.value.toUpperCase(); 
-                
-                if (dataSiswa[sIdx]) { 
-                    dataSiswa[sIdx].rekap[dIdx] = (val === 'H' || val === 'S' || val === 'I' || val === 'A') ? val : ""; 
-                } 
+                if (dataSiswa[sIdx]) { dataSiswa[sIdx].rekap[dIdx] = (val === 'H' || val === 'S' || val === 'I' || val === 'A') ? val : ""; } 
             });
-            
-            simpanDataKeCloud(); 
-            inputs.forEach(inp => inp.disabled = true); 
+            simpanDataKeCloud(); inputs.forEach(inp => inp.disabled = true); 
             document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
             document.getElementById('btn-save-rekap').classList.add('hidden'); 
-            renderTabelAbsensi4Minggu(); 
-            alert("Buku Rekap Bulanan berhasil diperbarui secara manual ke Cloud!");
+            renderTabelAbsensi4Minggu(); alert("Buku Rekap berhasil disinkron!");
         }
 
         function downloadExcelRekapBulanan() {
-            let tabel = document.getElementById('tabel-rekap-bulanan'); 
-            let tableClone = tabel.cloneNode(true); 
+            let tabel = document.getElementById('tabel-rekap-bulanan'); let tableClone = tabel.cloneNode(true); 
             let dateHeaders = tableClone.querySelectorAll('.date-header'); 
-            
-            dateHeaders.forEach(dt => { 
-                dt.parentElement.innerHTML = dt.parentElement.innerText.trim() + " " + (dt.value || ''); 
-            }); 
-            
+            dateHeaders.forEach(dt => { dt.parentElement.innerHTML = dt.parentElement.innerText.trim() + " " + (dt.value || ''); }); 
             let inputs = tableClone.querySelectorAll('.input-absen'); 
             inputs.forEach(inp => { inp.parentElement.innerHTML = inp.value; });
-            
-            let html = `<table border="1"><tr><th colspan="28" style="font-size:18px; font-weight:bold;">REKAPITULASI ABSEN BULANAN (4 MINGGU)</th></tr>${tableClone.innerHTML}</table>`; 
-            let link = document.createElement("a"); 
-            link.download = "Buku_Rekap_Absensi_Bulanan.xls"; 
-            link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html); 
-            link.click();
+            let html = `<table border="1"><tr><th colspan="28" style="font-size:18px; font-weight:bold;">REKAP BULANAN</th></tr>${tableClone.innerHTML}</table>`; 
+            let link = document.createElement("a"); link.download = "Buku_Rekap.xls"; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html); link.click();
         }
 
-        // --- BUKU UANG KAS ---
         function renderKas() {
-            let tbody = document.getElementById('tabel-body-kas'); 
-            tbody.innerHTML = ""; 
-            let totalTerkumpul = 0, totalTunggakan = 0, jumlahSiswaMenunggak = 0;
-            
+            let tbody = document.getElementById('tabel-body-kas'); tbody.innerHTML = ""; let totalTerkumpul = 0, totalTunggakan = 0, jumlahSiswaMenunggak = 0;
             if (dataSiswa.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data.</td></tr>`;
             } else {
                 dataSiswa.forEach((s, idx) => {
-                    let centang = s.kas.filter(Boolean).length; 
+                    let sKasArr = s.kas || [false, false, false, false];
+                    let centang = sKasArr.filter(Boolean).length; 
                     let sisaTagihan = (totalMingguKas - centang) * iuranKasPerMinggu; 
-                    
-                    totalTerkumpul += (centang * iuranKasPerMinggu); 
-                    totalTunggakan += sisaTagihan; 
+                    totalTerkumpul += (centang * iuranKasPerMinggu); totalTunggakan += sisaTagihan; 
                     if(sisaTagihan > 0) jumlahSiswaMenunggak++;
                     
                     let checkboxes = ""; 
-                    for(let i=0; i < totalMingguKas; i++) { 
-                        checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" data-student="${idx}" data-week="${i}" ${s.kas[i] ? 'checked' : ''}></td>`; 
-                    }
-                    
+                    for(let i=0; i < totalMingguKas; i++) { checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" data-student="${idx}" data-week="${i}" ${sKasArr[i] ? 'checked' : ''}></td>`; }
                     let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
-                    let pesanTagihan = `Halo Bapak/Ibu, menginfokan mengenai tabungan Uang Kas Kelas untuk anak Anda *${s.nama}*, saat ini tercatat memiliki sisa tunggakan sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon untuk diselesaikan, terima kasih.`;
+                    let pesanTagihan = `Halo Bapak/Ibu, menginfokan mengenai tabungan Kas Kelas untuk anak Anda *${s.nama}*, memiliki tunggakan *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Terima kasih.`;
                     
-                    tbody.innerHTML += `<tr>
-                        <td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>
-                        ${checkboxes}
-                        <td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td>
-                        <td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td>
-                    </tr>`;
+                    tbody.innerHTML += `<tr><td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>${checkboxes}<td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td><td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td></tr>`;
                 });
             }
-            
             document.getElementById('total-semua').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); 
             document.getElementById('display-kas').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); 
             document.getElementById('total-tunggakan').innerText = "Rp " + totalTunggakan.toLocaleString('id-ID'); 
@@ -1797,117 +1608,61 @@
         }
 
         function bukaAdminKas() { 
-            if (currentRole !== "admin" && currentRole !== "bendahara") { 
-                alert("Akses Ditolak!"); return; 
-            } 
-            let pass = prompt("Masukkan Password Keuangan:"); 
+            if (currentRole !== "admin" && currentRole !== "bendahara") { alert("Akses Ditolak!"); return; } 
+            let pass = prompt("Password Keuangan:"); 
             if(pass === "admin123") { 
-                isAdminKasUnlocked = true; 
-                document.getElementById('admin-area-kas').classList.remove('locked'); 
-                document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-unlock"></i> Admin Aktif'; 
-                document.getElementById('btn-save-kas').style.display = "inline-block"; 
-            } else { 
-                alert("Password Salah!"); 
-            } 
+                isAdminKasUnlocked = true; document.getElementById('admin-area-kas').classList.remove('locked'); 
+                document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-unlock"></i> Admin Aktif'; document.getElementById('btn-save-kas').style.display = "inline-block"; 
+            } else { alert("Password Salah!"); } 
         }
 
         function simpanKasDariForm() { 
-            if (!isAdminKasUnlocked) return; 
-            const currentDateStr = getFormatTanggalSaja(); 
-            
+            if (!isAdminKasUnlocked) return; const currentDateStr = getFormatTanggalSaja(); 
             document.querySelectorAll('.kas-checkbox-input').forEach(input => { 
-                let studentIdx = parseInt(input.getAttribute('data-student')); 
-                let weekIdx = parseInt(input.getAttribute('data-week')); 
-                let isCheckedNow = input.checked; 
-                let wasCheckedBefore = dataSiswa[studentIdx].kas[weekIdx]; 
-                
+                let studentIdx = parseInt(input.getAttribute('data-student')); let weekIdx = parseInt(input.getAttribute('data-week')); 
+                let isCheckedNow = input.checked; let wasCheckedBefore = dataSiswa[studentIdx].kas[weekIdx]; 
                 dataSiswa[studentIdx].kas[weekIdx] = isCheckedNow; 
-                if (isCheckedNow && !wasCheckedBefore) { 
-                    dataSiswa[studentIdx].kasTanggal[weekIdx] = currentDateStr; 
-                } else if (!isCheckedNow) { 
-                    dataSiswa[studentIdx].kasTanggal[weekIdx] = ""; 
-                } 
+                if (isCheckedNow && !wasCheckedBefore) { dataSiswa[studentIdx].kasTanggal[weekIdx] = currentDateStr; } else if (!isCheckedNow) { dataSiswa[studentIdx].kasTanggal[weekIdx] = ""; } 
             }); 
-            
-            simpanDataKeCloud(); 
-            isAdminKasUnlocked = false; 
-            document.getElementById('admin-area-kas').classList.add('locked'); 
-            document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin'; 
-            document.getElementById('btn-save-kas').style.display = "none"; 
-            renderAllViews(); 
-            alert("Data Buku Kas Berhasil Disimpan Permanen ke Cloud!"); 
+            simpanDataKeCloud(); isAdminKasUnlocked = false; document.getElementById('admin-area-kas').classList.add('locked'); 
+            document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Admin'; document.getElementById('btn-save-kas').style.display = "none"; 
+            renderAllViews(); alert("Buku Kas tersinkron!"); 
         }
 
         function downloadExcelKas() {
             let tableHTML = `<table border="1"><thead><tr><th colspan="9" style="font-size:16px; font-weight:bold; text-align:center;">LAPORAN BENDAHARA</th></tr><tr><th style="background-color: #f2f2f2;">No.</th><th style="background-color: #f2f2f2;">Nama Siswa</th><th style="background-color: #f2f2f2;">M1 (Rp)</th><th style="background-color: #f2f2f2;">M2 (Rp)</th><th style="background-color: #f2f2f2;">M3 (Rp)</th><th style="background-color: #f2f2f2;">M4 (Rp)</th><th style="background-color: #f2f2f2;">Total</th><th style="background-color: #f2f2f2;">Keterangan</th><th style="background-color: #f2f2f2;">Tanggal Pembayaran Otomatis</th></tr></thead><tbody>`;
-            
             dataSiswa.forEach((s, idx) => { 
-                let m1 = s.kas[0] ? iuranKasPerMinggu : 0; 
-                let m2 = s.kas[1] ? iuranKasPerMinggu : 0; 
-                let m3 = s.kas[2] ? iuranKasPerMinggu : 0; 
-                let m4 = s.kas[3] ? iuranKasPerMinggu : 0; 
-                let totalSiswa = m1 + m2 + m3 + m4; 
-                
-                let hitungCentang = s.kas.filter(Boolean).length; 
-                let keterangan = hitungCentang === totalMingguKas ? "Lunas" : `Menunggak ${totalMingguKas - hitungCentang} Minggu`; 
-                let tglBayar = []; 
-                for(let i = 0; i < 4; i++) { 
-                    if(s.kas[i] && s.kasTanggal && s.kasTanggal[i]) tglBayar.push(`M${i+1}: ${s.kasTanggal[i]}`); 
-                } 
+                let m1 = s.kas[0] ? iuranKasPerMinggu : 0; let m2 = s.kas[1] ? iuranKasPerMinggu : 0; let m3 = s.kas[2] ? iuranKasPerMinggu : 0; let m4 = s.kas[3] ? iuranKasPerMinggu : 0; let totalSiswa = m1 + m2 + m3 + m4; 
+                let hitungCentang = s.kas.filter(Boolean).length; let keterangan = hitungCentang === totalMingguKas ? "Lunas" : `Menunggak ${totalMingguKas - hitungCentang} Minggu`; 
+                let tglBayar = []; for(let i = 0; i < 4; i++) { if(s.kas[i] && s.kasTanggal && s.kasTanggal[i]) tglBayar.push(`M${i+1}: ${s.kasTanggal[i]}`); } 
                 let stringTanggal = tglBayar.length > 0 ? tglBayar.join(' | ') : '-'; 
-                
                 tableHTML += `<tr><td style="text-align:center;">${idx + 1}</td><td><strong>${s.nama}</strong></td><td style="text-align:right;">${m1}</td><td style="text-align:right;">${m2}</td><td style="text-align:right;">${m3}</td><td style="text-align:right;">${m4}</td><td style="text-align:right; font-weight:bold;">${totalSiswa}</td><td style="text-align:center;">${keterangan}</td><td>${stringTanggal}</td></tr>`; 
             });
-            
-            tableHTML += `</tbody></table>`; 
-            let link = document.createElement("a"); 
-            link.download = "Laporan_Uang_Kas.xls"; 
-            link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); 
-            link.click();
+            tableHTML += `</tbody></table>`; let link = document.createElement("a"); link.download = "Laporan_Uang_Kas.xls"; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); link.click();
         }
 
         function resetKasBulanan() { 
-            if(confirm("Yakin ingin reset buku kas bulan ini?")) { 
-                dataSiswa.forEach(s => { 
-                    s.kas = [false, false, false, false]; 
-                    s.kasTanggal = ["", "", "", ""]; 
-                }); 
-                simpanDataKeCloud();
-                renderAllViews(); 
-            } 
+            if(confirm("Yakin reset buku kas?")) { dataSiswa.forEach(s => { s.kas = [false, false, false, false]; s.kasTanggal = ["", "", "", ""]; }); simpanDataKeCloud(); renderAllViews(); } 
         }
 
-        // --- PENGATURAN SYSTEM, GAMBAR, JADWAL & TEXT SISWA ---
         function handleImageUpload(event, previewId, globalVarName) {
             const file = event.target.files[0];
             compressImageAndProcess(file, function(base64Data) {
                 window[globalVarName] = base64Data;
                 let preview = document.getElementById(previewId);
-                if(preview) {
-                    preview.src = base64Data;
-                    preview.style.display = "inline-block";
-                }
+                if(preview) { preview.src = base64Data; preview.style.display = "inline-block"; }
             });
         }
 
         function saveImageToSettings(settingKey, base64Data, labelName) {
             if(!base64Data) { alert(`Pilih gambar untuk ${labelName} terlebih dahulu!`); return; }
-            globalSettings[settingKey] = base64Data;
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert(`${labelName} berhasil tersimpan ke Cloud & terhubung ke Dashboard Siswa!`);
+            globalSettings[settingKey] = base64Data; simpanDataKeCloud(); loadSettingsToUI(); alert(`${labelName} tersinkron!`);
         }
 
         function deleteImageFromSettings(settingKey, previewId) {
-            globalSettings[settingKey] = "";
-            let preview = document.getElementById(previewId);
-            if(preview) {
-                preview.src = "";
-                preview.style.display = "none";
-            }
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert(`Data gambar berhasil dihapus dari Cloud!`);
+            globalSettings[settingKey] = ""; let preview = document.getElementById(previewId);
+            if(preview) { preview.src = ""; preview.style.display = "none"; }
+            simpanDataKeCloud(); loadSettingsToUI(); alert(`Dihapus!`);
         }
 
         function renderSemuaGambarGlobal() {
@@ -1921,10 +1676,7 @@
 
             configs.forEach(c => {
                 let saved = globalSettings[c.key];
-                let dImg = document.getElementById(c.dashImg); 
-                let dTxt = document.getElementById(c.dashTxt);
-                let sImg = document.getElementById(c.setImg);
-                
+                let dImg = document.getElementById(c.dashImg); let dTxt = document.getElementById(c.dashTxt); let sImg = document.getElementById(c.setImg);
                 if(saved) {
                     if(dImg) { dImg.src = saved; dImg.style.display = "inline-block"; }
                     if(dTxt) { dTxt.style.display = "none"; }
@@ -1938,79 +1690,34 @@
         }
         
         function saveCatatanPiket() {
-            let teks = document.getElementById('input-catatan-piket').value;
-            if(!teks.trim()) { alert("Isi catatan kosong!"); return; }
-            globalSettings.catatanPiket = teks;
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert("Catatan petugas piket berhasil disinkron!");
+            let teks = document.getElementById('input-catatan-piket').value; if(!teks.trim()) { alert("Isi kosong!"); return; }
+            globalSettings.catatanPiket = teks; simpanDataKeCloud(); loadSettingsToUI(); alert("Catatan piket tersinkron!");
         }
-        
-        function hapusCatatanPiket() {
-            globalSettings.catatanPiket = "";
-            document.getElementById('input-catatan-piket').value = "";
-            simpanDataKeCloud();
-            loadSettingsToUI();
-            alert("Catatan petugas piket dihapus.");
-        }
+        function hapusCatatanPiket() { globalSettings.catatanPiket = ""; document.getElementById('input-catatan-piket').value = ""; simpanDataKeCloud(); loadSettingsToUI(); }
 
         function populateCheckboxSiswaCatatan() {
-            let sel = document.getElementById('checkbox-siswa-catatan');
-            if(!sel) return;
-            sel.innerHTML = "";
-            dataSiswa.forEach(s => {
-                sel.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`;
-            });
+            let sel = document.getElementById('checkbox-siswa-catatan'); if(!sel) return; sel.innerHTML = "";
+            dataSiswa.forEach(s => { sel.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`; });
         }
 
         function saveCatatanSiswa() {
-            let isiTeks = document.getElementById('input-catatan-siswa').value;
-            let checkboxes = document.querySelectorAll('.cb-catatan-siswa:checked');
-            
-            if(checkboxes.length === 0) {
-                alert("Pilih minimal satu siswa pada daftar centang!");
-                return;
-            }
-            checkboxes.forEach(cb => {
-                let sIdx = dataSiswa.findIndex(x => x.nis === cb.value);
-                if (sIdx !== -1) {
-                    dataSiswa[sIdx].catatan = isiTeks;
-                }
-            });
-
-            simpanDataKeCloud();
-            alert("Pesan/catatan personal berhasil tersimpan!");
-            loadCatatanDashboard();
+            let isiTeks = document.getElementById('input-catatan-siswa').value; let checkboxes = document.querySelectorAll('.cb-catatan-siswa:checked');
+            if(checkboxes.length === 0) { alert("Pilih minimal 1 siswa!"); return; }
+            checkboxes.forEach(cb => { let sIdx = dataSiswa.findIndex(x => x.nis === cb.value); if (sIdx !== -1) { dataSiswa[sIdx].catatan = isiTeks; } });
+            simpanDataKeCloud(); alert("Pesan personal tersimpan!"); loadCatatanDashboard();
         }
-
-        function hapusCatatanSiswa() {
-            document.getElementById('input-catatan-siswa').value = "";
-            saveCatatanSiswa();
-        }
+        function hapusCatatanSiswa() { document.getElementById('input-catatan-siswa').value = ""; saveCatatanSiswa(); }
 
         function loadCatatanDashboard() {
             let panel = document.getElementById('panel-dashboard-catatan');
             if (currentRole === 'siswa') {
-                // Tampilkan catatan HANYA bila siswa sedang login dan memiliki pesan personal
-                let nis = localStorage.getItem('siwali_logged_student_nis');
-                let s = dataSiswa.find(x => x.nis === nis);
-                if (s && s.catatan && s.catatan.trim() !== "") {
-                    panel.style.display = "block";
-                    document.getElementById('display-catatan-siswa').innerText = s.catatan;
-                } else {
-                    panel.style.display = "none";
-                }
-            } else {
-                panel.style.display = "none"; 
-            }
+                let nis = localStorage.getItem('siwali_logged_student_nis'); let s = dataSiswa.find(x => x.nis === nis);
+                if (s && s.catatan && s.catatan.trim() !== "") { panel.style.display = "block"; document.getElementById('display-catatan-siswa').innerText = s.catatan;
+                } else { panel.style.display = "none"; }
+            } else { panel.style.display = "none"; }
         }
 
-        document.addEventListener('keydown', function(e) { 
-            if (e.key === 'F5') { 
-                e.preventDefault(); 
-                softRefreshApp(); 
-            } 
-        });
+        document.addEventListener('keydown', function(e) { if (e.key === 'F5') { e.preventDefault(); softRefreshApp(); } });
     </script>
 </body>
 </html>
