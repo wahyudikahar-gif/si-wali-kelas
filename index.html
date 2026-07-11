@@ -1596,7 +1596,7 @@
                     let checkboxes = ""; 
                     for(let i=0; i < totalMingguKas; i++) { checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" data-student="${idx}" data-week="${i}" ${sKasArr[i] ? 'checked' : ''}></td>`; }
                     let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
-                    let pesanTagihan = `Halo Bapak/Ibu, menginfokan mengenai tabungan Kas Kelas untuk anak Anda *${s.nama}*, memiliki tunggakan *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Terima kasih.`;
+                   let pesanTagihan = `Assalamu'alaikum/Selamat Pagi Bapak/Ibu wali murid. Mohon maaf mengganggu waktunya. Menginformasikan bahwa ananda *${s.nama}* saat ini memiliki sisa tagihan Uang Kas Kelas sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon kerjasamanya untuk dapat diselesaikan. Terima kasih banyak Bapak/Ibu. 🙏`;
                     
                     tbody.innerHTML += `<tr><td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>${checkboxes}<td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td><td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td></tr>`;
                 });
