@@ -636,15 +636,20 @@
             <div id="tab-forum" class="tab-content">
                 <div class="chat-container">
                     <div class="chat-header">
-                        <div class="chat-header-info">
-                            <i class="fas fa-comments"></i>
-                            <div>
-                                <h3 id="forum-kelas-nama">Forum Kelas (Live Chat)</h3>
-                                <p>Tersinkronisasi otomatis setiap 15 detik</p>
-                            </div>
-                        </div>
-                    </div>
-                    
+    <div class="chat-header-info">
+        <i class="fas fa-comments"></i>
+        <div>
+            <h3 id="forum-kelas-nama">Forum Kelas (Live Chat)</h3>
+            <p>Tersinkronisasi otomatis setiap 10 detik</p>
+        </div>
+    </div>
+
+    <div id="admin-chat-tools" class="admin-only-element hidden">
+        <button onclick="hapusSemuaChat()" style="background:#E63946; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:12px; font-weight:bold;">
+            <i class="fas fa-trash-alt"></i> Bersihkan Semua
+        </button>
+    </div>
+</div>                    
                     <div class="chat-messages" id="chat-messages-container">
                         <div style="text-align:center; color:#888; font-size:12px; margin-top:20px;">Memuat pesan...</div>
                     </div>
@@ -1872,7 +1877,20 @@ function renderChatList() {
                 });
             }
         }
+// ... (Kode lainnya) ...
 
+        function hapusSemuaChat() {
+            if (confirm("⚠️ PERINGATAN: Tindakan ini akan menghapus SELURUH pesan di forum. Yakin ingin membersihkan forum?")) {
+                globalChatData = []; 
+                simpanDataKeCloud(); 
+                renderChatList(); 
+                alert("Semua chat telah dihapus!");
+            }
+        }
+
+    </script> 
+</body>
+</html>
     </script>
 </body>
 </html>
