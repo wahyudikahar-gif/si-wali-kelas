@@ -1888,7 +1888,18 @@ function renderChatList() {
             }
         }
 
-    </script> 
+    </script>
+ <script>
+    // Memastikan musik diputar setelah user melakukan klik pertama di halaman
+    window.addEventListener('click', function() {
+        var audio = document.getElementById('bg-music-mars');
+        if (audio && audio.paused) {
+            audio.play().catch(function(error) {
+                console.log("Browser menolak autoplay, menunggu interaksi pengguna.");
+            });
+        }
+    }, { once: true });
+</script>
 </body>
 </html>
     </script>
