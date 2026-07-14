@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SI-WALI - Kelas Digital</title>
+    <!-- Import Google Fonts untuk Pilihan Tema Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap');
+    </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
@@ -20,210 +24,242 @@
             --chat-bg: #e5ddd5;
             --chat-bubble-right: #dcf8c6;
             --chat-bubble-left: #ffffff;
+            --border-color: #eeeeee;
+            --font-family: 'Arial', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
+        body { background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* Custom Scrollbar for Professional Look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-light); }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
         /* --- HALAMAN LOGIN --- */
         #login-page { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .login-container { background-color: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
-        .login-container h2 { color: var(--primary); margin-bottom: 5px; }
-        .login-container p.subtitle { color: #555; font-size: 14px; margin-bottom: 20px; }
-        .login-container input, .login-container select, .login-container button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #D3D3D3; border-radius: 5px; font-size: 14px; }
-        .login-container button { background-color: var(--secondary); color: white; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; transition: background 0.3s; }
-        .login-container button:hover { background-color: var(--primary); }
-        #student-features { display: none; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #E4F0EC; }
+        .login-container { background-color: var(--white); padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 400px; text-align: center; }
+        .login-container h2 { color: var(--primary); margin-bottom: 5px; font-size: 28px; }
+        .login-container p.subtitle { color: var(--text-dark); opacity: 0.7; font-size: 14px; margin-bottom: 25px; }
+        .login-container input, .login-container select, .login-container button { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background-color: var(--white); color: var(--text-dark); outline: none; transition: 0.3s; }
+        .login-container input:focus, .login-container select:focus { border-color: var(--secondary); box-shadow: 0 0 5px rgba(69, 182, 156, 0.3); }
+        .login-container button { background-color: var(--secondary); color: #fff; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 10px rgba(69, 182, 156, 0.2); }
+        .login-container button:hover { background-color: var(--primary); transform: translateY(-2px); }
+        #student-features { display: none; margin-top: 15px; padding-top: 15px; border-top: 2px dashed var(--border-color); }
 
         /* --- HALAMAN APLIKASI UTAMA --- */
         #app-page { display: none; }
         
         /* --- SIDEBAR & NAVBAR MOBILE --- */
-        .sidebar { width: 260px; background-color: var(--primary); color: var(--white); min-height: 100vh; padding: 20px 0; position: fixed; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s ease; }
+        .sidebar { width: 260px; background-color: var(--primary); color: #fff; min-height: 100vh; padding: 20px 0; position: fixed; z-index: 100; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .school-brand { text-align: center; padding: 10px 20px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
-        .school-logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 3px solid var(--secondary); background-color: var(--white); object-fit: cover; }
-        .school-brand h3 { font-size: 14px; color: var(--white); }
+        .school-logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; border: 3px solid var(--secondary); background-color: var(--white); object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .school-brand h3 { font-size: 15px; color: #fff; font-weight: 600; }
         .sidebar ul { list-style: none; }
-        .sidebar ul li { padding: 15px 25px; transition: 0.3s; cursor: pointer; border-left: 4px solid transparent; font-size: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .sidebar ul li { padding: 16px 25px; transition: 0.3s; cursor: pointer; border-left: 4px solid transparent; font-size: 14px; display: flex; align-items: center; justify-content: space-between; font-weight: 500; color: rgba(255,255,255,0.85); }
         .sidebar ul li div { display: flex; align-items: center; }
-        .sidebar ul li i.menu-icon { margin-right: 15px; width: 20px; text-align: center; }
-        .sidebar ul li:hover, .sidebar ul li.active { background-color: rgba(255,255,255,0.1); border-left: 4px solid var(--secondary); }
+        .sidebar ul li i.menu-icon { margin-right: 15px; width: 20px; text-align: center; font-size: 16px; }
+        .sidebar ul li:hover, .sidebar ul li.active { background-color: rgba(255,255,255,0.1); border-left: 4px solid var(--secondary); color: #fff; }
         .sidebar-logout { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-top: auto; }
         
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 99; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 99; backdrop-filter: blur(3px); }
         .mobile-nav-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--primary); margin-right: 15px; }
 
         /* --- MAIN CONTENT & TABS --- */
         .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 30px 40px; transition: 0.3s ease; }
-        .tab-content { display: none; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         /* --- HEADER & CARDS --- */
-        .header { display: flex; justify-content: space-between; align-items: center; background-color: var(--white); padding: 20px 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        .header { display: flex; justify-content: space-between; align-items: center; background-color: var(--white); padding: 20px 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .header-left { display: flex; align-items: center; }
         .profile-section { display: flex; align-items: center; }
-        .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--secondary); }
-        .header-info h2 { color: var(--primary); font-size: 18px; margin-bottom: 3px;}
-        .header-info p { color: #555; font-size: 13px; font-weight: bold; background-color: var(--bg-light); display: inline-block; padding: 4px 10px; border-radius: 15px;}
-        .time-section { text-align: right; background-color: var(--bg-light); padding: 10px 20px; border-radius: 8px; border-left: 4px solid var(--secondary); display: flex; align-items: center; gap: 15px;}
-        .time-section .clock { font-size: 20px; font-weight: bold; color: var(--primary); }
-        .time-section .date { font-size: 12px; color: #555; }
+        .profile-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--secondary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header-info h2 { color: var(--primary); font-size: 18px; margin-bottom: 5px; font-weight: 700; }
+        .header-info p { color: var(--text-dark); font-size: 12px; font-weight: 600; background-color: var(--bg-light); display: inline-block; padding: 5px 12px; border-radius: 20px; }
+        .time-section { text-align: right; background-color: var(--bg-light); padding: 12px 20px; border-radius: 10px; border-left: 4px solid var(--secondary); display: flex; align-items: center; gap: 15px; }
+        .time-section .clock { font-size: 22px; font-weight: bold; color: var(--primary); }
+        .time-section .date { font-size: 12px; color: var(--text-dark); opacity: 0.8; }
         
         .cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-        .card { background-color: var(--white); padding: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        .card { background-color: var(--white); padding: 25px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid var(--secondary); box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.3s; }
+        .card:hover { transform: translateY(-5px); }
         .card.alert { border-bottom: 4px solid var(--danger); }
-        .card-info h4 { color: #777; font-size: 13px; margin-bottom: 5px; text-transform: uppercase;}
-        .card-info h2 { color: var(--primary); font-size: 24px; }
-        .card-icon { font-size: 35px; color: var(--secondary); opacity: 0.8; }
+        .card-info h4 { color: var(--text-dark); opacity: 0.7; font-size: 13px; margin-bottom: 8px; text-transform: uppercase; font-weight: 600; }
+        .card-info h2 { color: var(--primary); font-size: 26px; font-weight: 700; }
+        .card-icon { font-size: 38px; color: var(--secondary); opacity: 0.9; }
         .card.alert .card-icon { color: var(--danger); }
 
         /* --- ANIMASI BERGERAK CSS --- */
-        .pengumuman-card { background: var(--primary); color: var(--secondary); padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; border-left: 8px solid var(--secondary); display: flex; align-items: center; overflow: hidden; position: relative; }
-        .panggilan-ortu-card { background: var(--danger); color: var(--white); padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 20px; border-left: 8px solid #8B0000; display: flex; align-items: center; overflow: hidden; position: relative; }
+        .pengumuman-card { background: var(--primary); color: var(--secondary); padding: 15px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 25px; border-left: 8px solid var(--secondary); display: flex; align-items: center; overflow: hidden; position: relative; }
+        .panggilan-ortu-card { background: var(--danger); color: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3); margin-bottom: 25px; border-left: 8px solid #8B0000; display: flex; align-items: center; overflow: hidden; position: relative; }
         .marquee-container { overflow: hidden; white-space: nowrap; width: 100%; }
         
-        .teks-bergerak { display: inline-block; font-size: 16px; font-weight: bold; color: #ffffff; text-transform: uppercase; animation: smooth-marquee 25s linear infinite; padding-left: 100%; }
-        .teks-bergerak-panggilan { display: inline-block; font-size: 18px; font-weight: bold; color: #ffffff; text-transform: uppercase; animation: smooth-marquee-fast 15s linear infinite; padding-left: 100%; letter-spacing: 1px; }
-        .teks-bergerak-dark { display: inline-block; font-size: 14px; font-weight: bold; color: #333333; animation: smooth-marquee 20s linear infinite; padding-left: 100%; }
-        .teks-bergerak-piket { display: inline-block; font-family: 'Arial Black', sans-serif; font-size: 15px; font-weight: bold; color: var(--text-dark); animation: smooth-marquee 20s linear infinite; padding-left: 100%; text-transform: uppercase; }
+        .teks-bergerak { display: inline-block; font-size: 15px; font-weight: 600; color: #ffffff; text-transform: uppercase; animation: smooth-marquee 25s linear infinite; padding-left: 100%; }
+        .teks-bergerak-panggilan { display: inline-block; font-size: 16px; font-weight: 700; color: #ffffff; text-transform: uppercase; animation: smooth-marquee-fast 15s linear infinite; padding-left: 100%; letter-spacing: 1px; }
+        .teks-bergerak-dark { display: inline-block; font-size: 14px; font-weight: 600; color: var(--text-dark); animation: smooth-marquee 20s linear infinite; padding-left: 100%; }
+        .teks-bergerak-piket { display: inline-block; font-size: 14px; font-weight: bold; color: var(--text-dark); animation: smooth-marquee 20s linear infinite; padding-left: 100%; text-transform: uppercase; }
         
         @keyframes smooth-marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         @keyframes smooth-marquee-fast { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         
         .admin-control-box { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;}
-        .admin-control-box input, .admin-control-box textarea { padding: 8px; border: 1px solid #ccc; border-radius: 5px; flex: 1; min-width: 200px; }
+        .admin-control-box input, .admin-control-box textarea { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; flex: 1; min-width: 200px; background: var(--bg-light); color: var(--text-dark); outline: none; }
+        .admin-control-box input:focus, .admin-control-box textarea:focus { border-color: var(--secondary); }
 
         /* --- PANELS & TABLES --- */
-        .panels-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;}
-        .panel { background-color: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); margin-bottom: 20px; overflow: hidden; }
-        .panel h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; font-size: 18px;}
+        .panels-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 25px;}
+        .panel { background-color: var(--white); padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 25px; overflow: hidden; }
+        .panel h3 { color: var(--primary); margin-bottom: 18px; border-bottom: 2px solid var(--bg-light); padding-bottom: 12px; font-size: 18px; font-weight: 700; }
         
-        .table-responsive { overflow-x: auto; width: 100%; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: middle;}
-        table th { background-color: var(--bg-light); color: var(--primary); font-weight: bold;}
+        .table-responsive { overflow-x: auto; width: 100%; margin-top: 15px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; background-color: var(--white); }
+        table th, table td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13.5px; vertical-align: middle; color: var(--text-dark); }
+        table th { background-color: var(--bg-light); color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
         table.text-center th, table.text-center td { text-align: center; }
+        table tbody tr:hover { background-color: var(--bg-light); }
         
-        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; display: inline-block;}
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #fff; display: inline-block; letter-spacing: 0.5px; text-transform: uppercase;}
         .bg-green { background-color: var(--secondary); }
         .bg-red { background-color: var(--danger); }
-        .bg-yellow { background-color: var(--warning); color: #333; }
+        .bg-yellow { background-color: var(--warning); color: #fff; }
         .bg-blue { background-color: var(--info); }
-        .bg-dark { background-color: #34495e; }
+        .bg-dark { background-color: var(--primary); }
 
-        .btn-action { background: var(--secondary); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; justify-content: center;}
+        .btn-action { background: var(--secondary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .btn-action.danger { background: var(--danger); }
         .btn-action.excel { background: #27ae60; }
-        .btn-action.upload { background: #2980b9; } 
-        .btn-action.edit { background: #f39c12; }
-        .btn-action:hover { filter: brightness(0.9); }
+        .btn-action.upload { background: var(--info); } 
+        .btn-action.edit { background: var(--warning); }
+        .btn-action:hover { filter: brightness(0.9); transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
         .hidden { display: none !important; }
         
-        .radio-group { display: flex; gap: 10px; flex-wrap: wrap;}
-        .radio-group label { cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 3px; font-size: 13px; }
-        input[type="text"], input[type="number"], select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; }
+        .radio-group { display: flex; gap: 12px; flex-wrap: wrap; background: var(--bg-light); padding: 8px 12px; border-radius: 8px;}
+        .radio-group label { cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 13px; }
+        input[type="text"], input[type="number"], select, textarea { padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; width: 100%; background: var(--bg-light); color: var(--text-dark); outline: none; transition: 0.3s;}
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: var(--secondary); }
         
-        .student-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; flex-shrink: 0;}
-        .avatar-container { display: flex; align-items: center; gap: 10px; }
+        .student-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); flex-shrink: 0;}
+        .avatar-container { display: flex; align-items: center; gap: 12px; }
         
         /* --- Uang Kas & Settings --- */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-        .stat-card { padding: 20px; border-radius: 10px; color: white; text-align: center; }
-        .locked { pointer-events: none; opacity: 0.5; }
-        .form-tambah { background: #fdfdfd; padding: 15px; border: 1px dashed var(--secondary); border-radius: 8px; margin-bottom: 20px; display: none; }
+        .stat-card { padding: 25px 20px; border-radius: 12px; color: #fff; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-card h4 { font-size: 14px; opacity: 0.9; margin-bottom: 8px; font-weight: 600; text-transform: uppercase;}
+        .stat-card h2 { font-size: 28px; font-weight: 700; }
+        .locked { pointer-events: none; opacity: 0.5; filter: grayscale(100%); }
+        .form-tambah { background: var(--bg-light); padding: 20px; border: 1px dashed var(--secondary); border-radius: 10px; margin-bottom: 25px; display: none; }
         .form-grid { display: grid; grid-template-columns: 1fr 2fr 1fr 2fr; gap: 15px; align-items: center; }
         
-        .settings-panel { background-color: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; margin-bottom: 20px;}
-        .form-group { margin-bottom: 15px; width: 100%; }
-        .form-group label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 8px; font-size: 14px;}
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;}
+        .settings-panel { background-color: var(--white); padding: 25px 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); width: 100%; margin-bottom: 25px;}
+        .form-group { margin-bottom: 18px; width: 100%; }
+        .form-group label { display: block; font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 13.5px;}
         
         /* Image Preview Dashboard */
-        .img-dashboard-preview { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top:10px; display: none; height: auto;}
-        .empty-state-text { color: #777; font-style: italic; font-size: 13px; text-align: center; padding: 15px;}
+        .img-dashboard-preview { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top:15px; display: none; height: auto; border: 1px solid var(--border-color);}
+        .empty-state-text { color: var(--text-dark); opacity: 0.6; font-style: italic; font-size: 13px; text-align: center; padding: 20px;}
 
         /* --- TAMBAHAN CSS UNTUK TABEL ABSENSI 4 MINGGU --- */
         .tabel-rekap { min-width: 1600px; text-align: center; border-collapse: collapse; }
-        .tabel-rekap th, .tabel-rekap td { border: 1px solid #ccc; padding: 8px; font-size: 13px; }
-        .tabel-rekap th { background-color: var(--primary); color: white; }
+        .tabel-rekap th, .tabel-rekap td { border: 1px solid var(--border-color); padding: 10px; font-size: 13px; }
+        .tabel-rekap th { background-color: var(--primary); color: #fff; }
         .tabel-rekap th.rekapan-header { background-color: var(--secondary); }
         
         .resizable-col { resize: horizontal; overflow: auto; white-space: nowrap; width: max-content; }
-        .date-header { width: 100%; font-size: 11px; padding: 2px; margin-top: 5px; border: none; border-radius: 3px; }
-        .input-absen { width: 30px; height: 30px; text-align: center; text-transform: uppercase; font-weight: bold; border: 1px solid #ddd; border-radius: 4px; }
-        .input-absen:focus { border-color: var(--secondary); outline: none; background: #e8f5e9; }
-        .input-absen:disabled { background: #f4f4f4; border: 1px dashed #ccc; color: #555;}
+        .date-header { width: 100%; font-size: 11px; padding: 4px; margin-top: 5px; border: none; border-radius: 4px; color: var(--text-dark); background: rgba(255,255,255,0.9); }
+        .input-absen { width: 35px; height: 35px; text-align: center; text-transform: uppercase; font-weight: 700; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-light); color: var(--text-dark); }
+        .input-absen:focus { border-color: var(--secondary); outline: none; background: var(--white); box-shadow: 0 0 5px rgba(69, 182, 156, 0.4); }
+        .input-absen:disabled { background: var(--bg-light); border: 1px dashed var(--border-color); opacity: 0.7;}
 
         /* ==============================================================
            MODUL FORUM DISKUSI (Modern UI)
            ============================================================== */
-        .chat-container { display: flex; flex-direction: column; height: 75vh; background-color: var(--chat-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #ddd; position: relative; }
-        .chat-header { background-color: var(--primary); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .chat-container { display: flex; flex-direction: column; height: 75vh; background-color: var(--chat-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--border-color); position: relative; }
+        .chat-header { background-color: var(--primary); color: #fff; padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .chat-header-info { display: flex; align-items: center; gap: 15px; }
-        .chat-header-info i { font-size: 24px; }
-        .chat-header h3 { margin: 0; font-size: 18px; }
-        .chat-header p { margin: 0; font-size: 12px; opacity: 0.8; }
+        .chat-header-info i { font-size: 26px; color: var(--secondary); }
+        .chat-header h3 { margin: 0; font-size: 18px; font-weight: 700; }
+        .chat-header p { margin: 0; font-size: 12px; opacity: 0.85; margin-top: 3px; }
         
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
-        .message-wrapper { display: flex; flex-direction: column; max-width: 85%; }
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; scroll-behavior: smooth; }
+        .message-wrapper { display: flex; flex-direction: column; max-width: 80%; }
         .message-wrapper.left { align-self: flex-start; }
         .message-wrapper.right { align-self: flex-end; align-items: flex-end; }
         
-        .message-sender { font-size: 12px; font-weight: bold; color: #555; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+        .message-sender { font-size: 12px; font-weight: 700; color: var(--text-dark); opacity: 0.8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
         .message-wrapper.right .message-sender { flex-direction: row-reverse; }
-        .message-sender img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+        .message-sender img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
         
-        .message-bubble { padding: 12px 16px; border-radius: 15px; font-size: 14px; line-height: 1.5; position: relative; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.1); min-width: 100px; }
-        .message-wrapper.left .message-bubble { background-color: var(--chat-bubble-left); border-top-left-radius: 0; }
-        .message-wrapper.right .message-bubble { background-color: var(--chat-bubble-right); border-top-right-radius: 0; }
-        .message-bubble img { max-width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer; }
+        .message-bubble { padding: 14px 18px; border-radius: 18px; font-size: 14px; line-height: 1.5; position: relative; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-width: 120px; color: var(--text-dark); }
+        .message-wrapper.left .message-bubble { background-color: var(--chat-bubble-left); border-top-left-radius: 4px; }
+        .message-wrapper.right .message-bubble { background-color: var(--chat-bubble-right); border-top-right-radius: 4px; }
+        .message-bubble img { max-width: 100%; border-radius: 10px; margin-top: 8px; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
         
-        .message-info { font-size: 10px; color: #888; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 5px; align-items: center;}
+        .message-info { font-size: 10px; opacity: 0.6; text-align: right; margin-top: 8px; display: flex; justify-content: flex-end; gap: 5px; align-items: center;}
         
-        .chat-input-area { background-color: #f0f0f0; padding: 15px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #ddd; position: relative; }
-        .chat-btn { background: none; border: none; font-size: 20px; color: #666; cursor: pointer; transition: 0.2s; padding: 5px; position: relative; }
-        .chat-btn:hover { color: var(--primary); }
-        .chat-input { flex: 1; padding: 12px 20px; border-radius: 25px; border: 1px solid #ccc; outline: none; font-size: 14px; background: var(--white); transition: border 0.3s; }
-        .chat-input:focus { border-color: var(--secondary); }
-        .btn-send-chat { background-color: var(--secondary); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.3s;}
+        .chat-input-area { background-color: var(--white); padding: 18px; display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--border-color); position: relative; }
+        .chat-btn { background: none; border: none; font-size: 22px; color: var(--text-dark); opacity: 0.6; cursor: pointer; transition: 0.2s; padding: 5px; }
+        .chat-btn:hover { color: var(--primary); opacity: 1; }
+        .chat-input { flex: 1; padding: 14px 22px; border-radius: 30px; border: 1px solid var(--border-color); outline: none; font-size: 14px; background: var(--bg-light); transition: border 0.3s; color: var(--text-dark); }
+        .chat-input:focus { border-color: var(--secondary); background: var(--white); box-shadow: 0 0 8px rgba(69, 182, 156, 0.2); }
+        .btn-send-chat { background-color: var(--secondary); color: #fff; border: none; width: 48px; height: 48px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(69, 182, 156, 0.3); transition: 0.3s;}
         .btn-send-chat:hover { background-color: var(--primary); transform: scale(1.05); }
 
-        .emoji-picker { display: none; position: absolute; bottom: 70px; left: 15px; background: white; border: 1px solid #ddd; border-radius: 10px; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 250px; grid-template-columns: repeat(6, 1fr); gap: 5px; z-index: 100; }
-        .emoji-item { font-size: 20px; cursor: pointer; text-align: center; padding: 5px; transition: 0.2s; border-radius: 5px; }
-        .emoji-item:hover { background: #f0f0f0; }
+        .emoji-picker { display: none; position: absolute; bottom: 80px; left: 20px; background: var(--white); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); width: 280px; grid-template-columns: repeat(6, 1fr); gap: 8px; z-index: 100; }
+        .emoji-item { font-size: 22px; cursor: pointer; text-align: center; padding: 6px; transition: 0.2s; border-radius: 8px; }
+        .emoji-item:hover { background: var(--bg-light); transform: scale(1.1); }
 
         /* ==============================================================
-           MEDIA QUERIES UNTUK TAMPILAN SMARTPHONE (RESPONSIVE)
+           MEDIA QUERIES UNTUK TAMPILAN PROFESIONAL DI SEMUA DEVICE
            ============================================================== */
         @media screen and (max-width: 1024px) {
-            .cards-grid { grid-template-columns: repeat(2, 1fr); }
-            .panels-grid { grid-template-columns: 1fr; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .panels-grid { grid-template-columns: 1fr; gap: 15px; }
             .form-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media screen and (max-width: 768px) {
             .mobile-nav-toggle { display: block; }
-            .sidebar { transform: translateX(-100%); box-shadow: 4px 0 15px rgba(0,0,0,0.2); }
+            .sidebar { transform: translateX(-100%); box-shadow: 4px 0 25px rgba(0,0,0,0.15); }
             .sidebar.show { transform: translateX(0); }
             .sidebar-overlay.show { display: block; }
             
-            .main-content { margin-left: 0; width: 100%; padding: 15px; }
-            .header { flex-direction: column; align-items: flex-start; gap: 15px; padding: 15px; }
-            .time-section { width: 100%; justify-content: space-between; border-left: none; border-top: 4px solid var(--secondary); padding-top: 15px; }
+            .main-content { margin-left: 0; width: 100%; padding: 20px 15px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 15px; padding: 20px; }
+            .time-section { width: 100%; justify-content: space-between; border-left: none; border-top: 4px solid var(--secondary); padding-top: 15px; border-radius: 0; }
             
-            .cards-grid { grid-template-columns: 1fr; gap: 15px; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
             .stats-grid { grid-template-columns: 1fr; gap: 15px; }
             
-            .panel { padding: 15px; }
+            .panel { padding: 20px 15px; }
             .form-grid { grid-template-columns: 1fr; }
             
-            table th, table td { font-size: 12px; padding: 8px; }
-            .btn-action { font-size: 11px; padding: 8px 10px; }
+            table th, table td { font-size: 12.5px; padding: 10px 8px; }
+            .btn-action { font-size: 12px; padding: 8px 12px; }
             
             .admin-control-box { flex-direction: column; align-items: stretch; }
-            .admin-control-box > div { display: flex; justify-content: space-between; gap: 5px; }
+            .admin-control-box > div { display: flex; justify-content: flex-start; gap: 8px; flex-wrap: wrap; }
             
             .message-wrapper { max-width: 90%; }
+            .chat-header { padding: 15px; }
+            .chat-messages { padding: 15px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .login-container { padding: 30px 20px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .profile-pic { width: 50px; height: 50px; }
+            .header-info h2 { font-size: 16px; }
+            .time-section .clock { font-size: 18px; }
+            .card-icon { font-size: 32px; }
+            .card-info h2 { font-size: 22px; }
+            h3 { font-size: 16px !important; }
+            .btn-action { width: 100%; justify-content: center; } /* Tombol jadi full width di HP kecil */
+            .table-responsive { border: 1px solid var(--border-color); }
         }
     </style>
 </head>
@@ -252,8 +288,8 @@
                 <input type="password" id="login-password" placeholder="Password / NISN" required>
                 
                 <div id="student-features">
-                    <p style="font-size: 14px; color: var(--primary); font-weight: bold; margin-top: 10px; margin-bottom: 5px; text-align: left;">Pilih Kehadiran Hari Ini:</p>
-                    <div class="radio-group" style="background: var(--bg-light); padding: 10px; border-radius: 5px; margin-bottom: 8px;">
+                    <p style="font-size: 14px; color: var(--primary); font-weight: bold; margin-top: 10px; margin-bottom: 8px; text-align: left;">Pilih Kehadiran Hari Ini:</p>
+                    <div class="radio-group" style="margin-bottom: 12px; justify-content: center;">
                         <label style="color: var(--secondary);"><input type="radio" name="student_status" value="H" checked> Hadir</label>
                         <label style="color: var(--warning);"><input type="radio" name="student_status" value="S"> Sakit</label>
                         <label style="color: var(--info);"><input type="radio" name="student_status" value="I"> Izin</label>
@@ -275,7 +311,7 @@
                 <div class="school-brand">
                     <img id="sidebar-logo" src="https://ui-avatars.com/api/?name=School&background=114B5F&color=fff" alt="Logo" class="school-logo">
                     <h3 id="sidebar-nama-sekolah">Belum Diatur</h3>
-                    <p id="sidebar-alamat-sekolah" style="font-size: 11px; color: #ddd; margin-top:5px; line-height: 1.3;">-</p>
+                    <p id="sidebar-alamat-sekolah" style="font-size: 11px; color: rgba(255,255,255,0.7); margin-top:5px; line-height: 1.4;">-</p>
                 </div>
                 <ul>
                     <li id="menu-dashboard" class="active" onclick="switchTab('dashboard')">
@@ -304,8 +340,8 @@
             
             <div class="sidebar-logout">
                 <ul>
-                    <li onclick="prosesLogout()" style="border-left:4px solid var(--danger);">
-                        <div style="color:var(--danger); font-weight:bold;"><i class="fas fa-sign-out-alt menu-icon"></i> Keluar Aplikasi</div>
+                    <li onclick="prosesLogout()" style="border-left:4px solid #ff4757;">
+                        <div style="color:#ff4757; font-weight:bold;"><i class="fas fa-sign-out-alt menu-icon"></i> Keluar Aplikasi</div>
                     </li>
                 </ul>
             </div>
@@ -328,12 +364,12 @@
                         <div class="clock" id="live-clock">00:00:00</div>
                         <div class="date" id="live-date">Memuat tanggal...</div>
                     </div>
-                    <button onclick="softRefreshApp()" class="btn-action" style="background:var(--info); padding: 10px;" title="Tarik Data dari Cloud"><i class="fas fa-cloud-download-alt"></i></button>
+                    <button onclick="softRefreshApp()" class="btn-action upload" style="padding: 12px; border-radius: 8px;" title="Tarik Data dari Cloud"><i class="fas fa-cloud-download-alt" style="font-size: 16px;"></i></button>
                 </div>
             </div>
 
             <div id="tab-dashboard" class="tab-content active">
-                <div class="panel" id="panel-panggilan-ortu" style="display: none; padding: 15px 25px 15px 25px; border: 2px solid var(--danger);">
+                <div class="panel" id="panel-panggilan-ortu" style="display: none; padding: 20px 25px; border: 2px solid var(--danger);">
                     <h3 style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> PANGGILAN ORANG TUA</h3>
                     <div class="panggilan-ortu-card">
                         <i class="fas fa-bell" style="color:white; margin-right:15px; font-size:24px; z-index: 2; background:var(--danger); padding-right:5px;"></i>
@@ -343,7 +379,7 @@
                     </div>
                 </div>
 
-                <div class="panel" style="padding: 15px 25px 20px 25px;">
+                <div class="panel" style="padding: 20px 25px;">
                     <h3><i class="fas fa-bullhorn"></i> Info Terbaru</h3>
                     <div class="pengumuman-card">
                         <i class="fas fa-info-circle" style="color:white; margin-right:15px; font-size:24px; z-index: 2; background:var(--primary); padding-right:5px;"></i>
@@ -357,7 +393,7 @@
                     <div class="card"><div class="card-info"><h4>Total Siswa</h4><h2 id="dash-total-siswa">0 Anak</h2></div><i class="fas fa-user-graduate card-icon"></i></div>
                     <div class="card"><div class="card-info"><h4>Hadir Hari Ini</h4><h2 id="dash-hadir">0 Anak</h2></div><i class="fas fa-check-circle card-icon"></i></div>
                     <div class="card" id="card-kas-terkumpul"><div class="card-info"><h4>Kas Terkumpul</h4><h2 id="display-kas">Rp 0</h2></div><i class="fas fa-money-bill-wave card-icon"></i></div>
-                    <div class="card alert"><div class="card-info"><h4>Tidak Hadir</h4><h2 style="color: #E63946;" id="dash-absen">0 Siswa</h2></div><i class="fas fa-exclamation-triangle card-icon"></i></div>
+                    <div class="card alert"><div class="card-info"><h4>Tidak Hadir</h4><h2 style="color: var(--danger);" id="dash-absen">0 Siswa</h2></div><i class="fas fa-exclamation-triangle card-icon"></i></div>
                 </div>
 
                 <div class="panels-grid">
@@ -375,22 +411,22 @@
                     
                     <div>
                         <div class="panel">
-                            <h3 style="color: #E63946;"><i class="fas fa-bell"></i> Agenda Kelas</h3>
-                            <div id="display-agenda" style="font-size: 14px; color: #555; line-height: 1.6; white-space: pre-line; margin-bottom: 10px;">Belum ada agenda.</div>
+                            <h3 style="color: var(--danger);"><i class="fas fa-bell"></i> Agenda Kelas</h3>
+                            <div id="display-agenda" style="font-size: 14.5px; color: var(--text-dark); opacity: 0.85; line-height: 1.6; white-space: pre-line; margin-bottom: 15px;">Belum ada agenda.</div>
                             
-                            <div id="admin-agenda-box" class="hidden admin-only-element" style="border-top:1px dashed #ccc; padding-top: 10px;">
-                                <textarea id="input-agenda" rows="3" style="width:100%; margin-bottom:5px;" placeholder="Ubah agenda kelas di sini..."></textarea>
-                                <div style="display:flex; gap:5px; flex-wrap:wrap;">
-                                    <button onclick="saveAgenda()" class="btn-action" style="font-size:11px; padding:6px 10px;"><i class="fas fa-save"></i> Save</button>
-                                    <button onclick="editAgenda()" class="btn-action" style="background:#f39c12; font-size:11px; padding:6px 10px;"><i class="fas fa-edit"></i> Edit</button>
-                                    <button onclick="hapusAgenda()" class="btn-action" style="background:#e74c3c; font-size:11px; padding:6px 10px;"><i class="fas fa-trash"></i> Hapus</button>
+                            <div id="admin-agenda-box" class="hidden admin-only-element" style="border-top:1px dashed var(--border-color); padding-top: 15px;">
+                                <textarea id="input-agenda" rows="3" style="width:100%; margin-bottom:10px;" placeholder="Ubah agenda kelas di sini..."></textarea>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <button onclick="saveAgenda()" class="btn-action upload" style="font-size:12px; padding:8px 12px;"><i class="fas fa-save"></i> Save</button>
+                                    <button onclick="editAgenda()" class="btn-action edit" style="font-size:12px; padding:8px 12px;"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="hapusAgenda()" class="btn-action danger" style="font-size:12px; padding:8px 12px;"><i class="fas fa-trash"></i> Hapus</button>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="panel" id="panel-dashboard-catatan" style="border-left: 5px solid var(--info); display: none;">
                             <h3 style="color: var(--info);"><i class="fas fa-sticky-note"></i> Catatan Khusus Untukmu</h3>
-                            <div style="overflow: hidden; white-space: nowrap; background:#f9f9f9; padding: 12px; border-radius:5px; border:1px solid #ddd;">
+                            <div style="overflow: hidden; white-space: nowrap; background:var(--bg-light); padding: 15px; border-radius:8px; border:1px solid var(--border-color);">
                                 <span class="teks-bergerak-dark" id="display-catatan-siswa">Belum ada catatan pribadi.</span>
                             </div>
                         </div>
@@ -437,17 +473,17 @@
                     
                     <div class="panel">
                         <h3 style="color: var(--secondary);"><i class="fas fa-broom"></i> Foto Petugas Piket</h3>
-                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                            <div style="width: 48%; min-width: 120px; text-align: center;">
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <div style="width: 45%; min-width: 120px; text-align: center;">
                                 <img id="dash-piket-1" class="img-dashboard-preview">
                                 <p id="txt-no-piket-1" class="empty-state-text">Foto 1 Kosong</p>
                             </div>
-                            <div style="width: 48%; min-width: 120px; text-align: center;">
+                            <div style="width: 45%; min-width: 120px; text-align: center;">
                                 <img id="dash-piket-2" class="img-dashboard-preview">
                                 <p id="txt-no-piket-2" class="empty-state-text">Foto 2 Kosong</p>
                             </div>
                         </div>
-                        <div id="catatan-piket-container" style="margin-top: 20px; overflow: hidden; white-space: nowrap; background: #fdfdfd; padding: 12px; border: 2px dashed var(--secondary); border-radius: 8px;">
+                        <div id="catatan-piket-container" style="margin-top: 25px; overflow: hidden; white-space: nowrap; background: var(--bg-light); padding: 15px; border: 2px dashed var(--secondary); border-radius: 10px;">
                             <span class="teks-bergerak-piket" id="dash-catatan-piket"></span>
                         </div>
                     </div>
@@ -480,9 +516,9 @@
 
             <div id="tab-siswa" class="tab-content">
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
                         <h3><i class="fas fa-users-cog"></i> Pusat Data Siswa</h3>
-                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                             <button onclick="hapusSiswaTerpilih()" class="btn-action danger admin-only-element hidden" id="btn-hapus-masal"><i class="fas fa-trash-alt"></i> Hapus Terpilih</button>
                             <button onclick="toggleFormTambah()" class="btn-action"><i class="fas fa-user-plus"></i> Tambah Manual</button>
                             <input type="file" id="file-excel" accept=".xlsx, .xls, .csv" style="display:none;" onchange="prosesUploadExcel(event)">
@@ -494,7 +530,7 @@
                     <input type="hidden" id="edit-index-siswa" value="-1">
 
                     <div class="form-tambah" id="form-tambah-siswa">
-                        <h4 style="margin-bottom:10px; color:var(--primary);"><i class="fas fa-edit"></i> Form <span id="label-form-siswa">Input Baru</span></h4>
+                        <h4 style="margin-bottom:15px; color:var(--primary); font-size: 16px;"><i class="fas fa-edit"></i> Form <span id="label-form-siswa">Input Baru</span></h4>
                         <div class="form-grid">
                             <label>NISN</label> <input type="number" id="input-nis" placeholder="Contoh: 102404">
                             <label>Nama Lengkap</label> <input type="text" id="input-nama" placeholder="Masukkan nama...">
@@ -502,7 +538,7 @@
                             <select id="input-jk"><option value="L">Laki-Laki</option><option value="P">Perempuan</option></select>
                             <label>No. HP Orang Tua</label> <input type="text" id="input-hp" placeholder="Contoh: 08123456789">
                         </div>
-                        <div style="margin-top: 15px; text-align:right;">
+                        <div style="margin-top: 20px; text-align:right;">
                             <button onclick="batalFormSiswa()" class="btn-action" style="background:#7f8c8d;">Batal</button>
                             <button onclick="simpanSiswaData()" class="btn-action"><i class="fas fa-save"></i> Save Data</button>
                         </div>
@@ -525,10 +561,10 @@
             </div>
 
             <div id="tab-absensi" class="tab-content">
-                <div class="panel" style="background: #e8f5e9; border: 1px solid #27ae60;">
-                    <h4 style="color: #27ae60; margin-bottom: 10px;"><i class="fas fa-link"></i> Sinkronisasi Otomatis</h4>
-                    <p style="font-size: 13px; margin-bottom: 10px;">Pilih hari berjalan saat ini. Jika siswa absen mandiri atau Admin menyimpan absen harian, datanya otomatis terekam ke Buku Rekap Bulanan.</p>
-                    <select id="select-active-rekap" onchange="updateActiveRekap()" style="width: 100%; max-width: 400px; padding: 8px;">
+                <div class="panel" style="background: rgba(46, 204, 113, 0.1); border: 1px solid #27ae60;">
+                    <h4 style="color: #27ae60; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-link"></i> Sinkronisasi Otomatis</h4>
+                    <p style="font-size: 13.5px; margin-bottom: 12px; color: var(--text-dark);">Pilih hari berjalan saat ini. Jika siswa absen mandiri atau Admin menyimpan absen harian, datanya otomatis terekam ke Buku Rekap Bulanan.</p>
+                    <select id="select-active-rekap" onchange="updateActiveRekap()" style="width: 100%; max-width: 400px; padding: 12px;">
                         <option value="-1">-- Matikan Sinkronisasi Otomatis --</option>
                         <optgroup label="Minggu 1">
                             <option value="0">Minggu 1 - Senin</option><option value="1">Minggu 1 - Selasa</option><option value="2">Minggu 1 - Rabu</option><option value="3">Minggu 1 - Kamis</option><option value="4">Minggu 1 - Jumat</option>
@@ -546,7 +582,7 @@
                 </div>
 
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                         <h3><i class="fas fa-calendar-check"></i> Form Absensi Harian</h3>
                         <div>
                             <button onclick="resetAbsensi()" class="btn-action danger"><i class="fas fa-sync"></i> Reset Hadir Semua</button>
@@ -561,15 +597,15 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button type="submit" class="btn-action" style="width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;"><i class="fas fa-save"></i> Save Absensi & Perbarui Dashboard</button>
+                        <button type="submit" class="btn-action" style="width: 100%; margin-top: 25px; font-size: 16px; padding: 16px; border-radius: 8px;"><i class="fas fa-save"></i> Save Absensi & Perbarui Dashboard</button>
                     </form>
                 </div>
 
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                        <h3 style="color: var(--primary); margin:0;"><i class="fas fa-table"></i> Buku Rekap Absensi Bulanan (Sekretaris)</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                        <h3 style="color: var(--primary); margin:0;"><i class="fas fa-table"></i> Buku Rekap Absensi Bulanan</h3>
                         <div style="display:flex; gap:10px; flex-wrap: wrap;">
-                            <button id="btn-edit-rekap" onclick="toggleEditRekap()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit Manual</button>
+                            <button id="btn-edit-rekap" onclick="toggleEditRekap()" class="btn-action edit"><i class="fas fa-edit"></i> Edit Manual</button>
                             <button id="btn-save-rekap" onclick="simpanRekapBulanan()" class="btn-action hidden" style="background:var(--primary);"><i class="fas fa-save"></i> Save Rekap</button>
                             <button onclick="downloadExcelRekapBulanan()" class="btn-action excel"><i class="fas fa-file-excel"></i> Download Excel</button>
                         </div>
@@ -580,8 +616,8 @@
                             <thead>
                                 <tr>
                                     <th rowspan="2" style="width: 40px; white-space: nowrap;">No.</th>
-                                    <th rowspan="2" class="resizable-col" style="min-width: 180px;">Nama Siswa</th>
-                                    <th rowspan="2" class="resizable-col" style="min-width: 80px;">NISN</th>
+                                    <th rowspan="2" class="resizable-col" style="min-width: 200px;">Nama Siswa</th>
+                                    <th rowspan="2" class="resizable-col" style="min-width: 90px;">NISN</th>
                                     <th rowspan="2" style="width: 50px; white-space: nowrap;">L/P</th>
                                     <th colspan="5">Minggu 1</th><th colspan="5">Minggu 2</th><th colspan="5">Minggu 3</th><th colspan="5">Minggu 4</th>
                                     <th colspan="4" class="rekapan-header">Total Rekapan</th>
@@ -602,7 +638,7 @@
 
             <div id="tab-kas" class="tab-content">
                 <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
                         <h3><i class="fas fa-wallet"></i> Buku Kas Kelas (Bulanan)</h3>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button id="btn-download-kas-excel" onclick="downloadExcelKas()" class="btn-action excel hidden"><i class="fas fa-file-excel"></i> Excel</button>
@@ -615,9 +651,9 @@
                         <div class="stat-card" style="background:var(--primary)"><h4>Siswa Menunggak</h4><h2 id="jml-tunggak">0</h2></div>
                     </div>
                     <div id="admin-area-kas" class="locked">
-                        <div style="margin-bottom: 10px; display: flex; justify-content: flex-end; gap: 10px;">
+                        <div style="margin-bottom: 15px; display: flex; justify-content: flex-end; gap: 10px;">
                             <button id="btn-save-kas" onclick="simpanKasDariForm()" class="btn-action" style="background: var(--primary); display: none;"><i class="fas fa-save"></i> Save Kas</button>
-                            <button onclick="resetKasBulanan()" class="btn-action danger" style="padding: 6px 12px; font-size: 12px;"><i class="fas fa-trash-alt"></i> Reset</button>
+                            <button onclick="resetKasBulanan()" class="btn-action danger" style="padding: 8px 14px; font-size: 12.5px;"><i class="fas fa-trash-alt"></i> Reset</button>
                         </div>
                         <div class="table-responsive">
                             <table id="tabel-kas-induk" class="text-center">
@@ -636,22 +672,22 @@
             <div id="tab-forum" class="tab-content">
                 <div class="chat-container">
                     <div class="chat-header">
-    <div class="chat-header-info">
-        <i class="fas fa-comments"></i>
-        <div>
-            <h3 id="forum-kelas-nama">Forum Kelas (Live Chat)</h3>
-            <p>Tersinkronisasi otomatis setiap 10 detik</p>
-        </div>
-    </div>
+                        <div class="chat-header-info">
+                            <i class="fas fa-comments"></i>
+                            <div>
+                                <h3 id="forum-kelas-nama">Forum Kelas (Live Chat)</h3>
+                                <p>Tersinkronisasi otomatis setiap 10 detik</p>
+                            </div>
+                        </div>
 
-    <div id="admin-chat-tools" class="admin-only-element hidden">
-        <button onclick="hapusSemuaChat()" style="background:#E63946; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:12px; font-weight:bold;">
-            <i class="fas fa-trash-alt"></i> Bersihkan Semua
-        </button>
-    </div>
-</div>                    
+                        <div id="admin-chat-tools" class="admin-only-element hidden">
+                            <button onclick="hapusSemuaChat()" style="background:rgba(255,255,255,0.2); color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:bold; transition: 0.3s;">
+                                <i class="fas fa-trash-alt"></i> Bersihkan
+                            </button>
+                        </div>
+                    </div>                    
                     <div class="chat-messages" id="chat-messages-container">
-                        <div style="text-align:center; color:#888; font-size:12px; margin-top:20px;">Memuat pesan...</div>
+                        <div style="text-align:center; color:var(--text-dark); opacity:0.6; font-size:13px; margin-top:30px;">Memuat pesan...</div>
                     </div>
                     
                     <div class="emoji-picker" id="emoji-picker-container">
@@ -669,7 +705,64 @@
             </div>
 
             <div id="tab-pengaturan" class="tab-content">
-                <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fas fa-cog"></i> Pengaturan Sistem</h2>
+                <h2 style="color: var(--primary); margin-bottom: 25px;"><i class="fas fa-cog"></i> Pengaturan Sistem</h2>
+
+                <!-- TEMA UI & CUSTOMIZATION (Accessible for Admin and Students) -->
+                <div class="settings-panel">
+                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-paint-roller"></i> Pengaturan Tema & Tampilan</h3>
+                    <p style="font-size:13.5px; color:var(--text-dark); opacity: 0.8; margin-bottom: 20px;">Sesuaikan tampilan aplikasi sesuai seleramu. Tema disimpan khusus untuk perangkat ini.</p>
+                    
+                    <div class="form-group">
+                        <label>Pilih Tema Preset</label>
+                        <select id="theme-preset" onchange="applyPresetTheme()" style="max-width: 400px;">
+                            <option value="default">Default (SI-WALI Original)</option>
+                            <option value="ocean">Ocean Blue</option>
+                            <option value="sunset">Sunset Glow</option>
+                            <option value="nature">Nature Green</option>
+                            <option value="dark">Dark Mode</option>
+                            <option value="custom">-- Kustomisasi Warna Sendiri --</option>
+                        </select>
+                    </div>
+                    
+                    <div id="custom-theme-options" style="display:none; gap: 15px; flex-wrap: wrap; background: var(--bg-light); padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-color);">
+                        <div class="form-group" style="width: calc(33% - 10px); min-width: 130px; margin-bottom:0;">
+                            <label>Warna Utama</label>
+                            <input type="color" id="custom-primary" value="#114B5F" style="height:45px; padding:2px; cursor:pointer; width:100%;">
+                        </div>
+                        <div class="form-group" style="width: calc(33% - 10px); min-width: 130px; margin-bottom:0;">
+                            <label>Warna Sekunder</label>
+                            <input type="color" id="custom-secondary" value="#45B69C" style="height:45px; padding:2px; cursor:pointer; width:100%;">
+                        </div>
+                        <div class="form-group" style="width: calc(33% - 10px); min-width: 130px; margin-bottom:0;">
+                            <label>Background Dasar</label>
+                            <input type="color" id="custom-bg" value="#F4F9F8" style="height:45px; padding:2px; cursor:pointer; width:100%;">
+                        </div>
+                        <div class="form-group" style="width: calc(33% - 10px); min-width: 130px; margin-bottom:0;">
+                            <label>Kartu & Panel</label>
+                            <input type="color" id="custom-white" value="#FFFFFF" style="height:45px; padding:2px; cursor:pointer; width:100%;">
+                        </div>
+                        <div class="form-group" style="width: calc(33% - 10px); min-width: 130px; margin-bottom:0;">
+                            <label>Warna Teks</label>
+                            <input type="color" id="custom-text" value="#333333" style="height:45px; padding:2px; cursor:pointer; width:100%;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Pilih Jenis Font (Tipografi)</label>
+                        <select id="theme-font" style="max-width: 400px;">
+                            <option value="'Arial', sans-serif">Arial (Default)</option>
+                            <option value="'Poppins', sans-serif">Poppins (Modern & Bulat)</option>
+                            <option value="'Montserrat', sans-serif">Montserrat (Tegas & Elegan)</option>
+                            <option value="'Open Sans', sans-serif">Open Sans (Mudah Dibaca)</option>
+                            <option value="'Roboto', sans-serif">Roboto (Rapi & Minimalis)</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-top: 25px; display:flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-action upload" onclick="saveTheme()"><i class="fas fa-save"></i> Terapkan & Simpan Tema</button>
+                        <button class="btn-action danger" onclick="resetTheme()"><i class="fas fa-undo"></i> Reset ke Default</button>
+                    </div>
+                </div>
 
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-school"></i> Pengaturan Identitas Sekolah</h3>
@@ -684,11 +777,11 @@
                     <div class="form-group">
                         <label>Upload Logo Sekolah</label>
                         <input type="file" id="input-logo-sekolah" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-logo-sekolah', 'tempLogoSekolah')">
-                        <img id="preview-logo-sekolah" class="img-dashboard-preview" style="max-height: 100px;">
+                        <img id="preview-logo-sekolah" class="img-dashboard-preview" style="max-height: 120px;">
                     </div>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
                         <button onclick="saveSekolah()" class="btn-action"><i class="fas fa-save"></i> Save & Sinkron</button>
-                        <button onclick="editSekolah()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="editSekolah()" class="btn-action edit"><i class="fas fa-edit"></i> Edit</button>
                         <button onclick="hapusSekolah()" class="btn-action danger"><i class="fas fa-trash"></i> Hapus Semua</button>
                     </div>
                 </div>
@@ -706,11 +799,11 @@
                     <div class="form-group">
                         <label>Upload Foto Profil</label>
                         <input type="file" id="input-foto-wali" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-foto-wali', 'tempFotoWali')">
-                        <img id="preview-foto-wali" class="img-dashboard-preview" style="max-height: 100px;">
+                        <img id="preview-foto-wali" class="img-dashboard-preview" style="max-height: 120px;">
                     </div>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
                         <button onclick="saveWaliKelas()" class="btn-action"><i class="fas fa-save"></i> Save & Sinkron</button>
-                        <button onclick="editWaliKelas()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
+                        <button onclick="editWaliKelas()" class="btn-action edit"><i class="fas fa-edit"></i> Edit</button>
                         <button onclick="hapusWaliKelas()" class="btn-action danger"><i class="fas fa-trash"></i> Hapus Semua</button>
                     </div>
                 </div>
@@ -719,10 +812,10 @@
                     <h3 style="color:var(--danger); margin-bottom:15px;"><i class="fas fa-exclamation-triangle"></i> Panggilan Orang Tua</h3>
                     <div class="admin-control-box" style="display:block; margin: 0;">
                         <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--danger);">Pilih Siswa yang Dipanggil:</label>
-                        <div id="checkbox-panggilan-ortu" style="max-height: 120px; overflow-y: auto; background:#fff; border:1px solid #ccc; padding:8px; border-radius:4px; margin-bottom:15px;"></div>
+                        <div id="checkbox-panggilan-ortu" style="max-height: 150px; overflow-y: auto; background:var(--bg-light); border:1px solid var(--border-color); padding:12px; border-radius:6px; margin-bottom:15px;"></div>
                         <div style="display:flex; gap:10px; flex-wrap: wrap;">
                             <button onclick="savePanggilanOrtu()" class="btn-action danger"><i class="fas fa-save"></i> Save & Sinkron</button>
-                            <button onclick="editPanggilanOrtu()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
+                            <button onclick="editPanggilanOrtu()" class="btn-action edit"><i class="fas fa-edit"></i> Edit</button>
                             <button onclick="hapusPanggilanOrtu()" class="btn-action" style="background:#7f8c8d;"><i class="fas fa-trash"></i> Hapus Semua</button>
                         </div>
                     </div>
@@ -731,11 +824,11 @@
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-bullhorn"></i> Info Terbaru Dashboard</h3>
                     <div class="admin-control-box" style="margin: 0; display: block;">
-                        <input type="text" id="input-pengumuman" placeholder="Tulis pengumuman baru di sini..." style="margin-bottom: 12px;">
+                        <input type="text" id="input-pengumuman" placeholder="Tulis pengumuman baru di sini..." style="margin-bottom: 15px; width: 100%;">
                         <div style="display:flex; gap:10px; flex-wrap: wrap;">
                             <button onclick="savePengumuman()" class="btn-action"><i class="fas fa-save"></i> Save & Sinkron</button>
-                            <button onclick="editPengumuman()" class="btn-action" style="background:#f39c12;"><i class="fas fa-edit"></i> Edit</button>
-                            <button onclick="hapusPengumuman()" class="btn-action" style="background:#e74c3c;"><i class="fas fa-trash"></i> Hapus</button>
+                            <button onclick="editPengumuman()" class="btn-action edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button onclick="hapusPengumuman()" class="btn-action danger"><i class="fas fa-trash"></i> Hapus</button>
                         </div>
                     </div>
                 </div>
@@ -781,7 +874,7 @@
                 
                 <div class="settings-panel">
                     <h3 style="color:var(--secondary); margin-bottom:15px;"><i class="fas fa-edit"></i> Catatan Petugas Piket</h3>
-                    <p style="font-size:13px; color:#555; margin-bottom:10px;">Fitur text ini tampil tepat di bawah foto petugas piket pada dashboard utama.</p>
+                    <p style="font-size:13.5px; color:var(--text-dark); opacity:0.8; margin-bottom:12px;">Fitur text ini tampil tepat di bawah foto petugas piket pada dashboard utama.</p>
                     <div class="form-group">
                         <textarea id="input-catatan-piket" rows="3" placeholder="Tulis pesan atau instruksi dari petugas piket di sini..."></textarea>
                     </div>
@@ -794,20 +887,20 @@
                 <div class="settings-panel">
                     <h3 style="color:var(--secondary); margin-bottom:15px;"><i class="fas fa-broom"></i> Upload Foto Petugas Piket</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                        <div class="form-group" style="background:#f4f9f8; padding:15px; border-radius:8px;">
+                        <div class="form-group" style="background:var(--bg-light); padding:20px; border-radius:10px; border: 1px solid var(--border-color);">
                             <label>Slot Foto 1 (.jpg / .png)</label>
                             <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-1', 'tempPiket1Base64')">
                             <img id="preview-img-piket-1" class="img-dashboard-preview" style="max-height: 150px;">
-                            <div style="margin-top: 10px; display:flex; gap: 5px; flex-wrap: wrap;">
+                            <div style="margin-top: 15px; display:flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn-action upload" onclick="saveImageToSettings('fotoPiket1', window.tempPiket1Base64, 'Foto Piket 1')"><i class="fas fa-save"></i> Save</button>
                                 <button class="btn-action danger" onclick="deleteImageFromSettings('fotoPiket1', 'preview-img-piket-1')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
-                        <div class="form-group" style="background:#f4f9f8; padding:15px; border-radius:8px;">
+                        <div class="form-group" style="background:var(--bg-light); padding:20px; border-radius:10px; border: 1px solid var(--border-color);">
                             <label>Slot Foto 2 (.jpg / .png)</label>
                             <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-2', 'tempPiket2Base64')">
                             <img id="preview-img-piket-2" class="img-dashboard-preview" style="max-height: 150px;">
-                            <div style="margin-top: 10px; display:flex; gap: 5px; flex-wrap: wrap;">
+                            <div style="margin-top: 15px; display:flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn-action upload" onclick="saveImageToSettings('fotoPiket2', window.tempPiket2Base64, 'Foto Piket 2')"><i class="fas fa-save"></i> Save</button>
                                 <button class="btn-action danger" onclick="deleteImageFromSettings('fotoPiket2', 'preview-img-piket-2')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
@@ -817,11 +910,11 @@
 
                 <div class="settings-panel admin-only-setting">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sticky-note"></i> Catatan Khusus Siswa</h3>
-                    <p style="font-size:13px; color:#555; margin-bottom:10px;">Fitur text berbentuk keterangan siswa yang diisi oleh admin. Tampil eksklusif hanya pada saat siswa yang bersangkutan login ke sistem.</p>
+                    <p style="font-size:13.5px; color:var(--text-dark); opacity:0.8; margin-bottom:15px;">Fitur text berbentuk keterangan siswa yang diisi oleh admin. Tampil eksklusif hanya pada saat siswa yang bersangkutan login ke sistem.</p>
                     
-                    <div class="form-group admin-only-element" id="admin-catatan-selector" style="display:none; margin-bottom:15px; padding:10px; background:#e4f0ec; border-radius:5px;">
-                        <label style="display:block; margin-bottom:8px; font-weight:bold; color:var(--primary);">Pilih Siswa (Bisa lebih dari 1):</label>
-                        <div id="checkbox-siswa-catatan" style="max-height: 150px; overflow-y: auto; background:#fff; border:1px solid #ccc; padding:8px; border-radius:4px;"></div>
+                    <div class="form-group admin-only-element" id="admin-catatan-selector" style="display:none; margin-bottom:15px; padding:15px; background:rgba(69, 182, 156, 0.1); border-radius:8px; border:1px solid var(--secondary);">
+                        <label style="display:block; margin-bottom:10px; font-weight:bold; color:var(--primary);">Pilih Siswa (Bisa lebih dari 1):</label>
+                        <div id="checkbox-siswa-catatan" style="max-height: 200px; overflow-y: auto; background:var(--white); border:1px solid var(--border-color); padding:10px; border-radius:6px;"></div>
                     </div>
 
                     <div class="form-group">
@@ -853,6 +946,15 @@
         // Konstanta Emoji
         const emojis = ["😀","😂","🥰","😎","🤔","👍","🙏","🔥","🎉","💡","✅","❌"];
 
+        // Konfigurasi Tema (Theme Variables)
+        const THEME_PRESETS = {
+            default: { primary: '#114B5F', secondary: '#45B69C', bg: '#F4F9F8', text: '#333333', white: '#FFFFFF' },
+            ocean:   { primary: '#03045E', secondary: '#0077B6', bg: '#F0F8FF', text: '#023E8A', white: '#FFFFFF' },
+            sunset:  { primary: '#9A031E', secondary: '#E36414', bg: '#FFF5F5', text: '#5F0F40', white: '#FFFFFF' },
+            nature:  { primary: '#2D6A4F', secondary: '#52B788', bg: '#F2F8F5', text: '#081C15', white: '#FFFFFF' },
+            dark:    { primary: '#BB86FC', secondary: '#03DAC6', bg: '#121212', text: '#E0E0E0', white: '#1E1E1E' }
+        };
+
         // Fungsi Request Notification Permission
         function initNotifications() {
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
@@ -871,7 +973,7 @@
                 span.onclick = function() {
                     let input = document.getElementById('chat-input-field');
                     input.value += emo;
-                    toggleEmojiPicker(); // tutup setelah pilih
+                    toggleEmojiPicker(); 
                     input.focus();
                 };
                 container.appendChild(span);
@@ -883,7 +985,6 @@
             picker.style.display = picker.style.display === "grid" ? "none" : "grid";
         }
 
-        // Fungsi Linkify untuk link agenda aktif
         function linkify(text) {
             var urlRegex = /(https?:\/\/[^\s]+)/g;
             return text.replace(urlRegex, function(url) {
@@ -891,13 +992,12 @@
             });
         }
 
-        // Kompresi Gambar
         function compressImageAndProcess(file, callback, maxW = 800) {
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 if (file.type === "application/pdf") {
-                    callback(e.target.result, "pdf"); // Jika PDF langsung kembalikan base64 utuh
+                    callback(e.target.result, "pdf"); 
                     return;
                 }
                 const img = new Image();
@@ -923,7 +1023,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Fungsi Jam & Waktu
         function updateTime() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -973,10 +1072,100 @@
                 .catch(err => console.error("Gagal sinkron Cloud!", err));
         }
 
+        /* ---------------- TEMA UI LOGIC ---------------- */
+        function loadTheme() {
+            let saved = localStorage.getItem('siwali_theme');
+            if (saved) {
+                try {
+                    let themeData = JSON.parse(saved);
+                    document.getElementById('theme-preset').value = themeData.preset;
+                    document.getElementById('theme-font').value = themeData.font;
+                    document.getElementById('custom-primary').value = themeData.colors.primary;
+                    document.getElementById('custom-secondary').value = themeData.colors.secondary;
+                    document.getElementById('custom-bg').value = themeData.colors.bg;
+                    document.getElementById('custom-white').value = themeData.colors.white;
+                    document.getElementById('custom-text').value = themeData.colors.text;
+                    applyPresetTheme(); 
+                    applyThemeToDOM(themeData);
+                } catch(e) { console.error("Load Theme Error", e); }
+            }
+        }
+
+        function applyPresetTheme() {
+            let preset = document.getElementById('theme-preset').value;
+            let customOptions = document.getElementById('custom-theme-options');
+
+            if (preset === 'custom') {
+                customOptions.style.display = 'flex';
+            } else {
+                customOptions.style.display = 'none';
+                if(THEME_PRESETS[preset]) {
+                    let colors = THEME_PRESETS[preset];
+                    document.getElementById('custom-primary').value = colors.primary;
+                    document.getElementById('custom-secondary').value = colors.secondary;
+                    document.getElementById('custom-bg').value = colors.bg;
+                    document.getElementById('custom-white').value = colors.white;
+                    document.getElementById('custom-text').value = colors.text;
+                }
+            }
+        }
+
+        function saveTheme() {
+            let preset = document.getElementById('theme-preset').value;
+            let font = document.getElementById('theme-font').value;
+            let themeData = {
+                preset: preset,
+                font: font,
+                colors: {
+                    primary: document.getElementById('custom-primary').value,
+                    secondary: document.getElementById('custom-secondary').value,
+                    bg: document.getElementById('custom-bg').value,
+                    white: document.getElementById('custom-white').value,
+                    text: document.getElementById('custom-text').value
+                }
+            };
+            localStorage.setItem('siwali_theme', JSON.stringify(themeData));
+            applyThemeToDOM(themeData);
+            alert("Tema UI berhasil disimpan & diterapkan pada perangkat ini!");
+        }
+
+        function applyThemeToDOM(themeData) {
+            let root = document.documentElement;
+            root.style.setProperty('--primary', themeData.colors.primary);
+            root.style.setProperty('--secondary', themeData.colors.secondary);
+            root.style.setProperty('--bg-light', themeData.colors.bg);
+            root.style.setProperty('--white', themeData.colors.white);
+            root.style.setProperty('--text-dark', themeData.colors.text);
+            root.style.setProperty('--font-family', themeData.font);
+
+            // Logika Dark Mode Dinamis
+            if(themeData.colors.white.toLowerCase() === '#1e1e1e' || themeData.preset === 'dark') {
+                root.style.setProperty('--border-color', '#333333');
+                root.style.setProperty('--chat-bg', '#1e1e1e');
+                root.style.setProperty('--chat-bubble-left', '#333333');
+                root.style.setProperty('--chat-bubble-right', themeData.colors.secondary);
+            } else {
+                root.style.setProperty('--border-color', '#eeeeee');
+                root.style.setProperty('--chat-bg', '#e5ddd5');
+                root.style.setProperty('--chat-bubble-left', '#ffffff');
+                root.style.setProperty('--chat-bubble-right', '#dcf8c6');
+            }
+        }
+
+        function resetTheme() {
+            if(confirm("Kembalikan tema ke versi Default (Original)?")) {
+                localStorage.removeItem('siwali_theme');
+                location.reload();
+            }
+        }
+        /* ------------------------------------------------- */
+
         // INIT SYSTEM
         window.addEventListener('DOMContentLoaded', () => {
+            loadTheme(); // Load Custom Theme UI
             initNotifications();
             renderEmojiPicker();
+            
             let sessionLoggedIn = localStorage.getItem('siwali_logged_in');
             
             if (sessionLoggedIn === "true") {
@@ -1000,7 +1189,7 @@
             // Inisialisasi awal tarik data
             tarikDataCloud(true);
             
-            // SMART POLLING: Tarik data chat setiap 15 detik untuk simulasi real-time
+            // SMART POLLING: Tarik data chat setiap 15 detik
             setInterval(() => {
                 if(localStorage.getItem('siwali_logged_in') === "true") {
                     tarikDataCloud(false);
@@ -1020,7 +1209,6 @@
                             if(parsedData.settings) globalSettings = Object.assign(globalSettings, parsedData.settings);
                             if(parsedData.chat) {
                                 let newChatCount = parsedData.chat.length;
-                                // Cek pesan baru
                                 if (newChatCount > totalChatCount && totalChatCount !== 0 && !isInitialLoad) {
                                     tampilkanNotifikasiChat(parsedData.chat[newChatCount - 1]);
                                 }
@@ -1034,7 +1222,6 @@
                             if (localStorage.getItem('siwali_logged_in') === "true") jalankanSistemAwal();
                             else checkRole(); 
                         } else {
-                            // Update diam-diam di background
                             if(isChatTabActive) renderChatList();
                         }
                     }
@@ -1088,7 +1275,7 @@
             var usernameContainer = document.getElementById("input-username-container");
 
             if (role === "siswa") {
-                let selectHTML = `<select id="login-username" required style="width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #D3D3D3; border-radius: 5px; font-size: 14px;">`;
+                let selectHTML = `<select id="login-username" required style="width: 100%; padding: 14px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: var(--white); color: var(--text-dark);">`;
                 selectHTML += `<option value="" disabled selected>-- Pilih Nama Anda (Siswa) --</option>`;
                 if (dataSiswa && dataSiswa.length > 0) {
                     dataSiswa.forEach(siswa => { selectHTML += `<option value="${siswa.nis}">${siswa.nama}</option>`; });
@@ -1100,13 +1287,13 @@
                 document.getElementById("login-password").placeholder = "Masukkan NISN Anda";
                 studentArea.style.display = "block";
                 btnSubmit.innerHTML = "<i class='fas fa-paper-plane'></i> Kirim Absen & Login"; 
-                btnSubmit.style.backgroundColor = "#114B5F";
+                btnSubmit.style.backgroundColor = "var(--primary)";
             } else if (role !== "") {
                 usernameContainer.innerHTML = `<input type="text" id="login-username" placeholder="Username" required>`;
                 document.getElementById("login-password").placeholder = "Password";
                 studentArea.style.display = "none";
                 btnSubmit.innerHTML = "Masuk Aplikasi"; 
-                btnSubmit.style.backgroundColor = "#45B69C";
+                btnSubmit.style.backgroundColor = "var(--secondary)";
             } else {
                 usernameContainer.innerHTML = `<input type="text" id="login-username" placeholder="Pilih Role di atas dulu" disabled required>`;
             }
@@ -1158,13 +1345,13 @@
             document.getElementById('login-page').style.display = "none"; 
             document.getElementById('app-page').style.display = "block"; 
             switchTab('dashboard');
-            initNotifications(); // ask permission again if they ignored it
+            initNotifications();
         }
 
         function unlockAdminFeatures() {
             document.querySelectorAll('.admin-only-element').forEach(el => el.classList.remove('hidden'));
-            let lockSiswa = document.getElementById('lock-siswa'); if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "#45B69C"; }
-            let lockAbsensi = document.getElementById('lock-absensi'); if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "#45B69C"; }
+            let lockSiswa = document.getElementById('lock-siswa'); if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "var(--secondary)"; }
+            let lockAbsensi = document.getElementById('lock-absensi'); if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "var(--secondary)"; }
             populateCheckboxSiswaCatatan();
             let adminCatatanSelector = document.getElementById('admin-catatan-selector');
             if(adminCatatanSelector) adminCatatanSelector.style.display = "block";
@@ -1238,7 +1425,6 @@
             if(dispAgenda) dispAgenda.innerHTML = linkify(globalSettings.agendaKelas || "Belum ada agenda.");
             
             let dashPiket = document.getElementById('dash-catatan-piket'); 
-            // DEFAULT KOSONG JIKA TIDAK ADA
             if(dashPiket) dashPiket.innerText = globalSettings.catatanPiket || "";
 
             let curName = "Pengguna";
@@ -1295,7 +1481,7 @@
                     if(siswa.status === 'H') hadir++; else tidakHadir++;
                     
                     tbody.innerHTML += `<tr>
-                        <td><div class="avatar-container"><img src="${getAvatarUrl(nama, siswa.foto)}" class="student-avatar"><div><strong>${nama}</strong><br><small style="color:#777;">NISN: ${siswa.nis}</small></div></div></td>
+                        <td><div class="avatar-container"><img src="${getAvatarUrl(nama, siswa.foto)}" class="student-avatar"><div><strong>${nama}</strong><br><small style="opacity:0.7;">NISN: ${siswa.nis}</small></div></div></td>
                         <td>${getStatusBadge(siswa.status)}</td>
                         <td>${siswa.ket || '-'}</td>
                         <td><span class="badge bg-dark" style="font-weight:normal;">${siswa.waktuAbsen || '-'}</span></td>
@@ -1330,18 +1516,20 @@
                 populateCheckboxPanggilanOrtu();
             }
         }
+        
         function renderLunasDashboard() {
             let tbody = document.getElementById('tabel-dashboard-lunas'); tbody.innerHTML = ""; let adaLunas = false;
             if(dataSiswa.length > 0) {
                 dataSiswa.forEach(s => { 
                     if (s.kas && s.kas.filter(Boolean).length === totalMingguKas) { 
                         adaLunas = true; 
-                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas (M1-M4)</span></td></tr>`; 
+                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas (M1-M4)</span></td></tr>`; 
                     } 
                 });
             }
-            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#777;">Belum ada data.</td></tr>`;
+            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; opacity:0.7;">Belum ada data.</td></tr>`;
         }
+        
         function renderTunggakanDashboard() {
             let tbody = document.getElementById('tabel-dashboard-tunggakan'); tbody.innerHTML = ""; let adaTunggakan = false;
             if(dataSiswa.length > 0) {
@@ -1350,7 +1538,7 @@
                     if (sisaMinggu > 0) {
                         adaTunggakan = true; let listMinggu = []; 
                         for(let i=0; i<totalMingguKas; i++) if(!s.kas[i]) listMinggu.push(`M${i+1}`);
-                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="color:#777;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
+                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
                     }
                 });
             }
@@ -1424,12 +1612,12 @@
                         <td style="text-align:center;"><input type="checkbox" class="cb-siswa-item admin-only-element" value="${index}"></td>
                         <td>${index + 1}</td><td>${siswa.nis}</td>
                         <td><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"></td>
-                        <td><strong>${siswa.nama}</strong><br><input type="file" accept="image/*" class="admin-only-element" onchange="uploadFotoSiswa(event, ${index})" style="font-size:10px; margin-top:5px; width:150px;"></td>
+                        <td><strong>${siswa.nama}</strong><br><input type="file" accept="image/*" class="admin-only-element" onchange="uploadFotoSiswa(event, ${index})" style="font-size:10px; margin-top:8px; width:150px;"></td>
                         <td>${siswa.jk}</td><td>${siswa.hp || "-"}</td>
-                        <td class="action-btns" style="display:flex; gap:5px;">
-                            <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fab fa-whatsapp"></i></button>
-                            <button onclick="editSiswaManual(${index})" class="admin-only-element" style="background:#f39c12; border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteSiswa(${index})" class="admin-only-element" style="background:var(--danger); border:none; padding:5px 8px; border-radius:4px; color:white; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                        <td class="action-btns" style="display:flex; gap:6px;">
+                            <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                            <button onclick="editSiswaManual(${index})" class="admin-only-element" style="background:var(--warning); border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="Edit"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteSiswa(${index})" class="admin-only-element" style="background:var(--danger); border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>`;
                 });
@@ -1471,7 +1659,7 @@
                     tbody.innerHTML += `<tr>
                         <td><div class="avatar-container"><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"><strong>${siswa.nama}</strong></div></td>
                         <td>
-                            <div class="radio-group">
+                            <div class="radio-group" style="background: transparent;">
                                 <label style="color: var(--secondary);"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> H</label>
                                 <label style="color: var(--warning);"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> S</label>
                                 <label style="color: var(--info);"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> I</label>
@@ -1479,7 +1667,7 @@
                             </div>
                         </td>
                         <td><input type="text" id="ket_${index}" value="${siswa.ket || ''}" placeholder="Alasan..."></td>
-                        <td><span style="font-size:11px; color:#555;">${siswa.waktuAbsen || '-'}</span></td>
+                        <td><span style="font-size:11px; opacity:0.7;">${siswa.waktuAbsen || '-'}</span></td>
                     </tr>`;
                 });
             }
@@ -1516,7 +1704,7 @@
                 if (!siswa.rekap) siswa.rekap = Array(20).fill("");
                 html += `<tr><td style="white-space:nowrap;">${i + 1}</td><td style="white-space:nowrap; text-align:left;">${siswa.nama}</td><td style="white-space:nowrap;">${siswa.nis}</td><td style="white-space:nowrap;">${siswa.jk}</td>`;
                 for(let d = 0; d < 20; d++) { html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${siswa.rekap[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled></td>`; }
-                html += `<td id="total-h-${i}" style="font-weight:bold; color:#27ae60; background:#e8f8f5;">0</td><td id="total-s-${i}" style="font-weight:bold; color:#f39c12; background:#fef5e7;">0</td><td id="total-i-${i}" style="font-weight:bold; color:#2980b9; background:#ebf5fb;">0</td><td id="total-a-${i}" style="font-weight:bold; color:#e74c3c; background:#fdedec;">0</td></tr>`;
+                html += `<td id="total-h-${i}" style="font-weight:bold; color:#27ae60; background:rgba(46, 204, 113, 0.1);">0</td><td id="total-s-${i}" style="font-weight:bold; color:#f39c12; background:rgba(243, 156, 18, 0.1);">0</td><td id="total-i-${i}" style="font-weight:bold; color:#2980b9; background:rgba(41, 128, 185, 0.1);">0</td><td id="total-a-${i}" style="font-weight:bold; color:#e74c3c; background:rgba(231, 76, 60, 0.1);">0</td></tr>`;
             }
             tbody.innerHTML = html; for (let i = 0; i < totalShow; i++) hitungRekapBaris(i); 
         }
@@ -1577,11 +1765,11 @@
                     if(sisaTagihan > 0) jumlahSiswaMenunggak++;
                     
                     let checkboxes = ""; 
-                    for(let i=0; i < totalMingguKas; i++) { checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" data-student="${idx}" data-week="${i}" ${sKasArr[i] ? 'checked' : ''}></td>`; }
+                    for(let i=0; i < totalMingguKas; i++) { checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" style="transform:scale(1.2);" data-student="${idx}" data-week="${i}" ${sKasArr[i] ? 'checked' : ''}></td>`; }
                     let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
                     let pesanTagihan = `Halo Bapak/Ibu/wali, mohon maaf menganggu waktunya, menginformasikan bahwa ananda *${s.nama}*, saat ini memiliki sisa tagihan Uang Kas Kelas sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon kerjasamanya untuk dapat diselesaikan. Terima kasih banyak Bapak/Ibu. 🙏`;
                     
-                    tbody.innerHTML += `<tr><td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>${checkboxes}<td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td><td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:5px 10px; border:none; color:white; border-radius:4px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Tagih</button></td></tr>`;
+                    tbody.innerHTML += `<tr><td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>${checkboxes}<td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td><td><button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:8px 12px; border:none; color:white; border-radius:6px; cursor:pointer;" title="Tagih via WA"><i class="fab fa-whatsapp"></i></button></td></tr>`;
                 });
             }
             document.getElementById('total-semua').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); 
@@ -1679,7 +1867,7 @@
         function populateCheckboxPanggilanOrtu() {
             let container = document.getElementById('checkbox-panggilan-ortu');
             if(!container) return; container.innerHTML = "";
-            dataSiswa.forEach(s => { container.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-panggilan-ortu" ${s.panggilanOrtu ? 'checked' : ''}> ${s.nama}</label>`; });
+            dataSiswa.forEach(s => { container.innerHTML += `<label style="display:flex; margin-bottom:8px; cursor:pointer; align-items:center; gap:8px;"><input type="checkbox" style="transform:scale(1.2)" value="${s.nis}" class="cb-panggilan-ortu" ${s.panggilanOrtu ? 'checked' : ''}> ${s.nama}</label>`; });
         }
         function savePanggilanOrtu() { 
             let checkboxes = document.querySelectorAll('.cb-panggilan-ortu');
@@ -1741,8 +1929,8 @@
         // --- FITUR SELECT ALL CATATAN SISWA ---
         function populateCheckboxSiswaCatatan() {
             let sel = document.getElementById('checkbox-siswa-catatan'); if(!sel) return; sel.innerHTML = "";
-            sel.innerHTML += `<label style="display:flex; margin-bottom:10px; cursor:pointer; align-items:center; gap:5px; font-weight:bold; color:var(--info); border-bottom:1px solid #ccc; padding-bottom:5px;"><input type="checkbox" id="cb-all-catatan" onchange="toggleAllCatatan(this)"> PILIH SEMUA SISWA</label>`;
-            dataSiswa.forEach(s => { sel.innerHTML += `<label style="display:flex; margin-bottom:5px; cursor:pointer; align-items:center; gap:5px;"><input type="checkbox" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`; });
+            sel.innerHTML += `<label style="display:flex; margin-bottom:10px; cursor:pointer; align-items:center; gap:8px; font-weight:bold; color:var(--info); border-bottom:1px solid var(--border-color); padding-bottom:8px;"><input type="checkbox" style="transform:scale(1.2)" id="cb-all-catatan" onchange="toggleAllCatatan(this)"> PILIH SEMUA SISWA</label>`;
+            dataSiswa.forEach(s => { sel.innerHTML += `<label style="display:flex; margin-bottom:8px; cursor:pointer; align-items:center; gap:8px;"><input type="checkbox" style="transform:scale(1.2)" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`; });
         }
         function toggleAllCatatan(source) { document.querySelectorAll('.cb-catatan-siswa').forEach(cb => cb.checked = source.checked); }
 
@@ -1766,7 +1954,7 @@
         function handleChatFileUpload(event) {
             const file = event.target.files[0];
             if(!file) return;
-            if(file.size > 1024 * 1024) { // Limit 1MB
+            if(file.size > 1024 * 1024) { 
                 alert("Maksimal ukuran file adalah 1 MB untuk menjaga performa Cloud Google.");
                 return;
             }
@@ -1785,7 +1973,7 @@
                 globalChatData.push(msgObj);
                 simpanDataKeCloud();
                 renderChatList();
-            }, 600); // 600px width limit for chat images
+            }, 600); 
         }
 
         function kirimPesanSistem() {
@@ -1810,65 +1998,62 @@
             renderChatList();
             input.value = "";
         }
-function hapusPesan(index) {
-    if(confirm("Yakin ingin menghapus pesan ini dari server?")) {
-        globalChatData.splice(index, 1); // Menghapus data dari array
-        simpanDataKeCloud(); // Menyinkronkan perubahan ke Cloud
-        renderChatList(); // Memuat ulang tampilan chat
-    }
-}
-function renderChatList() {
-    let container = document.getElementById('chat-messages-container');
-    let curName = document.getElementById('header-user-fullname').innerText;
-    
-    if (!globalChatData || globalChatData.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color:#888; font-size:12px; margin-top:20px;">Belum ada pesan di forum ini.</div>`;
-        return;
-    }
-    
-    container.innerHTML = "";
-    globalChatData.forEach((msg, index) => {
-        let isMe = (msg.sender === curName);
-        let alignClass = isMe ? "right" : "left";
-        
-        // Ikon hapus hanya muncul jika login sebagai Admin
-        let deleteBtn = isAdminLoggedIn ? `<i class="fas fa-trash" style="cursor:pointer; color:var(--danger); font-size:10px; margin-left:10px;" onclick="hapusPesan(${index})"></i>` : '';
-        
-        let contentHTML = msg.text;
-        if (msg.file) {
-            if (msg.fileType === "image") {
-                contentHTML = `<img src="${msg.file}" alt="Lampiran" onclick="window.open('${msg.file}')"><br>${msg.text}`;
-            } else if (msg.fileType === "pdf") {
-                contentHTML = `<a href="${msg.file}" download="${msg.fileName}" style="color:var(--info); font-weight:bold;"><i class="fas fa-file-pdf"></i> Download PDF</a><br>${msg.text}`;
+        function hapusPesan(index) {
+            if(confirm("Yakin ingin menghapus pesan ini dari server?")) {
+                globalChatData.splice(index, 1); 
+                simpanDataKeCloud(); 
+                renderChatList(); 
+            }
+        }
+        function renderChatList() {
+            let container = document.getElementById('chat-messages-container');
+            let curName = document.getElementById('header-user-fullname').innerText;
+            
+            if (!globalChatData || globalChatData.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-dark); opacity:0.6; font-size:13px; margin-top:30px;">Belum ada pesan di forum ini.</div>`;
+                return;
+            }
+            
+            container.innerHTML = "";
+            globalChatData.forEach((msg, index) => {
+                let isMe = (msg.sender === curName);
+                let alignClass = isMe ? "right" : "left";
+                
+                let deleteBtn = isAdminLoggedIn ? `<i class="fas fa-trash" style="cursor:pointer; color:var(--danger); font-size:11px; margin-left:10px;" onclick="hapusPesan(${index})"></i>` : '';
+                
+                let contentHTML = msg.text;
+                if (msg.file) {
+                    if (msg.fileType === "image") {
+                        contentHTML = `<img src="${msg.file}" alt="Lampiran" onclick="window.open('${msg.file}')"><br>${msg.text}`;
+                    } else if (msg.fileType === "pdf") {
+                        contentHTML = `<a href="${msg.file}" download="${msg.fileName}" style="color:var(--info); font-weight:bold;"><i class="fas fa-file-pdf"></i> Download PDF</a><br>${msg.text}`;
+                    }
+                }
+                
+                let bubbleHTML = `
+                <div class="message-wrapper ${alignClass}">
+                    <div class="message-sender">${msg.sender} ${deleteBtn}</div>
+                    <div class="message-bubble">
+                        ${contentHTML}
+                        <div class="message-info">${msg.time} <i class="fas fa-check"></i></div>
+                    </div>
+                </div>`;
+                container.innerHTML += bubbleHTML;
+            });
+            
+            if(isChatTabActive) {
+                container.scrollTop = container.scrollHeight;
             }
         }
         
-        let bubbleHTML = `
-        <div class="message-wrapper ${alignClass}">
-            <div class="message-sender">${msg.sender} ${deleteBtn}</div>
-            <div class="message-bubble">
-                ${contentHTML}
-                <div class="message-info">${msg.time} <i class="fas fa-check"></i></div>
-            </div>
-        </div>`;
-        container.innerHTML += bubbleHTML;
-    });
-    
-    if(isChatTabActive) {
-        container.scrollTop = container.scrollHeight;
-    }
-}
-        
         function tampilkanNotifikasiChat(msgObj) {
             let curName = document.getElementById('header-user-fullname').innerText;
-            if (msgObj.sender === curName) return; // jangan notifikasi pesan sendiri
+            if (msgObj.sender === curName) return; 
             
-            // Tampilkan badge notif merah di menu samping
             if(!isChatTabActive) {
                 document.getElementById('badge-notif-forum').style.display = 'inline-block';
             }
             
-            // Tampilkan push notification OS
             if ("Notification" in window && Notification.permission === "granted") {
                 let notifText = msgObj.text || "Mengirim lampiran";
                 new Notification("Pesan Baru di Forum Kelas", {
@@ -1877,7 +2062,6 @@ function renderChatList() {
                 });
             }
         }
-// ... (Kode lainnya) ...
 
         function hapusSemuaChat() {
             if (confirm("⚠️ PERINGATAN: Tindakan ini akan menghapus SELURUH pesan di forum. Yakin ingin membersihkan forum?")) {
@@ -1889,19 +2073,15 @@ function renderChatList() {
         }
 
     </script>
- <script>
-    // Memastikan musik diputar setelah user melakukan klik pertama di halaman
-    window.addEventListener('click', function() {
-        var audio = document.getElementById('bg-music-mars');
-        if (audio && audio.paused) {
-            audio.play().catch(function(error) {
-                console.log("Browser menolak autoplay, menunggu interaksi pengguna.");
-            });
-        }
-    }, { once: true });
-</script>
-</body>
-</html>
+    <script>
+        window.addEventListener('click', function() {
+            var audio = document.getElementById('bg-music-mars');
+            if (audio && audio.paused) {
+                audio.play().catch(function(error) {
+                    console.log("Browser menolak autoplay, menunggu interaksi pengguna.");
+                });
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
