@@ -34,7 +34,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
         body { background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* Custom Scrollbar for Professional Look */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-light); }
         ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
@@ -162,8 +162,11 @@
         .form-group label { display: block; font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 13.5px;}
         
         /* Image Preview Dashboard */
-        /* PERBAIKAN FITUR: Gambar piket dan jadwal dimaksimalkan lebarnya (responsif) */
         .img-dashboard-preview { width: 100%; max-width: 100%; max-height: 400px; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top:15px; display: none; border: 1px solid var(--border-color);}
+        
+        /* PERBAIKAN FITUR: Layout maksimal untuk jadwal piket & foto piket */
+        .img-dashboard-max { width: 100%; height: auto; min-height: 250px; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top:15px; display: none; border: 1px solid var(--border-color); background-color: var(--bg-light); }
+        
         .empty-state-text { color: var(--text-dark); opacity: 0.6; font-style: italic; font-size: 13px; text-align: center; padding: 20px;}
 
         /* --- TAMBAHAN CSS UNTUK TABEL ABSENSI 4 MINGGU --- */
@@ -469,7 +472,7 @@
                     <div class="panel">
                         <h3 style="color: var(--warning);"><i class="fas fa-calendar-day"></i> Jadwal Piket Harian</h3>
                         <div style="text-align: center; display: flex; justify-content: center; align-items: center; width: 100%;">
-                            <img id="dash-jadwal-piket" class="img-dashboard-preview">
+                            <img id="dash-jadwal-piket" class="img-dashboard-max">
                             <p id="txt-no-jadwal-piket" class="empty-state-text">Jadwal piket harian belum diupload oleh Admin.</p>
                         </div>
                     </div>
@@ -486,13 +489,14 @@
                     
                     <div class="panel">
                         <h3 style="color: var(--secondary);"><i class="fas fa-broom"></i> Foto Petugas Piket</h3>
-                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                            <div style="width: 48%; min-width: 120px; text-align: center;">
-                                <img id="dash-piket-1" class="img-dashboard-preview">
+                        <!-- PERBAIKAN FITUR: Layout grid untuk foto petugas piket diperbesar max width/height-nya -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;">
+                            <div style="text-align: center; width: 100%;">
+                                <img id="dash-piket-1" class="img-dashboard-max">
                                 <p id="txt-no-piket-1" class="empty-state-text">Foto 1 Kosong</p>
                             </div>
-                            <div style="width: 48%; min-width: 120px; text-align: center;">
-                                <img id="dash-piket-2" class="img-dashboard-preview">
+                            <div style="text-align: center; width: 100%;">
+                                <img id="dash-piket-2" class="img-dashboard-max">
                                 <p id="txt-no-piket-2" class="empty-state-text">Foto 2 Kosong</p>
                             </div>
                         </div>
@@ -558,7 +562,7 @@
                         </div>
                     </div>
 
-                    <!-- PERBAIKAN FITUR: Struktur Tabel Data Siswa -->
+                    <!-- PERBAIKAN FITUR: Struktur Tabel Data Siswa dengan tombol Save inline -->
                     <div class="table-responsive">
                         <table id="tabel-data-siswa-induk">
                             <thead>
@@ -1129,7 +1133,7 @@
                     </div>
                 </div>
 
-                <!-- PERBAIKAN FITUR: INFO TERBARU DI PENGATURAN (HANYA ADMIN) -->
+                <!-- PERBAIKAN FITUR: Papan Informasi, Struktur Kelas, Jadwal Pelajaran, dll yang hilang sebelumnya -->
                 <div class="settings-panel admin-only-setting hidden">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-bullhorn"></i> Papan Informasi Dashboard</h3>
                     <div class="admin-control-box" style="margin: 0; display: block;">
@@ -1146,10 +1150,11 @@
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sitemap"></i> Pengaturan Struktur Kelas</h3>
                     <div class="form-group">
                         <label>Upload Gambar Struktur Kelas</label>
-                        <input type="file" id="input-struktur" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-struktur', 'tempStrukturBase64')">
+                        <input type="file" id="input-struktur" accept="image/png, image/jpeg" class="hidden" onchange="handleImageUpload(event, 'preview-img-struktur', 'tempStrukturBase64')">
                         <img id="preview-img-struktur" class="img-dashboard-preview">
                         <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn-action upload" onclick="saveImageToSettings('strukturKelas', window.tempStrukturBase64, 'Struktur Kelas')"><i class="fas fa-save"></i> Save Struktur</button>
+                            <button class="btn-action edit" onclick="document.getElementById('input-struktur').click()"><i class="fas fa-edit"></i> Edit / Upload Baru</button>
                             <button class="btn-action danger" onclick="deleteImageFromSettings('strukturKelas', 'preview-img-struktur')"><i class="fas fa-trash"></i> Hapus Struktur</button>
                         </div>
                     </div>
@@ -1159,10 +1164,11 @@
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-calendar-alt"></i> Pengaturan Jadwal Pelajaran</h3>
                     <div class="form-group">
                         <label>Upload Jadwal Pelajaran</label>
-                        <input type="file" id="input-jadwal" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-jadwal', 'tempJadwalBase64')">
+                        <input type="file" id="input-jadwal" accept="image/png, image/jpeg" class="hidden" onchange="handleImageUpload(event, 'preview-img-jadwal', 'tempJadwalBase64')">
                         <img id="preview-img-jadwal" class="img-dashboard-preview">
                         <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn-action upload" onclick="saveImageToSettings('jadwalPelajaran', window.tempJadwalBase64, 'Jadwal Pelajaran')"><i class="fas fa-save"></i> Save Jadwal</button>
+                            <button class="btn-action edit" onclick="document.getElementById('input-jadwal').click()"><i class="fas fa-edit"></i> Edit / Upload Baru</button>
                             <button class="btn-action danger" onclick="deleteImageFromSettings('jadwalPelajaran', 'preview-img-jadwal')"><i class="fas fa-trash"></i> Hapus Jadwal</button>
                         </div>
                     </div>
@@ -1172,10 +1178,11 @@
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-calendar-day"></i> Pengaturan Jadwal Piket Harian</h3>
                     <div class="form-group">
                         <label>Upload Gambar Jadwal Piket</label>
-                        <input type="file" id="input-jadwal-piket" accept="image/png, image/jpeg" onchange="handleImageUpload(event, 'preview-img-jadwal-piket', 'tempJadwalPiketBase64')">
-                        <img id="preview-img-jadwal-piket" class="img-dashboard-preview">
+                        <input type="file" id="input-jadwal-piket" accept="image/png, image/jpeg" class="hidden" onchange="handleImageUpload(event, 'preview-img-jadwal-piket', 'tempJadwalPiketBase64')">
+                        <img id="preview-img-jadwal-piket" class="img-dashboard-max">
                         <div style="margin-top: 15px; display:flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn-action upload" onclick="saveImageToSettings('jadwalPiket', window.tempJadwalPiketBase64, 'Jadwal Piket')"><i class="fas fa-save"></i> Save Jadwal Piket</button>
+                            <button class="btn-action edit" onclick="document.getElementById('input-jadwal-piket').click()"><i class="fas fa-edit"></i> Edit / Upload Baru</button>
                             <button class="btn-action danger" onclick="deleteImageFromSettings('jadwalPiket', 'preview-img-jadwal-piket')"><i class="fas fa-trash"></i> Hapus Piket</button>
                         </div>
                     </div>
@@ -1198,19 +1205,21 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
                         <div class="form-group" style="background:var(--bg-light); padding:20px; border-radius:10px; border: 1px solid var(--border-color);">
                             <label>Slot Foto 1 (.jpg / .png)</label>
-                            <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-1', 'tempPiket1Base64')">
-                            <img id="preview-img-piket-1" class="img-dashboard-preview" style="max-height: 150px;">
+                            <input type="file" id="input-foto-piket-1" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'preview-img-piket-1', 'tempPiket1Base64')">
+                            <img id="preview-img-piket-1" class="img-dashboard-max" style="max-height: 250px;">
                             <div style="margin-top: 15px; display:flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn-action upload" onclick="saveImageToSettings('fotoPiket1', window.tempPiket1Base64, 'Foto Piket 1')"><i class="fas fa-save"></i> Save</button>
+                                <button class="btn-action edit" onclick="document.getElementById('input-foto-piket-1').click()"><i class="fas fa-edit"></i> Edit</button>
                                 <button class="btn-action danger" onclick="deleteImageFromSettings('fotoPiket1', 'preview-img-piket-1')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
                         <div class="form-group" style="background:var(--bg-light); padding:20px; border-radius:10px; border: 1px solid var(--border-color);">
                             <label>Slot Foto 2 (.jpg / .png)</label>
-                            <input type="file" accept="image/*" onchange="handleImageUpload(event, 'preview-img-piket-2', 'tempPiket2Base64')">
-                            <img id="preview-img-piket-2" class="img-dashboard-preview" style="max-height: 150px;">
+                            <input type="file" id="input-foto-piket-2" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'preview-img-piket-2', 'tempPiket2Base64')">
+                            <img id="preview-img-piket-2" class="img-dashboard-max" style="max-height: 250px;">
                             <div style="margin-top: 15px; display:flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn-action upload" onclick="saveImageToSettings('fotoPiket2', window.tempPiket2Base64, 'Foto Piket 2')"><i class="fas fa-save"></i> Save</button>
+                                <button class="btn-action edit" onclick="document.getElementById('input-foto-piket-2').click()"><i class="fas fa-edit"></i> Edit</button>
                                 <button class="btn-action danger" onclick="deleteImageFromSettings('fotoPiket2', 'preview-img-piket-2')"><i class="fas fa-trash"></i> Hapus</button>
                             </div>
                         </div>
@@ -1578,7 +1587,6 @@
             } catch(e) { console.error("Data lokal rusak."); }
         }
 
-        // FUNGSI SUPER PENTING: Inisialisasi properti agar aplikasi tidak crash
         function jalankanSistemAwal() {
             if (!Array.isArray(dataSiswa)) dataSiswa = [];
             dataSiswa.forEach(s => {
@@ -1624,7 +1632,6 @@
             var usernameContainer = document.getElementById("input-username-container");
             var passInput = document.getElementById("login-password");
 
-            // Simpan username saat ini agar tidak terhapus ketikannya
             let currentUsername = "";
             let existingInput = document.getElementById("login-username");
             if (existingInput && existingInput.tagName === "INPUT") {
@@ -1677,7 +1684,6 @@
                         let statusSiswa = statSiswaObj ? statSiswaObj.value : "H"; 
                         let ketManual = document.getElementById('student-ket-manual').value.trim();
                         
-                        // Menghindari error apabila properti rekap belum di-set sebelum login
                         if(!targetSiswa.rekap) targetSiswa.rekap = Array(20).fill("");
                         
                         targetSiswa.status = statusSiswa; targetSiswa.waktuAbsen = getWaktuSekarang(); 
@@ -1705,7 +1711,6 @@
                 localStorage.setItem('siwali_is_admin', isAdminLoggedIn ? 'true' : 'false'); 
                 localStorage.setItem('siwali_active_tab', 'dashboard');
                 
-                // Gunakan jalankanSistemAwal alih-alih merender parsial agar seluruh fallback object tergenerate
                 jalankanSistemAwal();
                 
                 document.getElementById('login-page').style.display = "none"; 
@@ -1783,12 +1788,15 @@
         function handleRoleVisibility() {
             const btnDownloadKasExcel = document.getElementById('btn-download-kas-excel');
             
-            // Pengaturan display (Block / None) untuk setting Admin 
+            // PERBAIKAN FITUR: Pastikan panel settings bisa muncul dan disembunyikan secara bersih
             document.querySelectorAll('.admin-only-setting').forEach(el => {
-                if(currentRole === 'siswa' || currentRole === 'sekretaris') el.style.display = 'none'; else el.style.display = 'block';
+                if(currentRole === 'siswa' || currentRole === 'sekretaris') {
+                    if (!el.classList.contains('hidden')) el.classList.add('hidden');
+                } else {
+                    el.classList.remove('hidden');
+                }
             });
             
-            // PERBAIKAN: Menjaga state .hidden untuk elemen-elemen admin yang di-render ulang secara dinamis.
             document.querySelectorAll('.admin-only-element').forEach(el => {
                 if (isAdminLoggedIn || (currentRole === "bendahara" && el.closest('#tab-kas'))) {
                     el.classList.remove('hidden');
@@ -1822,7 +1830,6 @@
             }
         }
 
-        // ================== PENGATURAN UI & SETTINGS ==================
         function loadSettingsToUI() {
             let dispPengumuman = document.getElementById('display-pengumuman');
             if(dispPengumuman) dispPengumuman.innerText = globalSettings.pengumuman || "Silakan tunggu info terbaru dari admin...";
@@ -1905,7 +1912,6 @@
             document.getElementById('dash-total-siswa').innerText = dataSiswa.length + " Anak"; 
             document.getElementById('dash-hadir').innerText = hadir + " Anak"; 
             
-            // Render Saldo Akhir Kas pada Dashboard Utama
             let totalTerkumpulDashboard = 0;
             dataSiswa.forEach(s => {
                 let centang = (s.kas || []).filter(Boolean).length;
@@ -1915,7 +1921,6 @@
             let saldoAkhirDash = totalTerkumpulDashboard - totalPengeluaranDashboard;
             document.getElementById('display-kas').innerText = "Rp " + saldoAkhirDash.toLocaleString('id-ID');
 
-            // Render Poin Disiplin Siswa di Dashboard
             if (currentRole === "siswa") {
                 let nis = localStorage.getItem('siwali_logged_student_nis');
                 let poin = getSiswaTotalPoin(nis);
@@ -2005,14 +2010,14 @@
             }, 300);
         }
         
-        // PERBAIKAN FITUR: Fitur Data Siswa (Tabel, Inline Edit, Hapus, Simpan, Upload Foto)
+        // PERBAIKAN FITUR: Tampilan dan fungsi Save inline di table Data Siswa
         function editSiswaInline(index) {
             ['nis', 'nama', 'jk', 'hp'].forEach(f => {
                 document.getElementById(`txt-${f}-${index}`).classList.add('hidden');
                 document.getElementById(`inp-${f}-${index}`).classList.remove('hidden');
             });
-            document.getElementById(`btn-edit-sis-${index}`).style.display = 'none';
-            document.getElementById(`btn-save-sis-${index}`).style.display = 'inline-block';
+            document.getElementById(`btn-edit-sis-${index}`).classList.add('hidden');
+            document.getElementById(`btn-save-sis-${index}`).classList.remove('hidden');
         }
 
         function saveSiswaInline(index) {
@@ -2061,10 +2066,10 @@
                             <input type="text" id="inp-hp-${index}" value="${siswa.hp || ''}" class="hidden" style="width:120px; font-size:12px;">
                         </td>
                         <td class="action-btns admin-only-element ${btnActionVisible}" style="text-align:center; white-space:nowrap;">
-                            <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" style="background:#25D366; border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                            <button id="btn-edit-sis-${index}" onclick="editSiswaInline(${index})" style="background:var(--warning); border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="Edit"><i class="fas fa-edit"></i></button>
-                            <button id="btn-save-sis-${index}" onclick="saveSiswaInline(${index})" class="hidden" style="background:#2ecc71; border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="Save"><i class="fas fa-save"></i></button>
-                            <button onclick="deleteSiswa(${index})" style="background:var(--danger); border:none; padding:8px 10px; border-radius:6px; color:white; cursor:pointer;" title="Hapus"><i class="fas fa-trash"></i></button>
+                            <button onclick="window.open('https://wa.me/62${waNumber}', '_blank')" class="btn-action" style="background:#25D366; padding:8px 10px; border-radius:6px; color:white;" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                            <button id="btn-edit-sis-${index}" onclick="editSiswaInline(${index})" class="btn-action edit" style="padding:8px 10px; border-radius:6px;" title="Edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button id="btn-save-sis-${index}" onclick="saveSiswaInline(${index})" class="btn-action hidden" style="background:#2ecc71; padding:8px 10px; border-radius:6px; color:white;" title="Save"><i class="fas fa-save"></i> Save</button>
+                            <button onclick="deleteSiswa(${index})" class="btn-action danger" style="padding:8px 10px; border-radius:6px; color:white;" title="Hapus"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>`;
                 });
@@ -2881,7 +2886,6 @@
             }
         }
 
-        // PERBAIKAN FITUR: Cetak SP Tanpa Tanda Tangan Kepala Sekolah
         function cetakSP(jenisSP) {
             let s = dataSiswa.find(x => x.nis === selectedNisCetak);
             if(!s) return;
