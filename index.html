@@ -1698,9 +1698,9 @@
                         alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
                     } else { alert("Sandi (NISN) yang Anda masukkan salah!"); return; }
                 } else if (role === "admin") {
-                    if (usernameVal === "admin" && pass === "admin123") { 
+                    if (usernameVal === "admin" && pass === "adminku") { 
                         isAdminLoggedIn = true; unlockAdminFeatures(); alert("Selamat datang Bapak/Ibu Wali Kelas!"); 
-                    } else { alert("Gagal Login!\nUsername / Password untuk Admin salah.\nGunakan Username: admin\nPassword: admin123"); return; }
+                    } else { alert("Gagal Login!\nUsername / Password untuk Admin salah.\nGunakan Username: admin\nPassword: adminku"); return; }
                 } else {
                     isAdminLoggedIn = false; alert("Login berhasil sebagai " + role.toUpperCase());
                 }
