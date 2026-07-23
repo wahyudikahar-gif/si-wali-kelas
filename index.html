@@ -1261,6 +1261,7 @@
         let globalChatData = [];
         let totalChatCount = 0;
         let isChatTabActive = false;
+        let isEditingRekap = false;
         
         let chartPelanggaranInstance = null;
 
@@ -1502,12 +1503,14 @@
                 document.getElementById('login-page').style.display = "none";
                 document.getElementById('app-page').style.display = "block";
                 
+                // PERBAIKAN FITUR: Load Local Data sebelum memanggil switch tab agar aplikasi tidak error saat refresh
+                loadLocalDataSafely();
+                jalankanSistemAwal();
+                
                 if (isAdminLoggedIn) unlockAdminFeatures();
                 let lastActiveTab = localStorage.getItem('siwali_active_tab') || 'dashboard';
                 switchTab(lastActiveTab);
 
-                loadLocalDataSafely();
-                jalankanSistemAwal();
             } else {
                 document.getElementById('login-username').disabled = false;
                 loadLocalDataSafely();
@@ -1558,7 +1561,9 @@
                             }
                         } else {
                             if(isChatTabActive) renderChatList();
-                            if(localStorage.getItem('siwali_active_tab') === 'kas') renderKas();
+                            // PERBAIKAN FITUR: Hanya me-render tab uang kas dan absensi jika tidak sedang diedit
+                            if(localStorage.getItem('siwali_active_tab') === 'kas' && !isAdminKasUnlocked) renderKas();
+                            if(localStorage.getItem('siwali_active_tab') === 'absensi' && !isEditingRekap) renderTabelAbsensi4Minggu();
                             if(localStorage.getItem('siwali_active_tab') === 'pelanggaran') renderPelanggaran();
                         }
                     }
@@ -2125,6 +2130,8 @@
                 });
             }
         }
+        
+        // PERBAIKAN FITUR: Sinkronisasi waktu serentak ke semua siswa jika admin menekan tombol Save
         function simpanAbsensi(e) {
             e.preventDefault(); 
             let updateTimeStr = getWaktuSekarang(); 
@@ -2134,15 +2141,18 @@
             dataSiswa.forEach((siswa, index) => {
                 let checkEl = document.querySelector(`input[name="status_${index}"]:checked`);
                 let newStatus = checkEl ? checkEl.value : 'H';
-                if(siswa.status !== newStatus || siswa.waktuAbsen === "-") { siswa.waktuAbsen = updateTimeStr; }
+                
+                siswa.waktuAbsen = updateTimeStr; // Seluruh siswa selalu diperbarui waktunya agar sinkron
                 siswa.status = newStatus; 
                 let ketEl = document.getElementById(`ket_${index}`);
                 siswa.ket = ketEl ? ketEl.value : "";
+                
                 if(activeRekapDay >= 0 && activeRekapDay < 20) { siswa.rekap[activeRekapDay] = newStatus; }
             });
             simpanDataKeCloud(); renderDashboard(); renderTabelAbsensi4Minggu(); 
             alert("Absensi tersimpan!"); switchTab('dashboard');
         }
+        
         function resetAbsensi() { 
             if(confirm("Atur ulang status harian semua jadi HADIR?")) { 
                 dataSiswa.forEach(s => { s.status = 'H'; s.ket = ''; s.waktuAbsen = "-"; }); 
@@ -2176,11 +2186,13 @@
         function toggleEditRekap() {
             let inputs = document.querySelectorAll('.input-absen'); if (inputs.length === 0) return; 
             let btnEdit = document.getElementById('btn-edit-rekap'); let btnSave = document.getElementById('btn-save-rekap'); 
-            let isEditing = !inputs[0].disabled;
-            if (isEditing) { 
+            isEditingRekap = !inputs[0].disabled;
+            if (isEditingRekap) { 
                 inputs.forEach(inp => inp.disabled = true); btnEdit.innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; btnSave.classList.add('hidden'); renderTabelAbsensi4Minggu(); 
+                isEditingRekap = false;
             } else { 
                 inputs.forEach(inp => inp.disabled = false); btnEdit.innerHTML = '<i class="fas fa-times"></i> Batal Edit'; btnSave.classList.remove('hidden'); 
+                isEditingRekap = true;
             }
         }
         function simpanRekapBulanan() {
@@ -2193,6 +2205,7 @@
             simpanDataKeCloud(); inputs.forEach(inp => inp.disabled = true); 
             document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
             document.getElementById('btn-save-rekap').classList.add('hidden'); 
+            isEditingRekap = false;
             renderTabelAbsensi4Minggu(); alert("Buku Rekap berhasil disinkron!");
         }
         function downloadExcelRekapBulanan() {
