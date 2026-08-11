@@ -346,7 +346,7 @@
                         <i class="fas fa-lock" id="lock-absensi" style="font-size:10px;"></i>
                     </li>
                     <li id="menu-kas" onclick="switchTab('kas')">
-                        <div><i class="fas fa-wallet menu-icon"></i> Uang Kas Kelas</div>
+                        <div><i class="fas fa-wallet menu-icon"></i> Uang Operasional Kelas</div>
                     </li>
                     <li id="menu-pelanggaran" onclick="switchTab('pelanggaran')">
                         <div><i class="fas fa-gavel menu-icon"></i> Pelanggaran & Pembinaan</div>
@@ -408,8 +408,8 @@
                 <div class="cards-grid">
                     <div class="card"><div class="card-info"><h4>Total Siswa</h4><h2 id="dash-total-siswa">0 Anak</h2></div><i class="fas fa-user-graduate card-icon"></i></div>
                     <div class="card"><div class="card-info"><h4>Hadir Hari Ini</h4><h2 id="dash-hadir">0 Anak</h2></div><i class="fas fa-check-circle card-icon"></i></div>
-                    <div class="card" id="card-kas-terkumpul"><div class="card-info"><h4>Saldo Kas Kelas</h4><h2 id="display-kas">Rp 0</h2></div><i class="fas fa-wallet card-icon"></i></div>
-                    <div class="card alert"><div class="card-info"><h4>Poin Kedisiplinan</h4><h2 style="color: var(--danger);" id="dash-poin-disiplin">0 Poin</h2></div><i class="fas fa-exclamation-triangle card-icon"></i></div>
+                    <div class="card" id="card-kas-terkumpul"><div class="card-info"><h4>Saldo Uang Operasional</h4><h2 id="display-kas">Rp 0</h2></div><i class="fas fa-wallet card-icon"></i></div>
+                    <div class="card alert"><div class="card-info"><h4>Total Kasus</h4><h2 style="color: var(--danger);" id="dash-poin-disiplin">0 Kasus</h2></div><i class="fas fa-exclamation-triangle card-icon"></i></div>
                 </div>
 
                 <div class="panels-grid">
@@ -437,13 +437,6 @@
                                     <button onclick="editAgenda()" class="btn-action edit" style="font-size:12px; padding:8px 12px;"><i class="fas fa-edit"></i> Edit</button>
                                     <button onclick="hapusAgenda()" class="btn-action danger" style="font-size:12px; padding:8px 12px;"><i class="fas fa-trash"></i> Hapus</button>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="panel" id="panel-dashboard-catatan" style="border-left: 5px solid var(--info); display: none;">
-                            <h3 style="color: var(--info);"><i class="fas fa-sticky-note"></i> Catatan Khusus Untukmu</h3>
-                            <div style="overflow: hidden; white-space: nowrap; background:var(--bg-light); padding: 15px; border-radius:8px; border:1px solid var(--border-color);">
-                                <span class="teks-bergerak-dark" id="display-catatan-siswa">Belum ada catatan pribadi.</span>
                             </div>
                         </div>
 
@@ -507,7 +500,7 @@
                 </div>
 
                 <div class="panel" id="panel-lunas-dashboard">
-                    <h3 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> Daftar Siswa Lunas Uang Kas Kelas (M1-M4)</h3>
+                    <h3 style="color: var(--secondary);"><i class="fas fa-check-circle"></i> Daftar Siswa Lunas Uang Operasional (M1-M4)</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Nama Lengkap Siswa</th><th>NISN</th><th>Status Pembayaran</th></tr></thead>
@@ -519,7 +512,7 @@
                 </div>
 
                 <div class="panel" id="panel-tunggakan-dashboard">
-                    <h3 style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Daftar Tunggakan Uang Kas Siswa (M1-M4)</h3>
+                    <h3 style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Daftar Tunggakan Uang Operasional Siswa (M1-M4)</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Nama Lengkap Siswa</th><th>Minggu Belum Dibayar</th><th>Total Tunggakan</th></tr></thead>
@@ -589,7 +582,7 @@
             <div id="tab-absensi" class="tab-content">
                 <div class="panel" style="background: rgba(46, 204, 113, 0.1); border: 1px solid #27ae60;">
                     <h4 style="color: #27ae60; margin-bottom: 12px; font-size: 16px;"><i class="fas fa-link"></i> Sinkronisasi Otomatis</h4>
-                    <p style="font-size: 13.5px; margin-bottom: 12px; color: var(--text-dark);">Pilih hari berjalan saat ini. Jika siswa absen mandiri atau Admin menyimpan absen harian, datanya otomatis terekam ke Buku Rekap Bulanan.</p>
+                    <p style="font-size: 13.5px; margin-bottom: 12px; color: var(--text-dark);">Pilih hari berjalan saat ini. Jika siswa absen mandiri atau Admin menyimpan absen harian, datanya otomatis terekam ke Buku Rekap Bulanan pada bulan aktif yang sedang dipilih.</p>
                     <select id="select-active-rekap" onchange="updateActiveRekap()" style="width: 100%; max-width: 400px; padding: 12px;" class="admin-only-element hidden">
                         <option value="-1">-- Matikan Sinkronisasi Otomatis --</option>
                         <optgroup label="Minggu 1">
@@ -630,7 +623,22 @@
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
                         <h3 style="color: var(--primary); margin:0;"><i class="fas fa-table"></i> Buku Rekap Absensi Bulanan</h3>
-                        <div style="display:flex; gap:10px; flex-wrap: wrap;">
+                        <div style="display:flex; gap:10px; flex-wrap: wrap; align-items:center;">
+                            <!-- FITUR BARU: Dropdown Bulan Absensi -->
+                            <select id="pilih-bulan-absen" onchange="gantiBulanAbsen()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--primary); background: var(--bg-light); font-weight: bold; color: var(--primary); cursor:pointer;">
+                                <option value="Juli">Juli</option>
+                                <option value="Agustus">Agustus</option>
+                                <option value="September">September</option>
+                                <option value="Oktober">Oktober</option>
+                                <option value="November">November</option>
+                                <option value="Desember">Desember</option>
+                                <option value="Januari">Januari</option>
+                                <option value="Februari">Februari</option>
+                                <option value="Maret">Maret</option>
+                                <option value="April">April</option>
+                                <option value="Mei">Mei</option>
+                                <option value="Juni">Juni</option>
+                            </select>
                             <button id="btn-edit-rekap" onclick="toggleEditRekap()" class="btn-action edit admin-only-element hidden"><i class="fas fa-edit"></i> Edit Manual</button>
                             <button id="btn-save-rekap" onclick="simpanRekapBulanan()" class="btn-action hidden" style="background:var(--primary);"><i class="fas fa-save"></i> Save Rekap</button>
                             <button onclick="downloadExcelRekapBulanan()" class="btn-action excel"><i class="fas fa-file-excel"></i> Download Excel</button>
@@ -666,8 +674,23 @@
             <div id="tab-kas" class="tab-content">
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
-                        <h3><i class="fas fa-wallet"></i> Buku Kas Kelas (Bulanan)</h3>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <h3><i class="fas fa-wallet"></i> Buku Uang Operasional (Bulanan)</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items:center;">
+                            <!-- FITUR BARU: Dropdown Bulan Uang Operasional -->
+                            <select id="pilih-bulan-kas" onchange="gantiBulanKas()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--primary); background: var(--bg-light); font-weight: bold; color: var(--primary); cursor:pointer;">
+                                <option value="Juli">Juli</option>
+                                <option value="Agustus">Agustus</option>
+                                <option value="September">September</option>
+                                <option value="Oktober">Oktober</option>
+                                <option value="November">November</option>
+                                <option value="Desember">Desember</option>
+                                <option value="Januari">Januari</option>
+                                <option value="Februari">Februari</option>
+                                <option value="Maret">Maret</option>
+                                <option value="April">April</option>
+                                <option value="Mei">Mei</option>
+                                <option value="Juni">Juni</option>
+                            </select>
                             <button id="btn-download-kas-excel" onclick="downloadExcelKas()" class="btn-action excel hidden"><i class="fas fa-file-excel"></i> Laporan Excel</button>
                             <button onclick="bukaAdminKas()" id="btn-admin-kas" class="btn-action admin-only-element hidden"><i class="fas fa-lock"></i> Mode Bendahara</button>
                         </div>
@@ -683,8 +706,8 @@
                     <div id="admin-area-kas" class="locked">
                         <h4 style="color:var(--primary); margin-bottom:10px;"><i class="fas fa-hand-holding-usd"></i> Tabel Pemasukan Mingguan</h4>
                         <div style="margin-bottom: 15px; display: flex; justify-content: flex-end; gap: 10px;">
-                            <button id="btn-save-kas" onclick="simpanKasDariForm()" class="btn-action" style="background: var(--primary); display: none;"><i class="fas fa-save"></i> Save Kas Masuk</button>
-                            <button onclick="resetKasBulanan()" class="btn-action danger" style="padding: 8px 14px; font-size: 12.5px;"><i class="fas fa-trash-alt"></i> Reset</button>
+                            <button id="btn-save-kas" onclick="simpanKasDariForm()" class="btn-action" style="background: var(--primary); display: none;"><i class="fas fa-save"></i> Save Uang Masuk</button>
+                            <button onclick="resetKasBulanan()" class="btn-action danger" style="padding: 8px 14px; font-size: 12.5px;"><i class="fas fa-trash-alt"></i> Reset Bulan Ini</button>
                         </div>
                         <div class="table-responsive">
                             <table id="tabel-kas-induk" class="text-center">
@@ -701,7 +724,7 @@
 
                 <!-- PANEL PENGELUARAN BARU -->
                 <div class="panel admin-only-element hidden" id="panel-input-pengeluaran">
-                    <h3 style="color:var(--danger);"><i class="fas fa-money-bill-wave"></i> Form Pengeluaran Dana Kas</h3>
+                    <h3 style="color:var(--danger);"><i class="fas fa-money-bill-wave"></i> Form Pengeluaran Dana Operasional</h3>
                     <input type="hidden" id="edit-index-pengeluaran" value="-1">
                     <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; align-items: end; background: var(--bg-light); padding: 15px; border-radius: 8px; border: 1px dashed var(--danger);">
                         <div>
@@ -725,7 +748,7 @@
 
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <h3 style="color:var(--info); margin:0;"><i class="fas fa-receipt"></i> Laporan Transaksi Pengeluaran</h3>
+                        <h3 style="color:var(--info); margin:0;"><i class="fas fa-receipt"></i> Laporan Transaksi Pengeluaran Operasional</h3>
                         <button class="btn-action danger admin-only-element hidden" onclick="hapusPengeluaranTerpilih()"><i class="fas fa-trash-alt"></i> Hapus Terpilih</button>
                     </div>
                     <div class="table-responsive">
@@ -1225,25 +1248,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="settings-panel admin-only-setting hidden">
-                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-sticky-note"></i> Catatan Khusus Siswa</h3>
-                    <p style="font-size:13.5px; color:var(--text-dark); opacity:0.8; margin-bottom:15px;">Fitur text berbentuk keterangan siswa yang diisi oleh admin. Tampil eksklusif hanya pada saat siswa yang bersangkutan login ke sistem.</p>
-                    
-                    <div class="form-group admin-only-element hidden" id="admin-catatan-selector" style="margin-bottom:15px; padding:15px; background:rgba(69, 182, 156, 0.1); border-radius:8px; border:1px solid var(--secondary);">
-                        <label style="display:block; margin-bottom:10px; font-weight:bold; color:var(--primary);">Pilih Siswa (Bisa lebih dari 1):</label>
-                        <div id="checkbox-siswa-catatan" style="max-height: 200px; overflow-y: auto; background:var(--white); border:1px solid var(--border-color); padding:10px; border-radius:6px;"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label id="label-catatan-teks">Isi Catatan Keterangan:</label>
-                        <textarea id="input-catatan-siswa" rows="4" placeholder="Tulis pesan, target belajar, peringatan di sini..."></textarea>
-                    </div>
-                    <div style="display:flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn-action upload" onclick="saveCatatanSiswa()"><i class="fas fa-save"></i> Save Pesan</button>
-                        <button class="btn-action danger" onclick="hapusCatatanSiswa()"><i class="fas fa-trash"></i> Hapus Pesan</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1264,6 +1268,11 @@
         let isEditingRekap = false;
         
         let chartPelanggaranInstance = null;
+        
+        // VARIABEL GLOBAL BULAN AKTIF
+        const daftarBulan = ["Juli", "Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni"];
+        let activeBulanAbsen = "Juli";
+        let activeBulanKas = "Juli";
 
         const emojis = ["😀","😂","🥰","😎","🤔","👍","🙏","🔥","🎉","💡","✅","❌"];
         const THEME_PRESETS = {
@@ -1594,13 +1603,30 @@
 
         function jalankanSistemAwal() {
             if (!Array.isArray(dataSiswa)) dataSiswa = [];
+            
+            // Proses Migrasi Otomatis untuk Fitur Bulan
             dataSiswa.forEach(s => {
-                if(!s.kas) s.kas = [false, false, false, false];
-                if(!s.kasTanggal) s.kasTanggal = ["", "", "", ""];
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
-                if(!s.rekap || !Array.isArray(s.rekap) || s.rekap.length !== 20) s.rekap = Array(20).fill("");
-                if(typeof s.catatan === 'undefined') s.catatan = "";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
+                
+                // MIGRASI ABSENSI BULANAN
+                if (!s.rekapBulan) {
+                    s.rekapBulan = {};
+                    s.rekapBulan["Juli"] = (s.rekap && s.rekap.length === 20) ? [...s.rekap] : Array(20).fill("");
+                }
+                daftarBulan.forEach(b => { if(!s.rekapBulan[b]) s.rekapBulan[b] = Array(20).fill(""); });
+
+                // MIGRASI KAS BULANAN
+                if (!s.kasBulan) {
+                    s.kasBulan = {};
+                    s.kasTanggalBulan = {};
+                    s.kasBulan["Juli"] = (s.kas && s.kas.length === 4) ? [...s.kas] : [false, false, false, false];
+                    s.kasTanggalBulan["Juli"] = (s.kasTanggal && s.kasTanggal.length === 4) ? [...s.kasTanggal] : ["", "", "", ""];
+                }
+                daftarBulan.forEach(b => {
+                    if(!s.kasBulan[b]) s.kasBulan[b] = [false, false, false, false];
+                    if(!s.kasTanggalBulan[b]) s.kasTanggalBulan[b] = ["", "", "", ""];
+                });
             });
             
             if(!globalSettings.pengeluaranKas) globalSettings.pengeluaranKas = [];
@@ -1689,14 +1715,12 @@
                         let statusSiswa = statSiswaObj ? statSiswaObj.value : "H"; 
                         let ketManual = document.getElementById('student-ket-manual').value.trim();
                         
-                        if(!targetSiswa.rekap) targetSiswa.rekap = Array(20).fill("");
-                        
                         targetSiswa.status = statusSiswa; targetSiswa.waktuAbsen = getWaktuSekarang(); 
                         if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; 
                         else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
                         let rekapEl = document.getElementById('select-active-rekap');
                         let activeRekapDay = parseInt(rekapEl ? rekapEl.value : "-1");
-                        if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekap[activeRekapDay] = statusSiswa; }
+                        if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekapBulan[activeBulanAbsen][activeRekapDay] = statusSiswa; }
                         
                         simpanDataKeCloud(); document.getElementById('student-ket-manual').value = ""; 
                         localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); 
@@ -1731,14 +1755,9 @@
 
         function unlockAdminFeatures() {
             document.querySelectorAll('.admin-only-element').forEach(el => el.classList.remove('hidden'));
-            
             let lockSiswa = document.getElementById('lock-siswa'); if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "var(--secondary)"; }
             let lockAbsensi = document.getElementById('lock-absensi'); if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "var(--secondary)"; }
             let lockPel = document.getElementById('lock-pelanggaran'); if(lockPel) { lockPel.className = "fas fa-check-circle"; lockPel.style.color = "var(--secondary)"; }
-            
-            populateCheckboxSiswaCatatan();
-            let adminCatatanSelector = document.getElementById('admin-catatan-selector');
-            if(adminCatatanSelector) adminCatatanSelector.style.display = "block";
         }
 
         function switchTab(tabName) {
@@ -1881,7 +1900,7 @@
                 if(previewLogo) { previewLogo.src = globalSettings.logoSekolah; previewLogo.style.display = "inline-block"; }
             } else { document.getElementById('sidebar-logo').src = "https://ui-avatars.com/api/?name=School&background=114B5F&color=fff"; }
 
-            renderSemuaGambarGlobal(); loadCatatanDashboard();
+            renderSemuaGambarGlobal();
         }
 
         // --- DASHBOARD FUNCTIONS ---
@@ -1919,8 +1938,12 @@
             
             let totalTerkumpulDashboard = 0;
             dataSiswa.forEach(s => {
-                let centang = (s.kas || []).filter(Boolean).length;
-                totalTerkumpulDashboard += (centang * iuranKasPerMinggu);
+                for (let bln of daftarBulan) {
+                    if (s.kasBulan && s.kasBulan[bln]) {
+                        let centang = s.kasBulan[bln].filter(Boolean).length;
+                        totalTerkumpulDashboard += (centang * iuranKasPerMinggu);
+                    }
+                }
             });
             let totalPengeluaranDashboard = (globalSettings.pengeluaranKas || []).reduce((sum, item) => sum + parseInt(item.nominal), 0);
             let saldoAkhirDash = totalTerkumpulDashboard - totalPengeluaranDashboard;
@@ -1941,28 +1964,28 @@
             let tbody = document.getElementById('tabel-dashboard-lunas'); tbody.innerHTML = ""; let adaLunas = false;
             if(dataSiswa.length > 0) {
                 dataSiswa.forEach(s => { 
-                    if (s.kas && s.kas.filter(Boolean).length === totalMingguKas) { 
+                    if (s.kasBulan && s.kasBulan[activeBulanKas] && s.kasBulan[activeBulanKas].filter(Boolean).length === totalMingguKas) { 
                         adaLunas = true; 
                         tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-blue">${s.nis}</span></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas (M1-M4)</span></td></tr>`; 
                     } 
                 });
             }
-            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; opacity:0.7;">Belum ada data.</td></tr>`;
+            if(!adaLunas) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; opacity:0.7;">Belum ada data di bulan ini.</td></tr>`;
         }
         
         function renderTunggakanDashboard() {
             let tbody = document.getElementById('tabel-dashboard-tunggakan'); tbody.innerHTML = ""; let adaTunggakan = false;
             if(dataSiswa.length > 0) {
                 dataSiswa.forEach(s => {
-                    let sisaMinggu = s.kas ? (totalMingguKas - s.kas.filter(Boolean).length) : 0;
+                    let sisaMinggu = s.kasBulan && s.kasBulan[activeBulanKas] ? (totalMingguKas - s.kasBulan[activeBulanKas].filter(Boolean).length) : 0;
                     if (sisaMinggu > 0) {
                         adaTunggakan = true; let listMinggu = []; 
-                        for(let i=0; i<totalMingguKas; i++) if(!s.kas[i]) listMinggu.push(`M${i+1}`);
+                        for(let i=0; i<totalMingguKas; i++) if(!s.kasBulan[activeBulanKas][i]) listMinggu.push(`M${i+1}`);
                         tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
                     }
                 });
             }
-            if(!adaTunggakan && dataSiswa.length > 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-weight:bold;">Semua lunas.</td></tr>`;
+            if(!adaTunggakan && dataSiswa.length > 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-weight:bold;">Semua lunas di bulan ini.</td></tr>`;
             else if (dataSiswa.length === 0) tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada data.</td></tr>`;
         }
 
@@ -1998,7 +2021,16 @@
             
             if (idx === -1) {
                 if (dataSiswa.find(s => s.nis == nis)) { alert("NISN sudah digunakan!"); return; }
-                dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false });
+                
+                // MIGRASI AWAL DATA BARU
+                let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {};
+                daftarBulan.forEach(b => {
+                    rekapBulan[b] = Array(20).fill("");
+                    kasBulan[b] = [false, false, false, false];
+                    kasTanggalBulan[b] = ["", "", "", ""];
+                });
+                
+                dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, panggilanOrtu: false });
                 alert("Siswa baru tersimpan!");
             }
             batalFormSiswa(); simpanDataKeCloud(); renderAllViews();
@@ -2091,7 +2123,9 @@
                 jsonSiswa.forEach(row => { 
                     let nis = row['NISN'] || row['nisn'] || row['NIS'] || ''; let nama = row['Nama'] || row['nama'] || row['Nama Lengkap'] || '';
                     if (nis && nama && !dataSiswa.find(s => s.nis == nis)) {
-                        dataSiswa.push({ nis: String(nis), nama: String(nama), jk: String(row['L/P'] || 'L').toUpperCase(), hp: String(row['HP'] || '-'), foto: "", status: "H", ket: "", kas: [false, false, false, false], kasTanggal: ["", "", "", ""], waktuAbsen: "-", rekap: Array(20).fill(""), catatan: "", panggilanOrtu: false }); 
+                        let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {};
+                        daftarBulan.forEach(b => { rekapBulan[b] = Array(20).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; });
+                        dataSiswa.push({ nis: String(nis), nama: String(nama), jk: String(row['L/P'] || 'L').toUpperCase(), hp: String(row['HP'] || '-'), foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, panggilanOrtu: false }); 
                         countAdded++;
                     }
                 });
@@ -2108,6 +2142,11 @@
         }
 
         // --- ABSENSI FUNCTIONS ---
+        function gantiBulanAbsen() {
+            activeBulanAbsen = document.getElementById('pilih-bulan-absen').value;
+            renderTabelAbsensi4Minggu();
+        }
+        
         function updateActiveRekap() { }
         function renderFormAbsensi() {
             let tbody = document.getElementById('tabel-form-absensi'); if(!tbody) return; tbody.innerHTML = "";
@@ -2131,7 +2170,6 @@
             }
         }
         
-        // PERBAIKAN FITUR: Sinkronisasi waktu serentak ke semua siswa jika admin menekan tombol Save
         function simpanAbsensi(e) {
             e.preventDefault(); 
             let updateTimeStr = getWaktuSekarang(); 
@@ -2142,15 +2180,17 @@
                 let checkEl = document.querySelector(`input[name="status_${index}"]:checked`);
                 let newStatus = checkEl ? checkEl.value : 'H';
                 
-                siswa.waktuAbsen = updateTimeStr; // Seluruh siswa selalu diperbarui waktunya agar sinkron
+                siswa.waktuAbsen = updateTimeStr; 
                 siswa.status = newStatus; 
                 let ketEl = document.getElementById(`ket_${index}`);
                 siswa.ket = ketEl ? ketEl.value : "";
                 
-                if(activeRekapDay >= 0 && activeRekapDay < 20) { siswa.rekap[activeRekapDay] = newStatus; }
+                if(activeRekapDay >= 0 && activeRekapDay < 20) { 
+                    siswa.rekapBulan[activeBulanAbsen][activeRekapDay] = newStatus; 
+                }
             });
             simpanDataKeCloud(); renderDashboard(); renderTabelAbsensi4Minggu(); 
-            alert("Absensi tersimpan!"); switchTab('dashboard');
+            alert("Absensi tersimpan dan berhasil diperbarui!");
         }
         
         function resetAbsensi() { 
@@ -2163,10 +2203,11 @@
             let tbody = document.getElementById('body-rekap-absensi'); if (!tbody) return; let html = '';
             let totalShow = Math.max(dataSiswa.length, 1);
             for (let i = 0; i < totalShow; i++) {
-                let siswa = dataSiswa[i] || { nama: '-', nis: '-', jk: '-', rekap: Array(20).fill("") }; 
-                if (!siswa.rekap) siswa.rekap = Array(20).fill("");
+                let siswa = dataSiswa[i] || { nama: '-', nis: '-', jk: '-' }; 
+                let rekapBulananArr = siswa.rekapBulan && siswa.rekapBulan[activeBulanAbsen] ? siswa.rekapBulan[activeBulanAbsen] : Array(20).fill("");
+                
                 html += `<tr><td style="white-space:nowrap;">${i + 1}</td><td style="white-space:nowrap; text-align:left;">${siswa.nama}</td><td style="white-space:nowrap;">${siswa.nis}</td><td style="white-space:nowrap;">${siswa.jk}</td>`;
-                for(let d = 0; d < 20; d++) { html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${siswa.rekap[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled></td>`; }
+                for(let d = 0; d < 20; d++) { html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${rekapBulananArr[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled></td>`; }
                 html += `<td id="total-h-${i}" style="font-weight:bold; color:#27ae60; background:rgba(46, 204, 113, 0.1);">0</td><td id="total-s-${i}" style="font-weight:bold; color:#f39c12; background:rgba(243, 156, 18, 0.1);">0</td><td id="total-i-${i}" style="font-weight:bold; color:#2980b9; background:rgba(41, 128, 185, 0.1);">0</td><td id="total-a-${i}" style="font-weight:bold; color:#e74c3c; background:rgba(231, 76, 60, 0.1);">0</td></tr>`;
             }
             tbody.innerHTML = html; for (let i = 0; i < totalShow; i++) hitungRekapBaris(i); 
@@ -2200,7 +2241,9 @@
             inputs.forEach(inp => { 
                 let sIdx = parseInt(inp.getAttribute('data-siswa-idx')); let dIdx = parseInt(inp.getAttribute('data-day-idx')); 
                 let val = inp.value.toUpperCase(); 
-                if (dataSiswa[sIdx]) { dataSiswa[sIdx].rekap[dIdx] = (val === 'H' || val === 'S' || val === 'I' || val === 'A') ? val : ""; } 
+                if (dataSiswa[sIdx] && dataSiswa[sIdx].rekapBulan && dataSiswa[sIdx].rekapBulan[activeBulanAbsen]) { 
+                    dataSiswa[sIdx].rekapBulan[activeBulanAbsen][dIdx] = (val === 'H' || val === 'S' || val === 'I' || val === 'A') ? val : ""; 
+                } 
             });
             simpanDataKeCloud(); inputs.forEach(inp => inp.disabled = true); 
             document.getElementById('btn-edit-rekap').innerHTML = '<i class="fas fa-edit"></i> Edit Manual'; 
@@ -2214,28 +2257,42 @@
             dateHeaders.forEach(dt => { dt.parentElement.innerHTML = dt.parentElement.innerText.trim() + " " + (dt.value || ''); }); 
             let inputs = tableClone.querySelectorAll('.input-absen'); 
             inputs.forEach(inp => { inp.parentElement.innerHTML = inp.value; });
-            let html = `<table border="1"><tr><th colspan="28" style="font-size:18px; font-weight:bold;">REKAP BULANAN</th></tr>${tableClone.innerHTML}</table>`; 
-            let link = document.createElement("a"); link.download = "Buku_Rekap.xls"; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html); link.click();
+            let html = `<table border="1"><tr><th colspan="28" style="font-size:18px; font-weight:bold;">REKAP BULANAN (${activeBulanAbsen.toUpperCase()})</th></tr>${tableClone.innerHTML}</table>`; 
+            let link = document.createElement("a"); link.download = `Buku_Rekap_${activeBulanAbsen}.xls`; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html); link.click();
         }
 
         // --- KAS FUNCTIONS ---
+        function gantiBulanKas() {
+            activeBulanKas = document.getElementById('pilih-bulan-kas').value;
+            renderKas();
+            renderTunggakanDashboard();
+            renderLunasDashboard();
+        }
+
         function renderKas() {
-            let tbody = document.getElementById('tabel-body-kas'); tbody.innerHTML = ""; let totalTerkumpul = 0, totalTunggakan = 0, jumlahSiswaMenunggak = 0;
+            let tbody = document.getElementById('tabel-body-kas'); tbody.innerHTML = ""; let totalTerkumpulSemua = 0, totalTunggakan = 0, jumlahSiswaMenunggak = 0;
             let isBendaharaOrAdmin = (currentRole === 'admin' || (currentRole === 'bendahara' && isAdminKasUnlocked));
 
             if (dataSiswa.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data.</td></tr>`; } 
             else {
                 dataSiswa.forEach((s, idx) => {
-                    let sKasArr = s.kas || [false, false, false, false];
+                    let sKasArr = s.kasBulan && s.kasBulan[activeBulanKas] ? s.kasBulan[activeBulanKas] : [false, false, false, false];
                     let centang = sKasArr.filter(Boolean).length; 
                     let sisaTagihan = (totalMingguKas - centang) * iuranKasPerMinggu; 
-                    totalTerkumpul += (centang * iuranKasPerMinggu); totalTunggakan += sisaTagihan; 
+                    totalTunggakan += sisaTagihan; 
                     if(sisaTagihan > 0) jumlahSiswaMenunggak++;
+                    
+                    // Hitung total terkumpul seluruh bulan
+                    for (let bln of daftarBulan) {
+                        if (s.kasBulan && s.kasBulan[bln]) {
+                            totalTerkumpulSemua += (s.kasBulan[bln].filter(Boolean).length * iuranKasPerMinggu);
+                        }
+                    }
                     
                     let checkboxes = ""; 
                     for(let i=0; i < totalMingguKas; i++) { checkboxes += `<td><input type="checkbox" class="kas-checkbox-input" style="transform:scale(1.2);" data-student="${idx}" data-week="${i}" ${sKasArr[i] ? 'checked' : ''} ${!isAdminKasUnlocked ? 'disabled' : ''}></td>`; }
                     let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
-                    let pesanTagihan = `Halo Bapak/Ibu/wali, mohon maaf mengganggu waktunya, menginformasikan bahwa ananda *${s.nama}*, saat ini memiliki sisa tagihan Uang Kas Kelas sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon kerjasamanya untuk dapat diselesaikan. Terima kasih banyak Bapak/Ibu. 🙏`;
+                    let pesanTagihan = `Halo Bapak/Ibu/wali, mohon maaf mengganggu waktunya, menginformasikan bahwa ananda *${s.nama}*, saat ini memiliki sisa tagihan Uang Operasional Kelas pada bulan *${activeBulanKas}* sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Mohon kerjasamanya untuk dapat diselesaikan. Terima kasih banyak Bapak/Ibu. 🙏`;
                     
                     let waBtnHtml = isBendaharaOrAdmin ? `<button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:8px 12px; border:none; color:white; border-radius:6px; cursor:pointer;" title="Tagih via WA"><i class="fab fa-whatsapp"></i></button>` : '';
                     
@@ -2245,9 +2302,9 @@
             
             let pengeluaranKas = globalSettings.pengeluaranKas || [];
             let totalPengeluaran = pengeluaranKas.reduce((sum, item) => sum + parseInt(item.nominal), 0);
-            let saldoAkhir = totalTerkumpul - totalPengeluaran;
+            let saldoAkhir = totalTerkumpulSemua - totalPengeluaran;
 
-            document.getElementById('total-semua').innerText = "Rp " + totalTerkumpul.toLocaleString('id-ID'); 
+            document.getElementById('total-semua').innerText = "Rp " + totalTerkumpulSemua.toLocaleString('id-ID'); 
             document.getElementById('display-kas').innerText = "Rp " + saldoAkhir.toLocaleString('id-ID');
             document.getElementById('total-pengeluaran').innerText = "Rp " + totalPengeluaran.toLocaleString('id-ID');
             document.getElementById('total-saldo').innerText = "Rp " + saldoAkhir.toLocaleString('id-ID');
@@ -2368,38 +2425,42 @@
             if (!isAdminKasUnlocked) return; const currentDateStr = getFormatTanggalSaja(); 
             document.querySelectorAll('.kas-checkbox-input').forEach(input => { 
                 let studentIdx = parseInt(input.getAttribute('data-student')); let weekIdx = parseInt(input.getAttribute('data-week')); 
-                let isCheckedNow = input.checked; let wasCheckedBefore = dataSiswa[studentIdx].kas[weekIdx]; 
-                dataSiswa[studentIdx].kas[weekIdx] = isCheckedNow; 
-                if (isCheckedNow && !wasCheckedBefore) { dataSiswa[studentIdx].kasTanggal[weekIdx] = currentDateStr; } else if (!isCheckedNow) { dataSiswa[studentIdx].kasTanggal[weekIdx] = ""; } 
+                let isCheckedNow = input.checked; let wasCheckedBefore = dataSiswa[studentIdx].kasBulan[activeBulanKas][weekIdx]; 
+                dataSiswa[studentIdx].kasBulan[activeBulanKas][weekIdx] = isCheckedNow; 
+                if (isCheckedNow && !wasCheckedBefore) { dataSiswa[studentIdx].kasTanggalBulan[activeBulanKas][weekIdx] = currentDateStr; } else if (!isCheckedNow) { dataSiswa[studentIdx].kasTanggalBulan[activeBulanKas][weekIdx] = ""; } 
             }); 
             simpanDataKeCloud(); isAdminKasUnlocked = false; document.getElementById('admin-area-kas').classList.add('locked'); 
             document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Bendahara'; document.getElementById('btn-save-kas').style.display = "none"; 
-            renderAllViews(); alert("Buku Kas tersinkron!"); 
+            renderAllViews(); alert("Buku Uang Operasional tersinkron!"); 
         }
         function downloadExcelKas() {
-            let tableHTML = `<table border="1"><thead><tr><th colspan="9" style="font-size:16px; font-weight:bold; text-align:center;">LAPORAN BENDAHARA (PEMASUKAN & PENGELUARAN)</th></tr>
+            let tableHTML = `<table border="1"><thead><tr><th colspan="9" style="font-size:16px; font-weight:bold; text-align:center;">LAPORAN BENDAHARA BULAN ${activeBulanKas.toUpperCase()} (PEMASUKAN & PENGELUARAN)</th></tr>
             <tr><th colspan="9" style="background-color: #f2f2f2; text-align:center;">DATA PEMASUKAN SISWA</th></tr>
-            <tr><th style="background-color: #f2f2f2;">No.</th><th style="background-color: #f2f2f2;">Nama Siswa</th><th style="background-color: #f2f2f2;">M1 (Rp)</th><th style="background-color: #f2f2f2;">M2 (Rp)</th><th style="background-color: #f2f2f2;">M3 (Rp)</th><th style="background-color: #f2f2f2;">M4 (Rp)</th><th style="background-color: #f2f2f2;">Total</th><th style="background-color: #f2f2f2;">Keterangan</th><th style="background-color: #f2f2f2;">Tanggal Pembayaran Otomatis</th></tr></thead><tbody>`;
-            dataSiswa.forEach((s, idx) => { 
-                let m1 = s.kas[0] ? iuranKasPerMinggu : 0; let m2 = s.kas[1] ? iuranKasPerMinggu : 0; let m3 = s.kas[2] ? iuranKasPerMinggu : 0; let m4 = s.kas[3] ? iuranKasPerMinggu : 0; let totalSiswa = m1 + m2 + m3 + m4; 
-                let hitungCentang = s.kas.filter(Boolean).length; let keterangan = hitungCentang === totalMingguKas ? "Lunas" : `Menunggak ${totalMingguKas - hitungCentang} Minggu`; 
-                let tglBayar = []; for(let i = 0; i < 4; i++) { if(s.kas[i] && s.kasTanggal && s.kasTanggal[i]) tglBayar.push(`M${i+1}: ${s.kasTanggal[i]}`); } 
+            <tr><th style="background-color: #f2f2f2;">No.</th><th style="background-color: #f2f2f2;">Nama Siswa</th><th style="background-color: #f2f2f2;">M1 (Rp)</th><th style="background-color: #f2f2f2;">M2 (Rp)</th><th style="background-color: #f2f2f2;">M3 (Rp)</th><th style="background-color: #f2f2f2;">M4 (Rp)</th><th style="background-color: #f2f2f2;">Total (Bulan Ini)</th><th style="background-color: #f2f2f2;">Keterangan</th><th style="background-color: #f2f2f2;">Tanggal Pembayaran Otomatis</th></tr></thead><tbody>`;
+            dataSiswa.forEach((s, idx) => {
+                let currentKas = s.kasBulan[activeBulanKas] || [false, false, false, false];
+                let currentTgl = s.kasTanggalBulan[activeBulanKas] || ["", "", "", ""];
+                let m1 = currentKas[0] ? iuranKasPerMinggu : 0; let m2 = currentKas[1] ? iuranKasPerMinggu : 0; let m3 = currentKas[2] ? iuranKasPerMinggu : 0; let m4 = currentKas[3] ? iuranKasPerMinggu : 0; let totalSiswa = m1 + m2 + m3 + m4; 
+                let hitungCentang = currentKas.filter(Boolean).length; let keterangan = hitungCentang === totalMingguKas ? "Lunas" : `Menunggak ${totalMingguKas - hitungCentang} Minggu`; 
+                let tglBayar = []; for(let i = 0; i < 4; i++) { if(currentKas[i] && currentTgl[i]) tglBayar.push(`M${i+1}: ${currentTgl[i]}`); } 
                 let stringTanggal = tglBayar.length > 0 ? tglBayar.join(' | ') : '-'; 
                 tableHTML += `<tr><td style="text-align:center;">${idx + 1}</td><td><strong>${s.nama}</strong></td><td style="text-align:right;">${m1}</td><td style="text-align:right;">${m2}</td><td style="text-align:right;">${m3}</td><td style="text-align:right;">${m4}</td><td style="text-align:right; font-weight:bold;">${totalSiswa}</td><td style="text-align:center;">${keterangan}</td><td>${stringTanggal}</td></tr>`; 
             });
             
-            tableHTML += `<tr><td colspan="9"></td></tr><tr><th colspan="9" style="background-color: #f2f2f2; text-align:center;">DATA PENGELUARAN</th></tr>`;
+            tableHTML += `<tr><td colspan="9"></td></tr><tr><th colspan="9" style="background-color: #f2f2f2; text-align:center;">DATA PENGELUARAN (SEMUA BULAN)</th></tr>`;
             tableHTML += `<tr><th>No</th><th colspan="2">Tanggal</th><th colspan="4">Keterangan</th><th>Pencatat</th><th>Nominal</th></tr>`;
             (globalSettings.pengeluaranKas || []).forEach((p, idx) => {
                 tableHTML += `<tr><td>${idx+1}</td><td colspan="2">${p.tanggal}</td><td colspan="4">${p.keterangan}</td><td>${p.user}</td><td style="color:red;">${p.nominal}</td></tr>`;
             });
 
-            tableHTML += `</tbody></table>`; let link = document.createElement("a"); link.download = "Laporan_Uang_Kas_Lengkap.xls"; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); link.click();
+            tableHTML += `</tbody></table>`; let link = document.createElement("a"); link.download = `Laporan_Uang_Operasional_${activeBulanKas}.xls`; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); link.click();
         }
         function resetKasBulanan() { 
-            if(confirm("Yakin reset buku kas (Pemasukan & Pengeluaran)? Data akan hilang permanen!")) { 
-                dataSiswa.forEach(s => { s.kas = [false, false, false, false]; s.kasTanggal = ["", "", "", ""]; }); 
-                globalSettings.pengeluaranKas = [];
+            if(confirm(`Yakin reset pemasukan khusus bulan ${activeBulanKas}? Data bulan ini akan hilang! (Data bulan lain tetap aman)`)) { 
+                dataSiswa.forEach(s => { 
+                    s.kasBulan[activeBulanKas] = [false, false, false, false]; 
+                    s.kasTanggalBulan[activeBulanKas] = ["", "", "", ""]; 
+                }); 
                 simpanDataKeCloud(); renderAllViews(); 
             } 
         }
@@ -3050,29 +3111,6 @@
             globalSettings.catatanPiket = teks; simpanDataKeCloud(); loadSettingsToUI(); alert("Catatan piket tersinkron!");
         }
         function hapusCatatanPiket() { globalSettings.catatanPiket = ""; document.getElementById('input-catatan-piket').value = ""; simpanDataKeCloud(); loadSettingsToUI(); }
-
-        function populateCheckboxSiswaCatatan() {
-            let sel = document.getElementById('checkbox-siswa-catatan'); if(!sel) return; sel.innerHTML = "";
-            sel.innerHTML += `<label style="display:flex; margin-bottom:10px; cursor:pointer; align-items:center; gap:8px; font-weight:bold; color:var(--info); border-bottom:1px solid var(--border-color); padding-bottom:8px;"><input type="checkbox" style="transform:scale(1.2)" id="cb-all-catatan" onchange="toggleAllCatatan(this)"> PILIH SEMUA SISWA</label>`;
-            dataSiswa.forEach(s => { sel.innerHTML += `<label style="display:flex; margin-bottom:8px; cursor:pointer; align-items:center; gap:8px;"><input type="checkbox" style="transform:scale(1.2)" value="${s.nis}" class="cb-catatan-siswa"> ${s.nama}</label>`; });
-        }
-        function toggleAllCatatan(source) { document.querySelectorAll('.cb-catatan-siswa').forEach(cb => cb.checked = source.checked); }
-
-        function saveCatatanSiswa() {
-            let isiTeks = document.getElementById('input-catatan-siswa').value; let checkboxes = document.querySelectorAll('.cb-catatan-siswa:checked');
-            if(checkboxes.length === 0) { alert("Pilih minimal 1 siswa!"); return; }
-            checkboxes.forEach(cb => { let sIdx = dataSiswa.findIndex(x => x.nis === cb.value); if (sIdx !== -1) { dataSiswa[sIdx].catatan = isiTeks; } });
-            simpanDataKeCloud(); alert("Pesan personal tersimpan!"); loadCatatanDashboard();
-        }
-        function hapusCatatanSiswa() { document.getElementById('input-catatan-siswa').value = ""; saveCatatanSiswa(); }
-        function loadCatatanDashboard() {
-            let panel = document.getElementById('panel-dashboard-catatan');
-            if (currentRole === 'siswa') {
-                let nis = localStorage.getItem('siwali_logged_student_nis'); let s = dataSiswa.find(x => x.nis === nis);
-                if (s && s.catatan && s.catatan.trim() !== "") { panel.style.display = "block"; document.getElementById('display-catatan-siswa').innerText = s.catatan;
-                } else { panel.style.display = "none"; }
-            } else { panel.style.display = "none"; }
-        }
 
         // --- FORUM DISKUSI ---
         function handleChatFileUpload(event) {
