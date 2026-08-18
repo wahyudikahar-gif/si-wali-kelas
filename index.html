@@ -9,6 +9,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap');
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- SheetJS (Excel) & ChartJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -163,8 +164,6 @@
         
         /* Image Preview Dashboard */
         .img-dashboard-preview { width: 100%; max-width: 100%; max-height: 400px; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top:15px; display: none; border: 1px solid var(--border-color);}
-        
-        /* PERBAIKAN FITUR: Layout maksimal untuk jadwal piket & foto piket */
         .img-dashboard-max { width: 100%; height: auto; min-height: 250px; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top:15px; display: none; border: 1px solid var(--border-color); background-color: var(--bg-light); }
         
         .empty-state-text { color: var(--text-dark); opacity: 0.6; font-style: italic; font-size: 13px; text-align: center; padding: 20px;}
@@ -388,6 +387,7 @@
                         <div class="clock" id="live-clock">00:00:00</div>
                         <div class="date" id="live-date">Memuat tanggal...</div>
                     </div>
+                    <!-- Tombol Sinkronisasi Cepat -->
                     <button onclick="softRefreshApp()" class="btn-action upload" style="padding: 12px; border-radius: 8px;" title="Tarik Data dari Cloud"><i class="fas fa-cloud-download-alt" style="font-size: 16px;"></i></button>
                 </div>
             </div>
@@ -482,7 +482,6 @@
                     
                     <div class="panel">
                         <h3 style="color: var(--secondary);"><i class="fas fa-broom"></i> Foto Petugas Piket</h3>
-                        <!-- PERBAIKAN FITUR: Layout grid untuk foto petugas piket diperbesar max width/height-nya -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;">
                             <div style="text-align: center; width: 100%;">
                                 <img id="dash-piket-1" class="img-dashboard-max">
@@ -555,7 +554,6 @@
                         </div>
                     </div>
 
-                    <!-- PERBAIKAN FITUR: Struktur Tabel Data Siswa dengan tombol Save inline -->
                     <div class="table-responsive">
                         <table id="tabel-data-siswa-induk">
                             <thead>
@@ -624,20 +622,11 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
                         <h3 style="color: var(--primary); margin:0;"><i class="fas fa-table"></i> Buku Rekap Absensi Bulanan</h3>
                         <div style="display:flex; gap:10px; flex-wrap: wrap; align-items:center;">
-                            <!-- FITUR BARU: Dropdown Bulan Absensi -->
                             <select id="pilih-bulan-absen" onchange="gantiBulanAbsen()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--primary); background: var(--bg-light); font-weight: bold; color: var(--primary); cursor:pointer;">
-                                <option value="Juli">Juli</option>
-                                <option value="Agustus">Agustus</option>
-                                <option value="September">September</option>
-                                <option value="Oktober">Oktober</option>
-                                <option value="November">November</option>
-                                <option value="Desember">Desember</option>
-                                <option value="Januari">Januari</option>
-                                <option value="Februari">Februari</option>
-                                <option value="Maret">Maret</option>
-                                <option value="April">April</option>
-                                <option value="Mei">Mei</option>
-                                <option value="Juni">Juni</option>
+                                <option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option>
+                                <option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                                <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option>
+                                <option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option>
                             </select>
                             <button id="btn-edit-rekap" onclick="toggleEditRekap()" class="btn-action edit admin-only-element hidden"><i class="fas fa-edit"></i> Edit Manual</button>
                             <button id="btn-save-rekap" onclick="simpanRekapBulanan()" class="btn-action hidden" style="background:var(--primary);"><i class="fas fa-save"></i> Save Rekap</button>
@@ -676,20 +665,11 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
                         <h3><i class="fas fa-wallet"></i> Buku Uang Operasional (Bulanan)</h3>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items:center;">
-                            <!-- FITUR BARU: Dropdown Bulan Uang Operasional -->
                             <select id="pilih-bulan-kas" onchange="gantiBulanKas()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--primary); background: var(--bg-light); font-weight: bold; color: var(--primary); cursor:pointer;">
-                                <option value="Juli">Juli</option>
-                                <option value="Agustus">Agustus</option>
-                                <option value="September">September</option>
-                                <option value="Oktober">Oktober</option>
-                                <option value="November">November</option>
-                                <option value="Desember">Desember</option>
-                                <option value="Januari">Januari</option>
-                                <option value="Februari">Februari</option>
-                                <option value="Maret">Maret</option>
-                                <option value="April">April</option>
-                                <option value="Mei">Mei</option>
-                                <option value="Juni">Juni</option>
+                                <option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option>
+                                <option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                                <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option>
+                                <option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option>
                             </select>
                             <button id="btn-download-kas-excel" onclick="downloadExcelKas()" class="btn-action excel hidden"><i class="fas fa-file-excel"></i> Laporan Excel</button>
                             <button onclick="bukaAdminKas()" id="btn-admin-kas" class="btn-action admin-only-element hidden"><i class="fas fa-lock"></i> Mode Bendahara</button>
@@ -778,7 +758,6 @@
                     </div>
                 </div>
 
-                <!-- Dashboard Ringkas Pelanggaran -->
                 <div class="stats-grid no-print" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="stat-card" style="background:var(--danger)"><h4>Siswa Bermasalah</h4><h2 id="pel-stat-siswa">0</h2></div>
                     <div class="stat-card" style="background:var(--orange)"><h4>Total Pelanggaran</h4><h2 id="pel-stat-total">0</h2></div>
@@ -786,7 +765,6 @@
                     <div class="stat-card" style="background:var(--darkred)"><h4>SP Diterbitkan</h4><h2 id="pel-stat-sp">0</h2></div>
                 </div>
 
-                <!-- Navigasi Internal Pelanggaran -->
                 <div class="radio-group no-print" style="margin-bottom: 20px; border: 1px solid var(--border-color); background: var(--white);">
                     <label style="color: var(--primary);"><input type="radio" name="pelanggaran_nav" value="data" checked onchange="switchPelanggaranNav('data')"> Data & Riwayat</label>
                     <label class="admin-only-element hidden" style="color: var(--danger);"><input type="radio" name="pelanggaran_nav" value="input" onchange="switchPelanggaranNav('input')"> Input Pelanggaran</label>
@@ -794,7 +772,6 @@
                     <label class="admin-only-element hidden" style="color: var(--text-dark);"><input type="radio" name="pelanggaran_nav" value="master" onchange="switchPelanggaranNav('master')"> Master Data (Poin)</label>
                 </div>
 
-                <!-- Bagian 1: Data & Riwayat -->
                 <div id="pel-nav-data" class="pelanggaran-section">
                     <div class="panels-grid no-print">
                         <div class="panel">
@@ -837,7 +814,6 @@
                     </div>
                 </div>
 
-                <!-- Bagian 2: Input Pelanggaran (Admin Only) -->
                 <div id="pel-nav-input" class="pelanggaran-section hidden no-print">
                     <div class="panel" style="border-top: 4px solid var(--danger);">
                         <h3 style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Form Laporan Pelanggaran Baru</h3>
@@ -882,7 +858,6 @@
                     </div>
                 </div>
 
-                <!-- Bagian 3: Input Pembinaan (Admin Only) -->
                 <div id="pel-nav-pembinaan" class="pelanggaran-section hidden no-print">
                     <div class="panel" style="border-top: 4px solid var(--info);">
                         <h3 style="color:var(--info);"><i class="fas fa-handshake"></i> Form Catatan Pembinaan</h3>
@@ -918,7 +893,6 @@
                     </div>
                 </div>
 
-                <!-- Bagian 4: Master Data Poin (Admin Only) -->
                 <div id="pel-nav-master" class="pelanggaran-section hidden no-print">
                     <div class="panel">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
@@ -970,18 +944,15 @@
                     </div>
                 </div>
 
-                <!-- Area Cetak Surat Peringatan -->
                 <div id="print-area" class="print-area" style="display:none; line-height: 1.6; font-family: 'Times New Roman', Times, serif;">
                     <!-- Konten SP akan diinjeksi via JS -->
                 </div>
             </div>
             
-            <!-- MODAL DETAIL SISWA PELANGGARAN -->
             <div id="modal-detail-pelanggaran" class="modal-overlay">
                 <div class="modal-content">
                     <button class="btn-close-modal" onclick="closeModalPelanggaran()"><i class="fas fa-times"></i></button>
                     
-                    <!-- Tombol Reset Riwayat Pindah ke Header Modal -->
                     <div class="admin-only-element hidden" style="position:absolute; top:20px; right:60px;">
                         <button onclick="resetSemuaRiwayatSiswa()" class="btn-action danger" style="padding:6px 12px; font-size:12px;"><i class="fas fa-trash-alt"></i> Reset Semua Riwayat Siswa Ini</button>
                     </div>
@@ -1054,7 +1025,18 @@
             <div id="tab-pengaturan" class="tab-content">
                 <h2 style="color: var(--primary); margin-bottom: 25px;"><i class="fas fa-cog"></i> Pengaturan Sistem</h2>
 
-                <!-- TEMA UI & CUSTOMIZATION -->
+                <!-- PERBAIKAN FITUR: Fitur Backup / Sinkronisasi Data Manual -->
+                <div class="settings-panel admin-only-setting hidden">
+                    <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-database"></i> Manajemen Data (Backup & Sinkronisasi)</h3>
+                    <p style="font-size:13.5px; color:var(--text-dark); opacity: 0.8; margin-bottom: 15px;">Gunakan fitur ini untuk membackup seluruh data kelas (Siswa, Absensi, Keuangan, Pengaturan) ke dalam file, atau memulihkan data lama agar tidak hilang tertimpa.</p>
+                    <div style="display:flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="backupDataJSON()" class="btn-action excel"><i class="fas fa-download"></i> Backup Data (Download .json)</button>
+                        <input type="file" id="upload-json" accept=".json" class="hidden" onchange="restoreDataJSON(event)">
+                        <button onclick="document.getElementById('upload-json').click()" class="btn-action upload"><i class="fas fa-upload"></i> Restore Data (Upload .json)</button>
+                        <button onclick="softRefreshApp()" class="btn-action"><i class="fas fa-sync"></i> Sinkronisasi Cloud</button>
+                    </div>
+                </div>
+
                 <div class="settings-panel">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-paint-roller"></i> Pengaturan Tema & Tampilan</h3>
                     <p style="font-size:13.5px; color:var(--text-dark); opacity: 0.8; margin-bottom: 5px;">Sesuaikan tampilan aplikasi sesuai seleramu.</p>
@@ -1156,7 +1138,6 @@
                     </div>
                 </div>
 
-                <!-- PERBAIKAN FITUR: Papan Informasi, Struktur Kelas, Jadwal Pelajaran, dll yang hilang sebelumnya -->
                 <div class="settings-panel admin-only-setting hidden">
                     <h3 style="color:var(--primary); margin-bottom:15px;"><i class="fas fa-bullhorn"></i> Papan Informasi Dashboard</h3>
                     <div class="admin-control-box" style="margin: 0; display: block;">
@@ -1269,7 +1250,6 @@
         
         let chartPelanggaranInstance = null;
         
-        // VARIABEL GLOBAL BULAN AKTIF
         const daftarBulan = ["Juli", "Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni"];
         let activeBulanAbsen = "Juli";
         let activeBulanKas = "Juli";
@@ -1375,7 +1355,6 @@
             sidebar.classList.toggle('show'); overlay.classList.toggle('show');
         }
 
-        // State Aplikasi
         let currentRole = "";
         let isAdminLoggedIn = false;
         let isAdminKasUnlocked = false;
@@ -1411,7 +1390,45 @@
                 .catch(err => console.error("Gagal sinkron Cloud!", err));
         }
 
-        /* ---------------- TEMA UI LOGIC (LOKAL ONLY) ---------------- */
+        // FITUR BARU: Backup Data Manual
+        function backupDataJSON() {
+            let data = { siswa: dataSiswa, settings: globalSettings, chat: globalChatData };
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+            let downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "Backup_SIWALI_" + new Date().getTime() + ".json");
+            document.body.appendChild(downloadAnchorNode); 
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // FITUR BARU: Restore Data Manual
+        function restoreDataJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let importedData = JSON.parse(e.target.result);
+                    if (importedData.siswa && importedData.settings) {
+                        dataSiswa = importedData.siswa;
+                        globalSettings = importedData.settings;
+                        if (importedData.chat) globalChatData = importedData.chat;
+                        
+                        simpanDataKeCloud();
+                        jalankanSistemAwal();
+                        alert("Berhasil! Data lama telah dipulihkan dan disinkronkan ke Cloud.");
+                    } else {
+                        alert("Format file JSON tidak valid / tidak sesuai sistem SI-WALI.");
+                    }
+                } catch (err) {
+                    alert("Terjadi kesalahan saat membaca file JSON.");
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
         function loadTheme() {
             let saved = localStorage.getItem('siwali_theme');
             if (saved) {
@@ -1496,9 +1513,7 @@
                 location.reload();
             }
         }
-        /* ------------------------------------------------- */
 
-        // INIT SYSTEM
         window.addEventListener('DOMContentLoaded', () => {
             loadTheme();
             initNotifications();
@@ -1512,7 +1527,6 @@
                 document.getElementById('login-page').style.display = "none";
                 document.getElementById('app-page').style.display = "block";
                 
-                // PERBAIKAN FITUR: Load Local Data sebelum memanggil switch tab agar aplikasi tidak error saat refresh
                 loadLocalDataSafely();
                 jalankanSistemAwal();
                 
@@ -1570,7 +1584,6 @@
                             }
                         } else {
                             if(isChatTabActive) renderChatList();
-                            // PERBAIKAN FITUR: Hanya me-render tab uang kas dan absensi jika tidak sedang diedit
                             if(localStorage.getItem('siwali_active_tab') === 'kas' && !isAdminKasUnlocked) renderKas();
                             if(localStorage.getItem('siwali_active_tab') === 'absensi' && !isEditingRekap) renderTabelAbsensi4Minggu();
                             if(localStorage.getItem('siwali_active_tab') === 'pelanggaran') renderPelanggaran();
@@ -1604,26 +1617,30 @@
         function jalankanSistemAwal() {
             if (!Array.isArray(dataSiswa)) dataSiswa = [];
             
-            // Proses Migrasi Otomatis untuk Fitur Bulan
+            // PERBAIKAN FITUR: Proses Migrasi Data (Mencegah fitur Kas dan Absen Error saat Save)
             dataSiswa.forEach(s => {
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
                 
-                // MIGRASI ABSENSI BULANAN
+                // Mencegah error "undefined object" pada Rekap
                 if (!s.rekapBulan) {
                     s.rekapBulan = {};
                     s.rekapBulan["Juli"] = (s.rekap && s.rekap.length === 20) ? [...s.rekap] : Array(20).fill("");
                 }
-                daftarBulan.forEach(b => { if(!s.rekapBulan[b]) s.rekapBulan[b] = Array(20).fill(""); });
-
-                // MIGRASI KAS BULANAN
+                
+                // Mencegah error "undefined object" pada Kas
                 if (!s.kasBulan) {
                     s.kasBulan = {};
-                    s.kasTanggalBulan = {};
                     s.kasBulan["Juli"] = (s.kas && s.kas.length === 4) ? [...s.kas] : [false, false, false, false];
+                }
+                // INI PERBAIKAN PENTING: Struktur kasTanggalBulan sebelumnya menyebabkan sistem lumpuh di akun lama.
+                if (!s.kasTanggalBulan) {
+                    s.kasTanggalBulan = {};
                     s.kasTanggalBulan["Juli"] = (s.kasTanggal && s.kasTanggal.length === 4) ? [...s.kasTanggal] : ["", "", "", ""];
                 }
-                daftarBulan.forEach(b => {
+
+                daftarBulan.forEach(b => { 
+                    if(!s.rekapBulan[b]) s.rekapBulan[b] = Array(20).fill(""); 
                     if(!s.kasBulan[b]) s.kasBulan[b] = [false, false, false, false];
                     if(!s.kasTanggalBulan[b]) s.kasTanggalBulan[b] = ["", "", "", ""];
                 });
@@ -1718,6 +1735,7 @@
                         targetSiswa.status = statusSiswa; targetSiswa.waktuAbsen = getWaktuSekarang(); 
                         if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; 
                         else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
+                        
                         let rekapEl = document.getElementById('select-active-rekap');
                         let activeRekapDay = parseInt(rekapEl ? rekapEl.value : "-1");
                         if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekapBulan[activeBulanAbsen][activeRekapDay] = statusSiswa; }
@@ -1762,16 +1780,12 @@
 
         function switchTab(tabName) {
             document.getElementById('print-area').style.display = 'none';
-
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
-            
             let targetTab = document.getElementById('tab-' + tabName);
             if (targetTab) targetTab.classList.add('active');
-            
             let menuLi = document.getElementById('menu-' + tabName); 
             if(menuLi) menuLi.classList.add('active');
-            
             localStorage.setItem('siwali_active_tab', tabName);
             document.getElementById('main-sidebar').classList.remove('show');
             document.querySelector('.sidebar-overlay').classList.remove('show');
@@ -1812,7 +1826,6 @@
         function handleRoleVisibility() {
             const btnDownloadKasExcel = document.getElementById('btn-download-kas-excel');
             
-            // PERBAIKAN FITUR: Pastikan panel settings bisa muncul dan disembunyikan secara bersih
             document.querySelectorAll('.admin-only-setting').forEach(el => {
                 if(currentRole === 'siswa' || currentRole === 'sekretaris') {
                     if (!el.classList.contains('hidden')) el.classList.add('hidden');
@@ -1843,7 +1856,7 @@
 
         function softRefreshApp() {
             tarikDataCloud(true);
-            alert("Sinkronisasi Berjalan! Data terbaru telah dimuat.");
+            alert("Sinkronisasi Berjalan! Data terbaru dari cloud telah dimuat.");
         }
 
         function prosesLogout() {
@@ -2021,8 +2034,6 @@
             
             if (idx === -1) {
                 if (dataSiswa.find(s => s.nis == nis)) { alert("NISN sudah digunakan!"); return; }
-                
-                // MIGRASI AWAL DATA BARU
                 let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {};
                 daftarBulan.forEach(b => {
                     rekapBulan[b] = Array(20).fill("");
@@ -2047,7 +2058,6 @@
             }, 300);
         }
         
-        // PERBAIKAN FITUR: Tampilan dan fungsi Save inline di table Data Siswa
         function editSiswaInline(index) {
             ['nis', 'nama', 'jk', 'hp'].forEach(f => {
                 document.getElementById(`txt-${f}-${index}`).classList.add('hidden');
@@ -2134,11 +2144,17 @@
             }; 
             reader.readAsArrayBuffer(file);
         }
+        
+        // PERBAIKAN FITUR: Download Excel Siswa yang lebih stabil menggunakan XLSX library
         function downloadExcelSiswa() {
             let tableHTML = `<table border="1"><tr><th>No</th><th>NISN</th><th>Nama Lengkap</th><th>L/P</th><th>No. HP</th></tr>`; 
             dataSiswa.forEach((s, idx) => { tableHTML += `<tr><td>${idx+1}</td><td>${s.nis}</td><td>${s.nama}</td><td>${s.jk}</td><td>${s.hp || '-'}</td></tr>`; }); 
             tableHTML += `</table>`;
-            let link = document.createElement("a"); link.download = "Laporan_Siswa.xls"; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); link.click();
+            
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = tableHTML;
+            let wb = XLSX.utils.table_to_book(tempDiv.querySelector('table'));
+            XLSX.writeFile(wb, "Laporan_Siswa.xlsx");
         }
 
         // --- ABSENSI FUNCTIONS ---
@@ -2170,6 +2186,7 @@
             }
         }
         
+        // PERBAIKAN FITUR: Alert yang lebih jelas bila absen gagal masuk ke Buku Rekap karena dropdown tidak di-set
         function simpanAbsensi(e) {
             e.preventDefault(); 
             let updateTimeStr = getWaktuSekarang(); 
@@ -2189,8 +2206,14 @@
                     siswa.rekapBulan[activeBulanAbsen][activeRekapDay] = newStatus; 
                 }
             });
-            simpanDataKeCloud(); renderDashboard(); renderTabelAbsensi4Minggu(); 
-            alert("Absensi tersimpan dan berhasil diperbarui!");
+            simpanDataKeCloud(); 
+            renderDashboard(); 
+            renderTabelAbsensi4Minggu(); 
+            
+            let msg = "Data absensi harian berhasil disimpan!";
+            if(activeRekapDay >= 0 && activeRekapDay < 20) msg += `\n(Telah terekam otomatis ke Buku Rekap bulan ${activeBulanAbsen})`;
+            else msg += `\n*(Peringatan: Sinkronisasi Buku Rekap Anda matikan, data belum terekam di tabel rekap bulanan!)*`;
+            alert(msg);
         }
         
         function resetAbsensi() { 
@@ -2251,14 +2274,21 @@
             isEditingRekap = false;
             renderTabelAbsensi4Minggu(); alert("Buku Rekap berhasil disinkron!");
         }
+
+        // PERBAIKAN FITUR: Download Excel Rekap Bulanan menggunakan XLSX library agar stabil
         function downloadExcelRekapBulanan() {
             let tabel = document.getElementById('tabel-rekap-bulanan'); let tableClone = tabel.cloneNode(true); 
             let dateHeaders = tableClone.querySelectorAll('.date-header'); 
             dateHeaders.forEach(dt => { dt.parentElement.innerHTML = dt.parentElement.innerText.trim() + " " + (dt.value || ''); }); 
             let inputs = tableClone.querySelectorAll('.input-absen'); 
             inputs.forEach(inp => { inp.parentElement.innerHTML = inp.value; });
+            
             let html = `<table border="1"><tr><th colspan="28" style="font-size:18px; font-weight:bold;">REKAP BULANAN (${activeBulanAbsen.toUpperCase()})</th></tr>${tableClone.innerHTML}</table>`; 
-            let link = document.createElement("a"); link.download = `Buku_Rekap_${activeBulanAbsen}.xls`; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html); link.click();
+            
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            let wb = XLSX.utils.table_to_book(tempDiv.querySelector('table'));
+            XLSX.writeFile(wb, `Buku_Rekap_${activeBulanAbsen}.xlsx`);
         }
 
         // --- KAS FUNCTIONS ---
@@ -2421,6 +2451,7 @@
                 renderKas();
             } else { alert("Password Salah!"); } 
         }
+
         function simpanKasDariForm() { 
             if (!isAdminKasUnlocked) return; const currentDateStr = getFormatTanggalSaja(); 
             document.querySelectorAll('.kas-checkbox-input').forEach(input => { 
@@ -2431,12 +2462,15 @@
             }); 
             simpanDataKeCloud(); isAdminKasUnlocked = false; document.getElementById('admin-area-kas').classList.add('locked'); 
             document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-lock"></i> Mode Bendahara'; document.getElementById('btn-save-kas').style.display = "none"; 
-            renderAllViews(); alert("Buku Uang Operasional tersinkron!"); 
+            renderAllViews(); alert("Buku Uang Operasional tersimpan dan tersinkron ke cloud!"); 
         }
+
+        // PERBAIKAN FITUR: Download Excel Kas Bulanan yang lebih stabil menggunakan XLSX library
         function downloadExcelKas() {
             let tableHTML = `<table border="1"><thead><tr><th colspan="9" style="font-size:16px; font-weight:bold; text-align:center;">LAPORAN BENDAHARA BULAN ${activeBulanKas.toUpperCase()} (PEMASUKAN & PENGELUARAN)</th></tr>
             <tr><th colspan="9" style="background-color: #f2f2f2; text-align:center;">DATA PEMASUKAN SISWA</th></tr>
             <tr><th style="background-color: #f2f2f2;">No.</th><th style="background-color: #f2f2f2;">Nama Siswa</th><th style="background-color: #f2f2f2;">M1 (Rp)</th><th style="background-color: #f2f2f2;">M2 (Rp)</th><th style="background-color: #f2f2f2;">M3 (Rp)</th><th style="background-color: #f2f2f2;">M4 (Rp)</th><th style="background-color: #f2f2f2;">Total (Bulan Ini)</th><th style="background-color: #f2f2f2;">Keterangan</th><th style="background-color: #f2f2f2;">Tanggal Pembayaran Otomatis</th></tr></thead><tbody>`;
+            
             dataSiswa.forEach((s, idx) => {
                 let currentKas = s.kasBulan[activeBulanKas] || [false, false, false, false];
                 let currentTgl = s.kasTanggalBulan[activeBulanKas] || ["", "", "", ""];
@@ -2452,9 +2486,14 @@
             (globalSettings.pengeluaranKas || []).forEach((p, idx) => {
                 tableHTML += `<tr><td>${idx+1}</td><td colspan="2">${p.tanggal}</td><td colspan="4">${p.keterangan}</td><td>${p.user}</td><td style="color:red;">${p.nominal}</td></tr>`;
             });
+            tableHTML += `</tbody></table>`; 
 
-            tableHTML += `</tbody></table>`; let link = document.createElement("a"); link.download = `Laporan_Uang_Operasional_${activeBulanKas}.xls`; link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(tableHTML); link.click();
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = tableHTML;
+            let wb = XLSX.utils.table_to_book(tempDiv.querySelector('table'));
+            XLSX.writeFile(wb, `Laporan_Uang_Operasional_${activeBulanKas}.xlsx`);
         }
+
         function resetKasBulanan() { 
             if(confirm(`Yakin reset pemasukan khusus bulan ${activeBulanKas}? Data bulan ini akan hilang! (Data bulan lain tetap aman)`)) { 
                 dataSiswa.forEach(s => { 
@@ -3197,17 +3236,17 @@
                     <div class="message-sender">${msg.sender} ${deleteBtn}</div>
                     <div class="message-bubble">
                         ${contentHTML}
-                        <div class="message-info">${msg.time} <i class="fas fa-check"></i></div>
+                        <div class="message-info">
+                            ${msg.time}
+                        </div>
                     </div>
-                </div>`;
+                </div>
+                `;
                 container.innerHTML += bubbleHTML;
             });
-            
-            if(isChatTabActive) {
-                container.scrollTop = container.scrollHeight;
-            }
+            container.scrollTop = container.scrollHeight;
         }
-        
+
         function tampilkanNotifikasiChat(msgObj) {
             let curName = document.getElementById('header-user-fullname').innerText;
             if (msgObj.sender === curName) return; 
