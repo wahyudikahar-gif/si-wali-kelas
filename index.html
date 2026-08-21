@@ -347,6 +347,10 @@
                     <li id="menu-kas" onclick="switchTab('kas')">
                         <div><i class="fas fa-wallet menu-icon"></i> Uang Operasional Kelas</div>
                     </li>
+                    <li id="menu-festaba" class="admin-only-element hidden" onclick="switchTab('festaba')">
+                        <div><i class="fas fa-star menu-icon"></i> Uang Operasional FESTABA 63</div>
+                        <i class="fas fa-lock" id="lock-festaba" style="font-size:10px;"></i>
+                    </li>
                     <li id="menu-pelanggaran" onclick="switchTab('pelanggaran')">
                         <div><i class="fas fa-gavel menu-icon"></i> Pelanggaran & Pembinaan</div>
                         <i class="fas fa-lock" id="lock-pelanggaran" style="font-size:10px;"></i>
@@ -740,6 +744,93 @@
                                 </tr>
                             </thead>
                             <tbody id="tabel-body-pengeluaran">
+                                <tr><td colspan="6" style="text-align:center;">Belum ada transaksi pengeluaran.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB UANG OPERASIONAL FESTABA 63 -->
+            <div id="tab-festaba" class="tab-content">
+                <div class="panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+                        <h3><i class="fas fa-star"></i> Buku Uang Operasional FESTABA 63</h3>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items:center;">
+                            <select id="pilih-bulan-festaba" onchange="gantiBulanFestaba()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--primary); background: var(--bg-light); font-weight: bold; color: var(--primary); cursor:pointer;">
+                                <option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option>
+                                <option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                                <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option>
+                                <option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option>
+                            </select>
+                            <button id="btn-download-festaba-excel" onclick="downloadExcelFestaba()" class="btn-action excel hidden"><i class="fas fa-file-excel"></i> Laporan Excel</button>
+                            <button onclick="bukaAdminFestaba()" id="btn-admin-festaba" class="btn-action admin-only-element hidden"><i class="fas fa-lock"></i> Mode Buka Kunci</button>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card" style="background:var(--secondary)"><h4>Uang Masuk</h4><h2 id="total-semua-festaba">Rp 0</h2></div>
+                        <div class="stat-card" style="background:var(--danger)"><h4>Pengeluaran</h4><h2 id="total-pengeluaran-festaba">Rp 0</h2></div>
+                        <div class="stat-card" style="background:var(--info)"><h4>Saldo Akhir</h4><h2 id="total-saldo-festaba">Rp 0</h2></div>
+                        <div class="stat-card" style="background:var(--primary)"><h4>Siswa Menunggak</h4><h2 id="jml-tunggak-festaba">0</h2></div>
+                    </div>
+                    
+                    <div id="admin-area-festaba" class="locked">
+                        <h4 style="color:var(--primary); margin-bottom:10px;"><i class="fas fa-hand-holding-usd"></i> Tabel Pemasukan Mingguan FESTABA</h4>
+                        <div style="margin-bottom: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button id="btn-save-festaba" onclick="simpanFestabaDariForm()" class="btn-action" style="background: var(--primary); display: none;"><i class="fas fa-save"></i> Save Uang Masuk</button>
+                            <button onclick="resetFestabaBulanan()" class="btn-action danger" style="padding: 8px 14px; font-size: 12.5px;"><i class="fas fa-trash-alt"></i> Reset Bulan Ini</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="tabel-festaba-induk" class="text-center">
+                                <thead>
+                                    <tr><th style="text-align:left;">Nama Siswa</th><th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>Sisa Tagihan</th><th>Aksi</th></tr>
+                                </thead>
+                                <tbody id="tabel-body-festaba">
+                                    <tr><td colspan="7" style="text-align:center;">Belum ada data.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL PENGELUARAN FESTABA -->
+                <div class="panel admin-only-element hidden" id="panel-input-pengeluaran-festaba">
+                    <h3 style="color:var(--danger);"><i class="fas fa-money-bill-wave"></i> Form Pengeluaran FESTABA 63</h3>
+                    <input type="hidden" id="edit-index-pengeluaran-festaba" value="-1">
+                    <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; align-items: end; background: var(--bg-light); padding: 15px; border-radius: 8px; border: 1px dashed var(--danger);">
+                        <div>
+                            <label style="font-size: 12px; color:var(--text-dark);">Tanggal</label>
+                            <input type="date" id="input-tgl-pengeluaran-festaba">
+                        </div>
+                        <div>
+                            <label style="font-size: 12px; color:var(--text-dark);">Nominal (Rp)</label>
+                            <input type="number" id="input-nominal-pengeluaran-festaba" placeholder="Contoh: 50000">
+                        </div>
+                        <div>
+                            <label style="font-size: 12px; color:var(--text-dark);">Keterangan Pembelian</label>
+                            <input type="text" id="input-ket-pengeluaran-festaba" placeholder="Keperluan Festaba...">
+                        </div>
+                        <div style="display:flex; gap:5px;">
+                            <button onclick="tambahPengeluaranFestaba()" id="btn-tambah-pengeluaran-festaba" class="btn-action danger" style="width: 100%; height: 42px;"><i class="fas fa-plus"></i> Tambah</button>
+                            <button onclick="batalEditPengeluaranFestaba()" class="btn-action" style="background:#7f8c8d; height: 42px;" title="Batal Edit"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="color:var(--info); margin:0;"><i class="fas fa-receipt"></i> Laporan Transaksi Pengeluaran FESTABA</h3>
+                        <button class="btn-action danger admin-only-element hidden" onclick="hapusPengeluaranTerpilihFestaba()"><i class="fas fa-trash-alt"></i> Hapus Terpilih</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="admin-only-element hidden" style="width:40px; text-align:center;"><input type="checkbox" id="cb-all-pengeluaran-festaba" onchange="toggleAllPengeluaranFestaba(this)"></th>
+                                    <th>No</th><th>Tanggal</th><th>Keterangan / Keperluan</th><th>Nominal</th><th class="admin-only-element hidden" style="text-align:center;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabel-body-pengeluaran-festaba">
                                 <tr><td colspan="6" style="text-align:center;">Belum ada transaksi pengeluaran.</td></tr>
                             </tbody>
                         </table>
@@ -1253,6 +1344,9 @@
         const daftarBulan = ["Juli", "Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni"];
         let activeBulanAbsen = "Juli";
         let activeBulanKas = "Juli";
+        let activeBulanFestaba = "Juli";
+        const iuranFestabaPerMinggu = 5000;
+        let isAdminFestabaUnlocked = false;
 
         const emojis = ["😀","😂","🥰","😎","🤔","👍","🙏","🔥","🎉","💡","✅","❌"];
         const THEME_PRESETS = {
@@ -1366,6 +1460,7 @@
             fotoPiket2: "", catatanPiket: "", namaWaliKelas: "", namaKelas: "", fotoWaliKelas: "", namaSekolah: "",
             alamatSekolah: "", logoSekolah: "",
             pengeluaranKas: [],
+            pengeluaranFestaba: [],
             pelanggaran: [],
             pembinaan: [],
             masterPelanggaran: [
@@ -1560,6 +1655,7 @@
                             if(parsedData.siswa) dataSiswa = parsedData.siswa;
                             if(parsedData.settings) {
                                 if(!parsedData.settings.pengeluaranKas) parsedData.settings.pengeluaranKas = globalSettings.pengeluaranKas || [];
+                                if(!parsedData.settings.pengeluaranFestaba) parsedData.settings.pengeluaranFestaba = globalSettings.pengeluaranFestaba || [];
                                 if(!parsedData.settings.pelanggaran) parsedData.settings.pelanggaran = globalSettings.pelanggaran || [];
                                 if(!parsedData.settings.pembinaan) parsedData.settings.pembinaan = globalSettings.pembinaan || [];
                                 if(!parsedData.settings.masterPelanggaran) parsedData.settings.masterPelanggaran = globalSettings.masterPelanggaran;
@@ -1585,6 +1681,7 @@
                         } else {
                             if(isChatTabActive) renderChatList();
                             if(localStorage.getItem('siwali_active_tab') === 'kas' && !isAdminKasUnlocked) renderKas();
+                            if(localStorage.getItem('siwali_active_tab') === 'festaba' && !isAdminFestabaUnlocked) renderFestaba();
                             if(localStorage.getItem('siwali_active_tab') === 'absensi' && !isEditingRekap) renderTabelAbsensi4Minggu();
                             if(localStorage.getItem('siwali_active_tab') === 'pelanggaran') renderPelanggaran();
                         }
@@ -1603,6 +1700,7 @@
                         if (localData.siswa) dataSiswa = localData.siswa;
                         if(localData.settings) {
                             if(!localData.settings.pengeluaranKas) localData.settings.pengeluaranKas = [];
+                            if(!localData.settings.pengeluaranFestaba) localData.settings.pengeluaranFestaba = [];
                             if(!localData.settings.pelanggaran) localData.settings.pelanggaran = [];
                             if(!localData.settings.pembinaan) localData.settings.pembinaan = [];
                             if(!localData.settings.masterPelanggaran) localData.settings.masterPelanggaran = globalSettings.masterPelanggaran;
@@ -1638,15 +1736,28 @@
                     s.kasTanggalBulan = {};
                     s.kasTanggalBulan["Juli"] = (s.kasTanggal && s.kasTanggal.length === 4) ? [...s.kasTanggal] : ["", "", "", ""];
                 }
+                
+                // NEW: FESTABA
+                if (!s.festabaBulan) {
+                    s.festabaBulan = {};
+                    s.festabaBulan["Juli"] = [false, false, false, false];
+                }
+                if (!s.festabaTanggalBulan) {
+                    s.festabaTanggalBulan = {};
+                    s.festabaTanggalBulan["Juli"] = ["", "", "", ""];
+                }
 
                 daftarBulan.forEach(b => { 
                     if(!s.rekapBulan[b]) s.rekapBulan[b] = Array(20).fill(""); 
                     if(!s.kasBulan[b]) s.kasBulan[b] = [false, false, false, false];
                     if(!s.kasTanggalBulan[b]) s.kasTanggalBulan[b] = ["", "", "", ""];
+                    if(!s.festabaBulan[b]) s.festabaBulan[b] = [false, false, false, false];
+                    if(!s.festabaTanggalBulan[b]) s.festabaTanggalBulan[b] = ["", "", "", ""];
                 });
             });
             
             if(!globalSettings.pengeluaranKas) globalSettings.pengeluaranKas = [];
+            if(!globalSettings.pengeluaranFestaba) globalSettings.pengeluaranFestaba = [];
             if(!globalSettings.pelanggaran) globalSettings.pelanggaran = [];
             if(!globalSettings.pembinaan) globalSettings.pembinaan = [];
             if(!globalSettings.masterPelanggaran) globalSettings.masterPelanggaran = [
@@ -1776,6 +1887,7 @@
             let lockSiswa = document.getElementById('lock-siswa'); if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "var(--secondary)"; }
             let lockAbsensi = document.getElementById('lock-absensi'); if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "var(--secondary)"; }
             let lockPel = document.getElementById('lock-pelanggaran'); if(lockPel) { lockPel.className = "fas fa-check-circle"; lockPel.style.color = "var(--secondary)"; }
+            let lockFestaba = document.getElementById('lock-festaba'); if(lockFestaba) { lockFestaba.className = "fas fa-check-circle"; lockFestaba.style.color = "var(--secondary)"; }
         }
 
         function switchTab(tabName) {
@@ -1802,6 +1914,8 @@
                 renderDashboard();
             } else if (tabName === 'kas') {
                 renderKas();
+            } else if (tabName === 'festaba') {
+                renderFestaba();
             } else if (tabName === 'pelanggaran') {
                 renderPelanggaran();
             }
@@ -1820,11 +1934,12 @@
         function renderAllViews() {
             if(dataSiswa.length > 0) dataSiswa.sort((a, b) => (a.nama || "").localeCompare(b.nama || ""));
             renderDashboard(); renderDataSiswa(); renderFormAbsensi(); renderTabelAbsensi4Minggu(); 
-            renderKas(); renderPelanggaran(); renderTunggakanDashboard(); renderLunasDashboard(); handleRoleVisibility(); 
+            renderKas(); renderFestaba(); renderPelanggaran(); renderTunggakanDashboard(); renderLunasDashboard(); handleRoleVisibility(); 
         }
 
         function handleRoleVisibility() {
             const btnDownloadKasExcel = document.getElementById('btn-download-kas-excel');
+            const btnDownloadFestabaExcel = document.getElementById('btn-download-festaba-excel');
             
             document.querySelectorAll('.admin-only-setting').forEach(el => {
                 if(currentRole === 'siswa' || currentRole === 'sekretaris') {
@@ -1849,8 +1964,10 @@
             
             if (currentRole === "admin" || currentRole === "bendahara") { 
                 if (btnDownloadKasExcel) btnDownloadKasExcel.classList.remove('hidden'); 
+                if (btnDownloadFestabaExcel) btnDownloadFestabaExcel.classList.remove('hidden');
             } else { 
                 if (btnDownloadKasExcel) btnDownloadKasExcel.classList.add('hidden'); 
+                if (btnDownloadFestabaExcel) btnDownloadFestabaExcel.classList.add('hidden');
             }
         }
 
@@ -2034,14 +2151,16 @@
             
             if (idx === -1) {
                 if (dataSiswa.find(s => s.nis == nis)) { alert("NISN sudah digunakan!"); return; }
-                let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {};
+                let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {}; let festabaBulan = {}; let festabaTanggalBulan = {};
                 daftarBulan.forEach(b => {
                     rekapBulan[b] = Array(20).fill("");
                     kasBulan[b] = [false, false, false, false];
                     kasTanggalBulan[b] = ["", "", "", ""];
+                    festabaBulan[b] = [false, false, false, false];
+                    festabaTanggalBulan[b] = ["", "", "", ""];
                 });
                 
-                dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, panggilanOrtu: false });
+                dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, festabaBulan: festabaBulan, festabaTanggalBulan: festabaTanggalBulan, panggilanOrtu: false });
                 alert("Siswa baru tersimpan!");
             }
             batalFormSiswa(); simpanDataKeCloud(); renderAllViews();
@@ -2133,9 +2252,9 @@
                 jsonSiswa.forEach(row => { 
                     let nis = row['NISN'] || row['nisn'] || row['NIS'] || ''; let nama = row['Nama'] || row['nama'] || row['Nama Lengkap'] || '';
                     if (nis && nama && !dataSiswa.find(s => s.nis == nis)) {
-                        let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {};
-                        daftarBulan.forEach(b => { rekapBulan[b] = Array(20).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; });
-                        dataSiswa.push({ nis: String(nis), nama: String(nama), jk: String(row['L/P'] || 'L').toUpperCase(), hp: String(row['HP'] || '-'), foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, panggilanOrtu: false }); 
+                        let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {}; let festabaBulan = {}; let festabaTanggalBulan = {};
+                        daftarBulan.forEach(b => { rekapBulan[b] = Array(20).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""]; });
+                        dataSiswa.push({ nis: String(nis), nama: String(nama), jk: String(row['L/P'] || 'L').toUpperCase(), hp: String(row['HP'] || '-'), foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, festabaBulan: festabaBulan, festabaTanggalBulan: festabaTanggalBulan, panggilanOrtu: false }); 
                         countAdded++;
                     }
                 });
@@ -2502,6 +2621,196 @@
                 }); 
                 simpanDataKeCloud(); renderAllViews(); 
             } 
+        }
+
+        // ================== MODUL UANG OPERASIONAL FESTABA 63 ==================
+        function gantiBulanFestaba() {
+            activeBulanFestaba = document.getElementById('pilih-bulan-festaba').value;
+            renderFestaba();
+        }
+
+        function renderFestaba() {
+            let tbody = document.getElementById('tabel-body-festaba'); tbody.innerHTML = ""; let totalTerkumpulSemua = 0, totalTunggakan = 0, jumlahSiswaMenunggak = 0;
+            let isBendaharaOrAdmin = (currentRole === 'admin' || currentRole === 'bendahara');
+
+            if (dataSiswa.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data.</td></tr>`; } 
+            else {
+                dataSiswa.forEach((s, idx) => {
+                    let sFestabaArr = s.festabaBulan && s.festabaBulan[activeBulanFestaba] ? s.festabaBulan[activeBulanFestaba] : [false, false, false, false];
+                    let centang = sFestabaArr.filter(Boolean).length; 
+                    let sisaTagihan = (totalMingguKas - centang) * iuranFestabaPerMinggu; 
+                    totalTunggakan += sisaTagihan; 
+                    if(sisaTagihan > 0) jumlahSiswaMenunggak++;
+                    
+                    for (let bln of daftarBulan) {
+                        if (s.festabaBulan && s.festabaBulan[bln]) {
+                            totalTerkumpulSemua += (s.festabaBulan[bln].filter(Boolean).length * iuranFestabaPerMinggu);
+                        }
+                    }
+                    
+                    let checkboxes = ""; 
+                    for(let i=0; i < totalMingguKas; i++) { checkboxes += `<td><input type="checkbox" class="festaba-checkbox-input" style="transform:scale(1.2);" data-student="${idx}" data-week="${i}" ${sFestabaArr[i] ? 'checked' : ''} ${!isAdminFestabaUnlocked ? 'disabled' : ''}></td>`; }
+                    let waNumber = (s.hp || "").startsWith('0') ? (s.hp || "").substring(1) : (s.hp || ""); 
+                    let pesanTagihan = `Halo Bapak/Ibu/wali, menginformasikan bahwa ananda *${s.nama}* memiliki sisa tagihan Uang Operasional FESTABA 63 pada bulan *${activeBulanFestaba}* sebesar *Rp ${sisaTagihan.toLocaleString('id-ID')}*. Terima kasih banyak Bapak/Ibu. 🙏`;
+                    
+                    let waBtnHtml = isBendaharaOrAdmin ? `<button onclick="window.open('https://wa.me/62${waNumber}?text=${encodeURIComponent(pesanTagihan)}', '_blank')" class="btn-action" style="background:#25D366; padding:8px 12px; border:none; color:white; border-radius:6px; cursor:pointer;" title="Tagih via WA"><i class="fab fa-whatsapp"></i></button>` : '';
+                    
+                    tbody.innerHTML += `<tr><td style="text-align:left; white-space:nowrap;"><strong>${s.nama}</strong></td>${checkboxes}<td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${sisaTagihan.toLocaleString('id-ID')}</td><td>${waBtnHtml}</td></tr>`;
+                });
+            }
+            
+            let pengeluaranFestaba = globalSettings.pengeluaranFestaba || [];
+            let totalPengeluaran = pengeluaranFestaba.reduce((sum, item) => sum + parseInt(item.nominal), 0);
+            let saldoAkhir = totalTerkumpulSemua - totalPengeluaran;
+
+            document.getElementById('total-semua-festaba').innerText = "Rp " + totalTerkumpulSemua.toLocaleString('id-ID'); 
+            document.getElementById('total-pengeluaran-festaba').innerText = "Rp " + totalPengeluaran.toLocaleString('id-ID');
+            document.getElementById('total-saldo-festaba').innerText = "Rp " + saldoAkhir.toLocaleString('id-ID');
+            document.getElementById('jml-tunggak-festaba').innerText = jumlahSiswaMenunggak;
+
+            renderPengeluaranFestabaTabel();
+            handleRoleVisibility();
+        }
+
+        function renderPengeluaranFestabaTabel() {
+            let tbody = document.getElementById('tabel-body-pengeluaran-festaba');
+            let pengeluaranFestaba = globalSettings.pengeluaranFestaba || [];
+            tbody.innerHTML = "";
+            let btnActionVisible = (currentRole === 'admin') ? "" : "hidden";
+            
+            if (pengeluaranFestaba.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Belum ada transaksi pengeluaran.</td></tr>`;
+            } else {
+                pengeluaranFestaba.forEach((item, index) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="admin-only-element ${btnActionVisible}" style="text-align:center;"><input type="checkbox" class="cb-pengeluaran-festaba-item" value="${index}"></td>
+                            <td>${index + 1}</td>
+                            <td style="white-space:nowrap;">${item.tanggal}</td>
+                            <td><strong>${item.keterangan}</strong><br><small style="opacity:0.6;">Oleh: ${item.user}</small></td>
+                            <td style="color:var(--danger); font-weight:bold; white-space:nowrap;">Rp ${parseInt(item.nominal).toLocaleString('id-ID')}</td>
+                            <td class="admin-only-element ${btnActionVisible}" style="text-align:center; white-space:nowrap;">
+                                <button onclick="editPengeluaranFestaba(${index})" class="btn-action edit" style="padding:6px 10px;" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button onclick="hapusPengeluaranFestaba(${index})" class="btn-action danger" style="padding:6px 10px;" title="Hapus"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        function tambahPengeluaranFestaba() {
+            if (currentRole !== 'admin') return;
+            let idx = parseInt(document.getElementById('edit-index-pengeluaran-festaba').value);
+            let tgl = document.getElementById('input-tgl-pengeluaran-festaba').value;
+            let nom = document.getElementById('input-nominal-pengeluaran-festaba').value;
+            let ket = document.getElementById('input-ket-pengeluaran-festaba').value;
+            let curUser = document.getElementById('header-user-fullname').innerText;
+
+            if(!tgl || !nom || !ket) { alert("Lengkapi data pengeluaran!"); return; }
+            if(!globalSettings.pengeluaranFestaba) globalSettings.pengeluaranFestaba = [];
+            
+            if(idx === -1) {
+                globalSettings.pengeluaranFestaba.push({ tanggal: tgl, nominal: nom, keterangan: ket, user: curUser });
+            } else {
+                globalSettings.pengeluaranFestaba[idx] = { tanggal: tgl, nominal: nom, keterangan: ket, user: curUser };
+            }
+            
+            batalEditPengeluaranFestaba(); simpanDataKeCloud(); renderFestaba();
+        }
+
+        function editPengeluaranFestaba(index) {
+            let item = globalSettings.pengeluaranFestaba[index];
+            document.getElementById('input-tgl-pengeluaran-festaba').value = item.tanggal;
+            document.getElementById('input-nominal-pengeluaran-festaba').value = item.nominal;
+            document.getElementById('input-ket-pengeluaran-festaba').value = item.keterangan;
+            document.getElementById('edit-index-pengeluaran-festaba').value = index;
+            document.getElementById('btn-tambah-pengeluaran-festaba').innerHTML = '<i class="fas fa-save"></i> Update';
+        }
+
+        function batalEditPengeluaranFestaba() {
+            document.getElementById('input-tgl-pengeluaran-festaba').value = "";
+            document.getElementById('input-nominal-pengeluaran-festaba').value = "";
+            document.getElementById('input-ket-pengeluaran-festaba').value = "";
+            document.getElementById('edit-index-pengeluaran-festaba').value = "-1";
+            document.getElementById('btn-tambah-pengeluaran-festaba').innerHTML = '<i class="fas fa-plus"></i> Tambah';
+        }
+
+        function hapusPengeluaranFestaba(index) {
+            if(confirm("Hapus catatan pengeluaran FESTABA ini?")) {
+                globalSettings.pengeluaranFestaba.splice(index, 1);
+                simpanDataKeCloud(); renderFestaba();
+            }
+        }
+
+        function toggleAllPengeluaranFestaba(source) { document.querySelectorAll('.cb-pengeluaran-festaba-item').forEach(cb => cb.checked = source.checked); }
+
+        function hapusPengeluaranTerpilihFestaba() {
+            let checked = document.querySelectorAll('.cb-pengeluaran-festaba-item:checked');
+            if(checked.length === 0) { alert("Pilih minimal 1 data pengeluaran!"); return; }
+            if(confirm(`Yakin ingin menghapus ${checked.length} data pengeluaran permanen?`)) {
+                let indexes = Array.from(checked).map(cb => parseInt(cb.value)).sort((a,b)=>b-a);
+                indexes.forEach(idx => globalSettings.pengeluaranFestaba.splice(idx, 1));
+                simpanDataKeCloud(); renderFestaba(); document.getElementById('cb-all-pengeluaran-festaba').checked = false;
+            }
+        }
+
+        function bukaAdminFestaba() { 
+            if (currentRole !== "admin") { alert("Akses Ditolak! Hanya Admin."); return; } 
+            let pass = prompt("Password Admin FESTABA:"); 
+            if(pass === "admin123") { 
+                isAdminFestabaUnlocked = true; document.getElementById('admin-area-festaba').classList.remove('locked'); 
+                document.getElementById('btn-admin-festaba').innerHTML = '<i class="fas fa-unlock"></i> Mode Aktif'; document.getElementById('btn-save-festaba').style.display = "inline-block"; 
+                renderFestaba();
+            } else { alert("Password Salah!"); } 
+        }
+
+        function simpanFestabaDariForm() { 
+            if (!isAdminFestabaUnlocked) return; const currentDateStr = getFormatTanggalSaja(); 
+            document.querySelectorAll('.festaba-checkbox-input').forEach(input => { 
+                let studentIdx = parseInt(input.getAttribute('data-student')); let weekIdx = parseInt(input.getAttribute('data-week')); 
+                let isCheckedNow = input.checked; let wasCheckedBefore = dataSiswa[studentIdx].festabaBulan[activeBulanFestaba][weekIdx]; 
+                dataSiswa[studentIdx].festabaBulan[activeBulanFestaba][weekIdx] = isCheckedNow; 
+                if (isCheckedNow && !wasCheckedBefore) { dataSiswa[studentIdx].festabaTanggalBulan[activeBulanFestaba][weekIdx] = currentDateStr; } else if (!isCheckedNow) { dataSiswa[studentIdx].festabaTanggalBulan[activeBulanFestaba][weekIdx] = ""; } 
+            }); 
+            simpanDataKeCloud(); isAdminFestabaUnlocked = false; document.getElementById('admin-area-festaba').classList.add('locked'); 
+            document.getElementById('btn-admin-festaba').innerHTML = '<i class="fas fa-lock"></i> Mode Buka Kunci'; document.getElementById('btn-save-festaba').style.display = "none"; 
+            renderFestaba(); alert("Buku Uang Operasional FESTABA tersimpan dan tersinkron ke cloud!"); 
+        }
+
+        function resetFestabaBulanan() { 
+            if(confirm(`Yakin reset pemasukan khusus bulan ${activeBulanFestaba}? Data bulan ini akan hilang!`)) { 
+                dataSiswa.forEach(s => { s.festabaBulan[activeBulanFestaba] = [false, false, false, false]; s.festabaTanggalBulan[activeBulanFestaba] = ["", "", "", ""]; }); 
+                simpanDataKeCloud(); renderFestaba(); 
+            } 
+        }
+
+        function downloadExcelFestaba() {
+            let tableHTML = `<table border="1"><thead><tr><th colspan="9" style="font-size:16px; font-weight:bold; text-align:center;">LAPORAN FESTABA BULAN ${activeBulanFestaba.toUpperCase()} (PEMASUKAN & PENGELUARAN)</th></tr>
+            <tr><th colspan="9" style="background-color: #f2f2f2; text-align:center;">DATA PEMASUKAN SISWA</th></tr>
+            <tr><th style="background-color: #f2f2f2;">No.</th><th style="background-color: #f2f2f2;">Nama Siswa</th><th style="background-color: #f2f2f2;">M1 (Rp)</th><th style="background-color: #f2f2f2;">M2 (Rp)</th><th style="background-color: #f2f2f2;">M3 (Rp)</th><th style="background-color: #f2f2f2;">M4 (Rp)</th><th style="background-color: #f2f2f2;">Total (Bulan Ini)</th><th style="background-color: #f2f2f2;">Keterangan</th><th style="background-color: #f2f2f2;">Tanggal Pembayaran Otomatis</th></tr></thead><tbody>`;
+            
+            dataSiswa.forEach((s, idx) => {
+                let currentFestaba = s.festabaBulan[activeBulanFestaba] || [false, false, false, false];
+                let currentTgl = s.festabaTanggalBulan[activeBulanFestaba] || ["", "", "", ""];
+                let m1 = currentFestaba[0] ? iuranFestabaPerMinggu : 0; let m2 = currentFestaba[1] ? iuranFestabaPerMinggu : 0; let m3 = currentFestaba[2] ? iuranFestabaPerMinggu : 0; let m4 = currentFestaba[3] ? iuranFestabaPerMinggu : 0; let totalSiswa = m1 + m2 + m3 + m4; 
+                let hitungCentang = currentFestaba.filter(Boolean).length; let keterangan = hitungCentang === totalMingguKas ? "Lunas" : `Menunggak ${totalMingguKas - hitungCentang} Minggu`; 
+                let tglBayar = []; for(let i = 0; i < 4; i++) { if(currentFestaba[i] && currentTgl[i]) tglBayar.push(`M${i+1}: ${currentTgl[i]}`); } 
+                let stringTanggal = tglBayar.length > 0 ? tglBayar.join(' | ') : '-'; 
+                tableHTML += `<tr><td style="text-align:center;">${idx + 1}</td><td><strong>${s.nama}</strong></td><td style="text-align:right;">${m1}</td><td style="text-align:right;">${m2}</td><td style="text-align:right;">${m3}</td><td style="text-align:right;">${m4}</td><td style="text-align:right; font-weight:bold;">${totalSiswa}</td><td style="text-align:center;">${keterangan}</td><td>${stringTanggal}</td></tr>`; 
+            });
+            
+            tableHTML += `<tr><td colspan="9"></td></tr><tr><th colspan="9" style="background-color: #f2f2f2; text-align:center;">DATA PENGELUARAN (SEMUA BULAN)</th></tr>`;
+            tableHTML += `<tr><th>No</th><th colspan="2">Tanggal</th><th colspan="4">Keterangan</th><th>Pencatat</th><th>Nominal</th></tr>`;
+            (globalSettings.pengeluaranFestaba || []).forEach((p, idx) => {
+                tableHTML += `<tr><td>${idx+1}</td><td colspan="2">${p.tanggal}</td><td colspan="4">${p.keterangan}</td><td>${p.user}</td><td style="color:red;">${p.nominal}</td></tr>`;
+            });
+            tableHTML += `</tbody></table>`; 
+
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = tableHTML;
+            let wb = XLSX.utils.table_to_book(tempDiv.querySelector('table'));
+            XLSX.writeFile(wb, `Laporan_FESTABA_${activeBulanFestaba}.xlsx`);
         }
 
         // ================== MODUL PELANGGARAN & PEMBINAAN ==================
@@ -3138,150 +3447,161 @@
             alert("Profil Wali Kelas tersimpan!");
         }
         function editWaliKelas() { document.getElementById('input-nama-wali').value = globalSettings.namaWaliKelas || ""; document.getElementById('input-nama-kelas').value = globalSettings.namaKelas || ""; }
-        function hapusWaliKelas() {
-            globalSettings.namaWaliKelas = ""; globalSettings.namaKelas = ""; globalSettings.fotoWaliKelas = "";
-            document.getElementById('input-nama-wali').value = ""; document.getElementById('input-nama-kelas').value = "";
-            let pFoto = document.getElementById('preview-foto-wali'); if(pFoto) { pFoto.src = ""; pFoto.style.display = "none"; }
-            simpanDataKeCloud(); loadSettingsToUI();
+       function hapusWaliKelas() {
+            globalSettings.namaWaliKelas = ""; 
+            globalSettings.namaKelas = ""; 
+            globalSettings.fotoWaliKelas = "";
+            document.getElementById('input-nama-wali').value = ""; 
+            document.getElementById('input-nama-kelas').value = "";
+            
+            let pFoto = document.getElementById('preview-foto-wali'); 
+            if(pFoto) { 
+                pFoto.src = ""; 
+                pFoto.style.display = "none"; 
+            }
+            window.tempFotoWali = "";
+            simpanDataKeCloud(); 
+            loadSettingsToUI(); 
+            alert("Profil Wali Kelas berhasil dihapus!");
         }
 
+        // ================== PENGATURAN CATATAN PIKET ==================
         function saveCatatanPiket() {
-            let teks = document.getElementById('input-catatan-piket').value; if(!teks.trim()) { alert("Isi kosong!"); return; }
-            globalSettings.catatanPiket = teks; simpanDataKeCloud(); loadSettingsToUI(); alert("Catatan piket tersinkron!");
-        }
-        function hapusCatatanPiket() { globalSettings.catatanPiket = ""; document.getElementById('input-catatan-piket').value = ""; simpanDataKeCloud(); loadSettingsToUI(); }
-
-        // --- FORUM DISKUSI ---
-        function handleChatFileUpload(event) {
-            const file = event.target.files[0];
-            if(!file) return;
-            if(file.size > 1024 * 1024) { 
-                alert("Maksimal ukuran file adalah 1 MB untuk menjaga performa Cloud Google.");
-                return;
-            }
-            
-            let curName = document.getElementById('header-user-fullname').innerText;
-            compressImageAndProcess(file, function(base64Data, type) {
-                let time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                let msgObj = {
-                    sender: curName,
-                    text: "",
-                    file: base64Data,
-                    fileType: type,
-                    fileName: file.name,
-                    time: time
-                };
-                globalChatData.push(msgObj);
-                simpanDataKeCloud();
-                renderChatList();
-            }, 600); 
+            let teks = document.getElementById('input-catatan-piket').value;
+            globalSettings.catatanPiket = teks;
+            simpanDataKeCloud(); 
+            loadSettingsToUI(); 
+            alert("Catatan Piket tersimpan!");
         }
 
-        function kirimPesanSistem() {
-            let input = document.getElementById('chat-input-field'); 
-            let textValue = input.value.trim();
-            if(textValue === '') return;
-            
-            let curName = document.getElementById('header-user-fullname').innerText;
-            let time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            let msgObj = {
-                sender: curName,
-                text: textValue,
-                file: "",
-                fileType: "",
-                fileName: "",
-                time: time
-            };
-            
-            globalChatData.push(msgObj);
-            simpanDataKeCloud();
-            renderChatList();
-            input.value = "";
+        function hapusCatatanPiket() {
+            globalSettings.catatanPiket = "";
+            document.getElementById('input-catatan-piket').value = "";
+            simpanDataKeCloud(); 
+            loadSettingsToUI(); 
+            alert("Catatan Piket dihapus!");
         }
-        function hapusPesan(index) {
-            if(confirm("Yakin ingin menghapus pesan ini dari server?")) {
-                globalChatData.splice(index, 1); 
-                simpanDataKeCloud(); 
-                renderChatList(); 
-            }
-        }
+
+        // ================== FORUM DISKUSI (CHAT) ==================
         function renderChatList() {
             let container = document.getElementById('chat-messages-container');
-            let curName = document.getElementById('header-user-fullname').innerText;
+            if(!container) return;
+            container.innerHTML = "";
             
-            if (!globalChatData || globalChatData.length === 0) {
-                container.innerHTML = `<div style="text-align:center; color:var(--text-dark); opacity:0.6; font-size:13px; margin-top:30px;">Belum ada pesan di forum ini.</div>`;
+            if (globalChatData.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-dark); opacity:0.6; font-size:13px; margin-top:30px;">Belum ada pesan di forum kelas ini.</div>`;
                 return;
             }
+
+            let curUser = document.getElementById('header-user-fullname').innerText;
             
-            container.innerHTML = "";
-            globalChatData.forEach((msg, index) => {
-                let isMe = (msg.sender === curName);
+            globalChatData.forEach(chat => {
+                let isMe = (chat.sender === curUser);
                 let alignClass = isMe ? "right" : "left";
                 
-                let deleteBtn = isAdminLoggedIn ? `<i class="fas fa-trash" style="cursor:pointer; color:var(--danger); font-size:11px; margin-left:10px;" onclick="hapusPesan(${index})"></i>` : '';
-                
-                let contentHTML = msg.text;
-                if (msg.file) {
-                    if (msg.fileType === "image") {
-                        contentHTML = `<img src="${msg.file}" alt="Lampiran" onclick="window.open('${msg.file}')"><br>${msg.text}`;
-                    } else if (msg.fileType === "pdf") {
-                        contentHTML = `<a href="${msg.file}" download="${msg.fileName}" style="color:var(--info); font-weight:bold;"><i class="fas fa-file-pdf"></i> Download PDF</a><br>${msg.text}`;
+                let attachHtml = "";
+                if(chat.attachment) {
+                    if(chat.attachType === 'pdf') {
+                        attachHtml = `<br><a href="${chat.attachment}" download="Lampiran.pdf" style="color:var(--info); font-size:12px; font-weight:bold; margin-top: 8px; display: inline-block;"><i class="fas fa-file-pdf"></i> Download PDF Lampiran</a>`;
+                    } else {
+                        attachHtml = `<br><img src="${chat.attachment}" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${chat.attachment}')">`;
                     }
                 }
-                
-                let bubbleHTML = `
-                <div class="message-wrapper ${alignClass}">
-                    <div class="message-sender">${msg.sender} ${deleteBtn}</div>
-                    <div class="message-bubble">
-                        ${contentHTML}
-                        <div class="message-info">
-                            ${msg.time}
+
+                container.innerHTML += `
+                    <div class="message-wrapper ${alignClass}">
+                        <div class="message-sender">
+                            <img src="${chat.avatar}"> ${chat.sender}
+                        </div>
+                        <div class="message-bubble">
+                            ${linkify(chat.message)}
+                            ${attachHtml}
+                            <div class="message-info">${chat.time}</div>
                         </div>
                     </div>
-                </div>
                 `;
-                container.innerHTML += bubbleHTML;
             });
+            
+            // Auto scroll ke bawah
             container.scrollTop = container.scrollHeight;
         }
 
-        function tampilkanNotifikasiChat(msgObj) {
-            let curName = document.getElementById('header-user-fullname').innerText;
-            if (msgObj.sender === curName) return; 
+        function kirimPesanSistem() {
+            let input = document.getElementById('chat-input-field');
+            let msg = input.value.trim();
+            let attachBase64 = window.tempChatAttachment || "";
+            let attachType = window.tempChatAttachType || "";
             
-            if(!isChatTabActive) {
-                document.getElementById('badge-notif-forum').style.display = 'inline-block';
+            if (!msg && !attachBase64) return;
+
+            let curUser = document.getElementById('header-user-fullname').innerText;
+            let curAvatar = document.getElementById('header-profile-pic').src;
+            let timeStr = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+
+            globalChatData.push({
+                id: Date.now(),
+                sender: curUser,
+                avatar: curAvatar,
+                message: msg,
+                attachment: attachBase64,
+                attachType: attachType,
+                time: timeStr
+            });
+            
+            totalChatCount = globalChatData.length;
+            simpanDataKeCloud();
+            
+            // Reset input
+            input.value = "";
+            window.tempChatAttachment = "";
+            window.tempChatAttachType = "";
+            
+            renderChatList();
+        }
+
+        function hapusSemuaChat() {
+            if(confirm("Yakin ingin membersihkan semua pesan di forum kelas? Data tidak bisa dikembalikan.")) {
+                globalChatData = [];
+                totalChatCount = 0;
+                simpanDataKeCloud();
+                renderChatList();
+            }
+        }
+
+        function handleChatFileUpload(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            
+            if(file.size > 1024 * 1024) { 
+                alert("Ukuran file terlalu besar! Maksimal 1MB."); 
+                event.target.value = ''; 
+                return; 
             }
             
+            compressImageAndProcess(file, function(base64Data, type) {
+                window.tempChatAttachment = base64Data;
+                window.tempChatAttachType = type;
+                alert("Lampiran siap! Silakan ketik pesan Anda dan tekan tombol kirim.");
+            }, 600);
+        }
+
+        function tampilkanNotifikasiChat(chatObj) {
+            if(isChatTabActive) return; 
+            
+            let curUser = document.getElementById('header-user-fullname').innerText;
+            if(chatObj.sender === curUser) return;
+            
+            let badge = document.getElementById('badge-notif-forum');
+            if(badge) badge.style.display = 'inline-block';
+            
             if ("Notification" in window && Notification.permission === "granted") {
-                let notifText = msgObj.text || "Mengirim lampiran";
-                new Notification("Pesan Baru di Forum Kelas", {
-                    body: `${msgObj.sender}: ${notifText}`,
-                    icon: "https://ui-avatars.com/api/?name=SI+Wali&background=114B5F&color=fff"
+                new Notification(`Pesan baru dari ${chatObj.sender}`, {
+                    body: chatObj.message || "Mengirim lampiran...",
+                    icon: chatObj.avatar
                 });
             }
         }
 
-        function hapusSemuaChat() {
-            if (confirm("⚠️ PERINGATAN: Tindakan ini akan menghapus SELURUH pesan di forum. Yakin ingin membersihkan forum?")) {
-                globalChatData = []; 
-                simpanDataKeCloud(); 
-                renderChatList(); 
-                alert("Semua chat telah dihapus!");
-            }
-        }
-    </script>
-    <script>
-        window.addEventListener('click', function() {
-            var audio = document.getElementById('bg-music-mars');
-            if (audio && audio.paused) {
-                audio.play().catch(function(error) {
-                    console.log("Browser menolak autoplay, menunggu interaksi pengguna.");
-                });
-            }
-        }, { once: true });
     </script>
 </body>
 </html>
