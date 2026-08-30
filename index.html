@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SI-WALI - Kelas Digital</title>
+    <title>WK PINTAR - Kelas Digital</title>
     <!-- Import Google Fonts untuk Pilihan Tema Font -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap');
@@ -288,7 +288,7 @@
 
     <div id="login-page">
         <div class="login-container">
-            <h2>SI-WALI</h2>
+            <h2>WK PINTAR</h2>
             <p class="subtitle">Portal Login & Presensi Mandiri</p>
 
             <form onsubmit="prosesLogin(event)">
@@ -1136,7 +1136,7 @@
                     <div class="form-group">
                         <label>Pilih Tema Preset</label>
                         <select id="theme-preset" onchange="applyPresetTheme()" style="max-width: 400px;">
-                            <option value="default">Default (SI-WALI Original)</option>
+                            <option value="default">Default (WK PINTAR Original)</option>
                             <option value="ocean">Ocean Blue</option>
                             <option value="sunset">Sunset Glow</option>
                             <option value="nature">Nature Green</option>
@@ -1345,7 +1345,7 @@
         let activeBulanAbsen = "Juli";
         let activeBulanKas = "Juli";
         let activeBulanFestaba = "Juli";
-        const iuranFestabaPerMinggu = 5000;
+        const iuranFestabaPerMinggu = 10000;
         let isAdminFestabaUnlocked = false;
 
         const emojis = ["😀","😂","🥰","😎","🤔","👍","🙏","🔥","🎉","💡","✅","❌"];
@@ -1386,8 +1386,9 @@
         }
 
         function linkify(text) {
+            if (!text) return "";
             var urlRegex = /(https?:\/\/[^\s]+)/g;
-            return text.replace(urlRegex, function(url) {
+            return String(text).replace(urlRegex, function(url) {
                 return '<a href="' + url + '" target="_blank" style="color:var(--info); text-decoration:underline;">' + url + '</a>';
             });
         }
@@ -1491,7 +1492,7 @@
             let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
             let downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "Backup_SIWALI_" + new Date().getTime() + ".json");
+            downloadAnchorNode.setAttribute("download", "Backup_WKPINTAR_" + new Date().getTime() + ".json");
             document.body.appendChild(downloadAnchorNode); 
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
@@ -1514,7 +1515,7 @@
                         jalankanSistemAwal();
                         alert("Berhasil! Data lama telah dipulihkan dan disinkronkan ke Cloud.");
                     } else {
-                        alert("Format file JSON tidak valid / tidak sesuai sistem SI-WALI.");
+                        alert("Format file JSON tidak valid / tidak sesuai sistem WK PINTAR.");
                     }
                 } catch (err) {
                     alert("Terjadi kesalahan saat membaca file JSON.");
@@ -3508,100 +3509,108 @@
                     }
                 }
 
-                container.innerHTML += `
-                    <div class="message-wrapper ${alignClass}">
-                        <div class="message-sender">
-                            <img src="${chat.avatar}"> ${chat.sender}
+               container.innerHTML += `
+                        <div class="message-wrapper ${alignClass}">
+                            <div class="message-sender"><img src="${chat.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(chat.sender) + '&background=random&color=fff'}"> ${chat.sender}</div>
+                            <div class="message-bubble">
+                                ${linkify(chat.text)}
+                                ${attachHtml}
+                                <div class="message-info">${chat.time}</div>
+                            </div>
                         </div>
-                        <div class="message-bubble">
-                            ${linkify(chat.message)}
-                            ${attachHtml}
-                            <div class="message-info">${chat.time}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // Auto scroll ke bawah
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function kirimPesanSistem() {
-            let input = document.getElementById('chat-input-field');
-            let msg = input.value.trim();
-            let attachBase64 = window.tempChatAttachment || "";
-            let attachType = window.tempChatAttachType || "";
-            
-            if (!msg && !attachBase64) return;
-
-            let curUser = document.getElementById('header-user-fullname').innerText;
-            let curAvatar = document.getElementById('header-profile-pic').src;
-            let timeStr = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-
-            globalChatData.push({
-                id: Date.now(),
-                sender: curUser,
-                avatar: curAvatar,
-                message: msg,
-                attachment: attachBase64,
-                attachType: attachType,
-                time: timeStr
-            });
-            
-            totalChatCount = globalChatData.length;
-            simpanDataKeCloud();
-            
-            // Reset input
-            input.value = "";
-            window.tempChatAttachment = "";
-            window.tempChatAttachType = "";
-            
-            renderChatList();
-        }
-
-        function hapusSemuaChat() {
-            if(confirm("Yakin ingin membersihkan semua pesan di forum kelas? Data tidak bisa dikembalikan.")) {
-                globalChatData = [];
-                totalChatCount = 0;
-                simpanDataKeCloud();
-                renderChatList();
-            }
-        }
-
-        function handleChatFileUpload(event) {
-            const file = event.target.files[0];
-            if(!file) return;
-            
-            if(file.size > 1024 * 1024) { 
-                alert("Ukuran file terlalu besar! Maksimal 1MB."); 
-                event.target.value = ''; 
-                return; 
-            }
-            
-            compressImageAndProcess(file, function(base64Data, type) {
-                window.tempChatAttachment = base64Data;
-                window.tempChatAttachType = type;
-                alert("Lampiran siap! Silakan ketik pesan Anda dan tekan tombol kirim.");
-            }, 600);
-        }
-
-        function tampilkanNotifikasiChat(chatObj) {
-            if(isChatTabActive) return; 
-            
-            let curUser = document.getElementById('header-user-fullname').innerText;
-            if(chatObj.sender === curUser) return;
-            
-            let badge = document.getElementById('badge-notif-forum');
-            if(badge) badge.style.display = 'inline-block';
-            
-            if ("Notification" in window && Notification.permission === "granted") {
-                new Notification(`Pesan baru dari ${chatObj.sender}`, {
-                    body: chatObj.message || "Mengirim lampiran...",
-                    icon: chatObj.avatar
+                    `;
                 });
+                
+                // Auto-scroll ke bawah saat ada pesan baru
+                container.scrollTop = container.scrollHeight;
             }
-        }
 
-    </script>
-</body>
+            // Variabel penampung file lampiran chat sementara
+            let tempChatAttachment = "";
+            let tempChatAttachType = "";
+
+            function handleChatFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                // Pengecekan ukuran maksimal (1MB)
+                if (file.size > 1024 * 1024) {
+                    alert("Ukuran file maksimal 1MB!");
+                    event.target.value = '';
+                    return;
+                }
+
+                compressImageAndProcess(file, function(base64Data, type) {
+                    tempChatAttachment = base64Data;
+                    tempChatAttachType = type;
+                    alert("Lampiran siap dikirim. Silakan ketik pesan dan tekan tombol kirim.");
+                }, 800);
+            }
+
+            function kirimPesanSistem() {
+                let inputField = document.getElementById('chat-input-field');
+                let text = inputField.value.trim();
+                
+                if (!text && !tempChatAttachment) return;
+
+                let curUser = document.getElementById('header-user-fullname').innerText;
+                let curAvatar = document.getElementById('header-profile-pic').src;
+                let now = new Date();
+                let timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+                
+                let newChat = {
+                    id: Date.now(),
+                    sender: curUser,
+                    avatar: curAvatar,
+                    text: text,
+                    time: timeStr,
+                    attachment: tempChatAttachment,
+                    attachType: tempChatAttachType
+                };
+
+                // Batasi jumlah history chat maksimal 500 pesan agar memori tidak berat
+                if (globalChatData.length >= 500) {
+                    globalChatData.shift(); 
+                }
+
+                globalChatData.push(newChat);
+                totalChatCount = globalChatData.length;
+                
+                // Reset input
+                inputField.value = "";
+                tempChatAttachment = "";
+                tempChatAttachType = "";
+                document.getElementById('chat-file-upload').value = '';
+                
+                renderChatList();
+                simpanDataKeCloud();
+            }
+
+            function hapusSemuaChat() {
+                if (confirm("Yakin ingin membersihkan semua riwayat forum diskusi kelas?")) {
+                    globalChatData = [];
+                    totalChatCount = 0;
+                    simpanDataKeCloud();
+                    renderChatList();
+                }
+            }
+
+            function tampilkanNotifikasiChat(lastChat) {
+                if (isChatTabActive) return; // Jangan notif jika sedang buka tab chat
+                
+                let curUser = document.getElementById('header-user-fullname').innerText;
+                if (lastChat.sender === curUser) return; // Jangan notif chat sendiri
+
+                let badge = document.getElementById('badge-notif-forum');
+                if (badge) badge.style.display = 'inline-block';
+
+                if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification(`Pesan Baru di Forum WK PINTAR`, {
+                        body: `${lastChat.sender}: ${lastChat.text}`,
+                        icon: lastChat.avatar || 'https://ui-avatars.com/api/?name=Chat&background=45B69C&color=fff'
+                    });
+                }
+            }
+        </script>
+    </body>
 </html>
