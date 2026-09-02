@@ -1650,10 +1650,17 @@
                 try {
                     if(textData && textData.trim() !== "" && textData.trim() !== "Sukses") {
                         let parsedData = JSON.parse(textData);
+                        
+                        // SAFETY CHECK: Mencegah data di-reset apabila cloud sementara mengirim data kosong/gagal parse penuh.
+                        if (!parsedData || (Array.isArray(parsedData) && parsedData.length === 0 && dataSiswa.length > 0)) {
+                             console.warn("Cloud mengembalikan data kosong, abaikan timpaan lokal.");
+                             return;
+                        }
+
                         if (Array.isArray(parsedData)) {
                             dataSiswa = parsedData;
                         } else {
-                            if(parsedData.siswa) dataSiswa = parsedData.siswa;
+                            if(parsedData.siswa && parsedData.siswa.length > 0) dataSiswa = parsedData.siswa;
                             if(parsedData.settings) {
                                 if(!parsedData.settings.pengeluaranKas) parsedData.settings.pengeluaranKas = globalSettings.pengeluaranKas || [];
                                 if(!parsedData.settings.pengeluaranFestaba) parsedData.settings.pengeluaranFestaba = globalSettings.pengeluaranFestaba || [];
@@ -3486,131 +3493,123 @@
         // ================== FORUM DISKUSI (CHAT) ==================
         function renderChatList() {
             let container = document.getElementById('chat-messages-container');
-            if(!container) return;
+            if (!container) return;
             container.innerHTML = "";
-            
-            if (globalChatData.length === 0) {
-                container.innerHTML = `<div style="text-align:center; color:var(--text-dark); opacity:0.6; font-size:13px; margin-top:30px;">Belum ada pesan di forum kelas ini.</div>`;
+
+            if (!globalChatData || globalChatData.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-dark); opacity:0.6; font-size:13px; margin-top:30px;">Belum ada pesan di forum ini. Jadilah yang pertama menyapa!</div>`;
                 return;
             }
 
-            let curUser = document.getElementById('header-user-fullname').innerText;
-            
-            globalChatData.forEach(chat => {
-                let isMe = (chat.sender === curUser);
+            let currentUser = document.getElementById('header-user-fullname').innerText;
+
+            globalChatData.forEach(msg => {
+                let isMe = (msg.sender === currentUser);
                 let alignClass = isMe ? "right" : "left";
                 
-                let attachHtml = "";
-                if(chat.attachment) {
-                    if(chat.attachType === 'pdf') {
-                        attachHtml = `<br><a href="${chat.attachment}" download="Lampiran.pdf" style="color:var(--info); font-size:12px; font-weight:bold; margin-top: 8px; display: inline-block;"><i class="fas fa-file-pdf"></i> Download PDF Lampiran</a>`;
-                    } else {
-                        attachHtml = `<br><img src="${chat.attachment}" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px; cursor:pointer;" onclick="window.open('${chat.attachment}')">`;
+                let mediaHtml = "";
+                if (msg.media) {
+                    if (msg.mediaType === "image") {
+                        mediaHtml = `<img src="${msg.media}" onclick="window.open('${msg.media}')" style="max-width:100%; max-height:250px; display:block; margin-top:5px; border-radius:8px; cursor:pointer;">`;
+                    } else if (msg.mediaType === "pdf") {
+                        mediaHtml = `<a href="${msg.media}" target="_blank" style="display:inline-block; margin-top:5px; color:var(--primary); font-weight:bold; text-decoration:none; background:rgba(0,0,0,0.05); padding:8px 12px; border-radius:6px;"><i class="fas fa-file-pdf" style="color:#e74c3c;"></i> Buka Dokumen PDF</a>`;
                     }
                 }
 
-               container.innerHTML += `
-                        <div class="message-wrapper ${alignClass}">
-                            <div class="message-sender"><img src="${chat.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(chat.sender) + '&background=random&color=fff'}"> ${chat.sender}</div>
-                            <div class="message-bubble">
-                                ${linkify(chat.text)}
-                                ${attachHtml}
-                                <div class="message-info">${chat.time}</div>
-                            </div>
+                let teksHtml = msg.text ? linkify(msg.text) : "";
+
+                container.innerHTML += `
+                    <div class="message-wrapper ${alignClass}">
+                        <div class="message-sender">${msg.sender} <span style="font-size:9px; opacity:0.7; font-weight:normal; margin-left:4px;">(${msg.role || 'Siswa'})</span></div>
+                        <div class="message-bubble">
+                            ${teksHtml}
+                            ${mediaHtml}
+                            <div class="message-info">${msg.time}</div>
                         </div>
-                    `;
-                });
-                
-                // Auto-scroll ke bawah saat ada pesan baru
-                container.scrollTop = container.scrollHeight;
+                    </div>
+                `;
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function kirimPesanSistem(teks = null, mediaBase64 = null, mediaType = null) {
+            let inputEl = document.getElementById('chat-input-field');
+            let textVal = teks !== null ? teks : (inputEl ? inputEl.value.trim() : "");
+            
+            if (!textVal && !mediaBase64) return;
+            
+            let curUser = document.getElementById('header-user-fullname').innerText;
+            let curRole = document.getElementById('header-nama-kelas').innerText;
+            
+            let newMsg = {
+                sender: curUser,
+                role: curRole,
+                text: textVal,
+                media: mediaBase64,
+                mediaType: mediaType,
+                time: getWaktuSekarang()
+            };
+
+            if (!globalChatData) globalChatData = [];
+            globalChatData.push(newMsg);
+            totalChatCount = globalChatData.length;
+            
+            if (inputEl) inputEl.value = "";
+            let emojiPicker = document.getElementById('emoji-picker-container');
+            if (emojiPicker) emojiPicker.style.display = "none";
+            
+            renderChatList();
+            simpanDataKeCloud();
+        }
+
+        function handleChatFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Batasi ukuran file (Max 1MB untuk performa Cloud / Local Storage)
+            if (file.size > 1024 * 1024) {
+                alert("Ukuran file terlalu besar! Maksimal 1MB.");
+                event.target.value = '';
+                return;
             }
 
-            // Variabel penampung file lampiran chat sementara
-            let tempChatAttachment = "";
-            let tempChatAttachType = "";
+            compressImageAndProcess(file, function(base64Data, type) {
+                let caption = prompt("Tambahkan keterangan pesan (opsional):", "");
+                if (caption === null) caption = ""; // Handle jika user klik cancel
+                kirimPesanSistem(caption, base64Data, type);
+            }, 800);
+            
+            event.target.value = '';
+        }
 
-            function handleChatFileUpload(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                
-                // Pengecekan ukuran maksimal (1MB)
-                if (file.size > 1024 * 1024) {
-                    alert("Ukuran file maksimal 1MB!");
-                    event.target.value = '';
-                    return;
-                }
-
-                compressImageAndProcess(file, function(base64Data, type) {
-                    tempChatAttachment = base64Data;
-                    tempChatAttachType = type;
-                    alert("Lampiran siap dikirim. Silakan ketik pesan dan tekan tombol kirim.");
-                }, 800);
+        function hapusSemuaChat() {
+            if (currentRole !== 'admin') {
+                alert("Hanya Admin/Wali Kelas yang memiliki akses untuk membersihkan forum!");
+                return;
             }
-
-            function kirimPesanSistem() {
-                let inputField = document.getElementById('chat-input-field');
-                let text = inputField.value.trim();
-                
-                if (!text && !tempChatAttachment) return;
-
-                let curUser = document.getElementById('header-user-fullname').innerText;
-                let curAvatar = document.getElementById('header-profile-pic').src;
-                let now = new Date();
-                let timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-                
-                let newChat = {
-                    id: Date.now(),
-                    sender: curUser,
-                    avatar: curAvatar,
-                    text: text,
-                    time: timeStr,
-                    attachment: tempChatAttachment,
-                    attachType: tempChatAttachType
-                };
-
-                // Batasi jumlah history chat maksimal 500 pesan agar memori tidak berat
-                if (globalChatData.length >= 500) {
-                    globalChatData.shift(); 
-                }
-
-                globalChatData.push(newChat);
-                totalChatCount = globalChatData.length;
-                
-                // Reset input
-                inputField.value = "";
-                tempChatAttachment = "";
-                tempChatAttachType = "";
-                document.getElementById('chat-file-upload').value = '';
-                
-                renderChatList();
+            if (confirm("PERINGATAN: Yakin ingin menghapus SELURUH riwayat obrolan di forum kelas ini secara permanen?")) {
+                globalChatData = [];
+                totalChatCount = 0;
                 simpanDataKeCloud();
+                renderChatList();
             }
+        }
 
-            function hapusSemuaChat() {
-                if (confirm("Yakin ingin membersihkan semua riwayat forum diskusi kelas?")) {
-                    globalChatData = [];
-                    totalChatCount = 0;
-                    simpanDataKeCloud();
-                    renderChatList();
-                }
-            }
-
-            function tampilkanNotifikasiChat(lastChat) {
-                if (isChatTabActive) return; // Jangan notif jika sedang buka tab chat
-                
-                let curUser = document.getElementById('header-user-fullname').innerText;
-                if (lastChat.sender === curUser) return; // Jangan notif chat sendiri
-
+        function tampilkanNotifikasiChat(msgObj) {
+            if (!isChatTabActive) {
                 let badge = document.getElementById('badge-notif-forum');
                 if (badge) badge.style.display = 'inline-block';
-
-                if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification(`Pesan Baru di Forum WK PINTAR`, {
-                        body: `${lastChat.sender}: ${lastChat.text}`,
-                        icon: lastChat.avatar || 'https://ui-avatars.com/api/?name=Chat&background=45B69C&color=fff'
+                
+                if (Notification.permission === "granted") {
+                    let textBody = msgObj.text || (msgObj.mediaType === 'image' ? '[Mengirim Gambar]' : '[Mengirim Dokumen]');
+                    new Notification("Pesan Baru di Forum WK PINTAR", {
+                        body: `${msgObj.sender}: ${textBody}`,
+                        icon: "https://ui-avatars.com/api/?name=Chat&background=45B69C&color=fff"
                     });
                 }
             }
-        </script>
-    </body>
+        }
+    </script>
+</body>
 </html>
