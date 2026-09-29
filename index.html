@@ -365,10 +365,12 @@
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
                             <h2><i class="fas fa-clipboard-check"></i> Form Presensi Harian</h2>
                             <div style="display:flex; gap:10px; align-items:center;">
-                                <label style="font-weight:bold;">Simpan ke Rekap Hari Ke:</label>
-                                <select id="select-active-rekap" class="form-control" style="width:120px;">
+                                <label style="font-weight:bold;">Simpan ke Rekap Tanggal:</label>
+                                <select id="select-active-rekap" class="form-control" style="width:140px;">
                                     <option value="-1">Jangan Simpan</option>
-                                    <script>for(let i=0; i<20; i++) document.write(`<option value="${i}">Hari ${i+1}</option>`);</script>
+                                    <script>
+                                        for(let i=0; i<31; i++) document.write(`<option value="${i}">Tanggal ${i+1}</option>`);
+                                    </script>
                                 </select>
                             </div>
                         </div>
@@ -398,11 +400,11 @@
                                 <thead>
                                     <tr>
                                         <th rowspan="2" style="text-align:center;">No</th><th rowspan="2" style="text-align:left;">Nama Siswa</th><th rowspan="2">NISN</th><th rowspan="2">L/P</th>
-                                        <th colspan="20" style="text-align:center; background:#f2f2f2;">Pertemuan / Hari Ke-</th>
+                                        <th colspan="31" style="text-align:center; background:#f2f2f2;">Tanggal (1 - 31)</th>
                                         <th colspan="4" style="text-align:center; background:#e8f4f8;">Total</th>
                                     </tr>
                                     <tr>
-                                        <script>for(let i=1; i<=20; i++) document.write(`<th style="min-width:35px; text-align:center; padding:5px;">${i}</th>`);</script>
+                                        <script>for(let i=1; i<=31; i++) document.write(`<th style="min-width:30px; text-align:center; padding:5px;">${i}</th>`);</script>
                                         <th style="background:#e8f4f8; color:#27ae60;">H</th><th style="background:#e8f4f8; color:#f39c12;">S</th><th style="background:#e8f4f8; color:#2980b9;">I</th><th style="background:#e8f4f8; color:#e74c3c;">A</th>
                                     </tr>
                                 </thead>
@@ -1153,6 +1155,11 @@
             initNotifications();
             renderEmojiPicker();
             
+            // Set otomatis form presensi ke tanggal hari ini
+            let tglHariIni = new Date().getDate() - 1; 
+            let selectTgl = document.getElementById('select-active-rekap');
+            if(selectTgl) selectTgl.value = tglHariIni;
+
             let sessionLoggedIn = localStorage.getItem('siwali_logged_in');
             
             if (sessionLoggedIn === "true") {
@@ -1292,9 +1299,11 @@
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
                 
+                // --- UPDATE: Logika Pembaruan Rekap Bulan menjadi 31 Kolom ---
                 if (!s.rekapBulan) {
                     s.rekapBulan = {};
-                    s.rekapBulan["Juli"] = (s.rekap && s.rekap.length === 20) ? [...s.rekap] : Array(20).fill("");
+                    // Jika data lama cuma 20, kita pad (tambah kosong) sampai 31
+                    s.rekapBulan["Juli"] = (s.rekap && s.rekap.length >= 20) ? [...s.rekap] : Array(31).fill("");
                 }
                 
                 if (!s.kasBulan) {
@@ -1316,7 +1325,15 @@
                 }
 
                 daftarBulan.forEach(b => { 
-                    if(!s.rekapBulan[b]) s.rekapBulan[b] = Array(20).fill(""); 
+                    // Padding data array absensi menjadi 31 jika dulunya 20
+                    if(!s.rekapBulan[b]) {
+                        s.rekapBulan[b] = Array(31).fill(""); 
+                    } else if (s.rekapBulan[b].length < 31) {
+                        while(s.rekapBulan[b].length < 31) {
+                            s.rekapBulan[b].push("");
+                        }
+                    }
+
                     if(!s.kasBulan[b]) s.kasBulan[b] = [false, false, false, false];
                     if(!s.kasTanggalBulan[b]) s.kasTanggalBulan[b] = ["", "", "", ""];
                     if(!s.festabaBulan[b]) s.festabaBulan[b] = [false, false, false, false];
@@ -1417,7 +1434,7 @@
                         
                         let rekapEl = document.getElementById('select-active-rekap');
                         let activeRekapDay = parseInt(rekapEl ? rekapEl.value : "-1");
-                        if(activeRekapDay >= 0 && activeRekapDay < 20) { targetSiswa.rekapBulan[activeBulanAbsen][activeRekapDay] = statusSiswa; }
+                        if(activeRekapDay >= 0 && activeRekapDay < 31) { targetSiswa.rekapBulan[activeBulanAbsen][activeRekapDay] = statusSiswa; }
                         
                         simpanDataKeCloud(); document.getElementById('student-ket-manual').value = ""; 
                         localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); 
@@ -1692,7 +1709,7 @@
                 if (dataSiswa.find(s => s.nis == nis)) { alert("NISN sudah digunakan!"); return; }
                 let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {}; let festabaBulan = {}; let festabaTanggalBulan = {};
                 daftarBulan.forEach(b => {
-                    rekapBulan[b] = Array(20).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""];
+                    rekapBulan[b] = Array(31).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""];
                 });
                 dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, festabaBulan: festabaBulan, festabaTanggalBulan: festabaTanggalBulan, panggilanOrtu: false });
                 alert("Siswa baru tersimpan!");
@@ -1761,7 +1778,7 @@
                     let nis = row['NISN'] || row['nisn'] || row['NIS'] || ''; let nama = row['Nama'] || row['nama'] || row['Nama Lengkap'] || '';
                     if (nis && nama && !dataSiswa.find(s => s.nis == nis)) {
                         let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {}; let festabaBulan = {}; let festabaTanggalBulan = {};
-                        daftarBulan.forEach(b => { rekapBulan[b] = Array(20).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""]; });
+                        daftarBulan.forEach(b => { rekapBulan[b] = Array(31).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""]; });
                         dataSiswa.push({ nis: String(nis), nama: String(nama), jk: String(row['L/P'] || 'L').toUpperCase(), hp: String(row['HP'] || '-'), foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, festabaBulan: festabaBulan, festabaTanggalBulan: festabaTanggalBulan, panggilanOrtu: false }); 
                         countAdded++;
                     }
@@ -1815,12 +1832,14 @@
                 siswa.waktuAbsen = updateTimeStr; siswa.status = newStatus; 
                 let ketEl = document.getElementById(`ket_${index}`); siswa.ket = ketEl ? ketEl.value : "";
                 
-                if(activeRekapDay >= 0 && activeRekapDay < 20) { siswa.rekapBulan[activeBulanAbsen][activeRekapDay] = newStatus; }
+                if(activeRekapDay >= 0 && activeRekapDay < 31) { 
+                    siswa.rekapBulan[activeBulanAbsen][activeRekapDay] = newStatus; 
+                }
             });
             simpanDataKeCloud(); renderDashboard(); renderTabelAbsensi4Minggu(); 
             
             let msg = "Data absensi harian berhasil disimpan!";
-            if(activeRekapDay >= 0 && activeRekapDay < 20) msg += `\n(Telah terekam otomatis ke Buku Rekap bulan ${activeBulanAbsen})`;
+            if(activeRekapDay >= 0 && activeRekapDay < 31) msg += `\n(Telah terekam otomatis ke Buku Rekap bulan ${activeBulanAbsen})`;
             else msg += `\n*(Peringatan: Sinkronisasi Buku Rekap Anda matikan, data belum terekam di tabel rekap bulanan!)*`;
             alert(msg);
         }
@@ -1831,10 +1850,10 @@
             let totalShow = Math.max(dataSiswa.length, 1);
             for (let i = 0; i < totalShow; i++) {
                 let siswa = dataSiswa[i] || { nama: '-', nis: '-', jk: '-' }; 
-                let rekapBulananArr = siswa.rekapBulan && siswa.rekapBulan[activeBulanAbsen] ? siswa.rekapBulan[activeBulanAbsen] : Array(20).fill("");
+                let rekapBulananArr = siswa.rekapBulan && siswa.rekapBulan[activeBulanAbsen] ? siswa.rekapBulan[activeBulanAbsen] : Array(31).fill("");
                 
                 html += `<tr><td style="white-space:nowrap;">${i + 1}</td><td style="white-space:nowrap; text-align:left;">${siswa.nama}</td><td style="white-space:nowrap;">${siswa.nis}</td><td style="white-space:nowrap;">${siswa.jk}</td>`;
-                for(let d = 0; d < 20; d++) { html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${rekapBulananArr[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled style="width:25px; text-align:center;"></td>`; }
+                for(let d = 0; d < 31; d++) { html += `<td><input type="text" class="input-absen baris-absen-${i}" data-siswa-idx="${i}" data-day-idx="${d}" value="${rekapBulananArr[d]}" maxlength="1" onkeyup="hitungRekapBaris(${i})" disabled style="width:22px; text-align:center; padding: 2px;"></td>`; }
                 html += `<td id="total-h-${i}" style="font-weight:bold; color:#27ae60; background:rgba(46, 204, 113, 0.1);">0</td><td id="total-s-${i}" style="font-weight:bold; color:#f39c12; background:rgba(243, 156, 18, 0.1);">0</td><td id="total-i-${i}" style="font-weight:bold; color:#2980b9; background:rgba(41, 128, 185, 0.1);">0</td><td id="total-a-${i}" style="font-weight:bold; color:#e74c3c; background:rgba(231, 76, 60, 0.1);">0</td></tr>`;
             }
             tbody.innerHTML = html; for (let i = 0; i < totalShow; i++) hitungRekapBaris(i); 
@@ -1874,7 +1893,7 @@
             let tabel = document.getElementById('tabel-rekap-bulanan'); let tableClone = tabel.cloneNode(true); 
             let inputs = tableClone.querySelectorAll('.input-absen'); 
             inputs.forEach(inp => { inp.parentElement.innerHTML = inp.value; });
-            let html = `<table border="1"><tr><th colspan="28" style="font-size:18px; font-weight:bold;">REKAP BULANAN (${activeBulanAbsen.toUpperCase()})</th></tr>${tableClone.innerHTML}</table>`; 
+            let html = `<table border="1"><tr><th colspan="39" style="font-size:18px; font-weight:bold;">REKAP BULANAN (${activeBulanAbsen.toUpperCase()})</th></tr>${tableClone.innerHTML}</table>`; 
             let tempDiv = document.createElement('div'); tempDiv.innerHTML = html;
             let wb = XLSX.utils.table_to_book(tempDiv.querySelector('table')); XLSX.writeFile(wb, `Buku_Rekap_${activeBulanAbsen}.xlsx`);
         }
