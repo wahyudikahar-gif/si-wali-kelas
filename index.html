@@ -856,6 +856,9 @@
 
     <!-- ================== SCRIPT UTAMA ================== -->
     <script>
+        // --- VARIABEL APP SCRIPT GLOBAL ---
+        const SCRIPT_URL = "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI";
+
         window.tempStrukturBase64 = ""; 
         window.tempJadwalBase64 = ""; 
         window.tempJadwalPiketBase64 = ""; 
@@ -887,12 +890,6 @@
             nature:  { primary: '#2D6A4F', secondary: '#52B788', bg: '#F2F8F5', text: '#081C15', white: '#FFFFFF' },
             dark:    { primary: '#BB86FC', secondary: '#03DAC6', bg: '#121212', text: '#E0E0E0', white: '#1E1E1E' }
         };
-
-        // --- VARIABEL FIREBASE GLOBAL ---
-        let db = null;
-        let fsDoc = null;
-        let fsSetDoc = null;
-        let fsGetDoc = null;
 
         function initNotifications() {
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
@@ -1018,15 +1015,23 @@
             let payloadStr = JSON.stringify(payload);
             try { localStorage.setItem('siwali_data_master', payloadStr); } catch(e) { console.error("Local storage penuh", e); }
             
-            if (db && fsSetDoc && fsDoc) {
-                fsSetDoc(fsDoc(db, "wkpintar", "master_data"), payload)
-                    .then(() => console.log("Berhasil simpan ke Firebase Cloud!"))
-                    .catch(err => {
-                        console.error("Gagal sinkron Firebase Cloud!", err);
-                        alert("Peringatan: Gagal menyimpan data ke server Cloud (Firebase). Data ini HANYA tersimpan di perangkat lokal.\n\nKemungkinan penyebab:\n1. Aturan Keamanan (Rules) Firebase sudah kedaluwarsa.\n2. Kuota batas 1MB terlampaui karena terlalu banyak unggahan foto/file.");
-                    });
+            if (SCRIPT_URL && SCRIPT_URL !== "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI") {
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: payloadStr
+                })
+                .then(response => response.text())
+                .then(result => console.log("Berhasil simpan ke App Script: ", result))
+                .catch(err => {
+                    console.error("Gagal sinkron ke App Script!", err);
+                    // Peringatan ini bisa diaktifkan kembali jika diperlukan
+                    // alert("Peringatan: Gagal menyimpan data ke server Cloud (App Script). Data ini HANYA tersimpan di perangkat lokal.");
+                });
             } else {
-                console.warn("Koneksi Firebase belum siap, tersimpan di Local Storage terlebih dahulu.");
+                console.warn("URL SCRIPT kosong, tersimpan di Local Storage terlebih dahulu.");
             }
         }
 
@@ -1183,97 +1188,76 @@
                 checkRole();
             }
 
-            import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js').then(appModule => {
-                import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js').then(fsModule => {
-                    const firebaseConfig = {
-                        apiKey: "AIzaSyAv2fU0Fo2ILs6hSHP5U8ceOQO0HQuGD_8",
-                        authDomain: "walikelas-87698.firebaseapp.com",
-                        projectId: "walikelas-87698",
-                        storageBucket: "walikelas-87698.firebasestorage.app",
-                        messagingSenderId: "83892259774",
-                        appId: "1:83892259774:web:3e8881d2385448274647ef",
-                        measurementId: "G-YPLJ42DYJ5"
-                    };
-                    const app = appModule.initializeApp(firebaseConfig);
-                    db = fsModule.getFirestore(app);
-                    fsDoc = fsModule.doc;
-                    fsSetDoc = fsModule.setDoc;
-                    fsGetDoc = fsModule.getDoc;
-
-                    tarikDataCloud(true);
-                    setInterval(() => {
-                        if(localStorage.getItem('siwali_logged_in') === "true") {
-                            tarikDataCloud(false);
-                        }
-                    }, 15000); 
-                });
-            }).catch(err => {
-                console.error("Gagal memuat Firebase SDK:", err);
-            });
+            tarikDataCloud(true);
+            setInterval(() => {
+                if(localStorage.getItem('siwali_logged_in') === "true") {
+                    tarikDataCloud(false);
+                }
+            }, 15000);
         });
 
         function tarikDataCloud(isInitialLoad) {
-            if (!db || !fsGetDoc || !fsDoc) return; 
+            if (!SCRIPT_URL || SCRIPT_URL === "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI") return; 
 
-            fsGetDoc(fsDoc(db, "wkpintar", "master_data")).then(docSnap => {
-                if (docSnap.exists()) {
-                    let parsedData = docSnap.data();
-                    
-                    if (!parsedData || (Array.isArray(parsedData) && parsedData.length === 0 && dataSiswa.length > 0)) {
-                         console.warn("Cloud mengembalikan data kosong, abaikan timpaan lokal.");
-                         return;
-                    }
+            fetch(SCRIPT_URL)
+            .then(res => res.json())
+            .then(parsedData => {
+                if (!parsedData || (Array.isArray(parsedData) && parsedData.length === 0 && dataSiswa.length > 0)) {
+                     console.warn("Cloud mengembalikan data kosong, abaikan timpaan lokal.");
+                     return;
+                }
 
-                    if (Array.isArray(parsedData)) {
-                        dataSiswa = parsedData;
-                    } else {
-                        if(parsedData.siswa !== undefined) dataSiswa = parsedData.siswa;
-                        
-                        if(parsedData.settings) {
-                            if(!parsedData.settings.pengeluaranKas) parsedData.settings.pengeluaranKas = globalSettings.pengeluaranKas || [];
-                            if(!parsedData.settings.pengeluaranFestaba) parsedData.settings.pengeluaranFestaba = globalSettings.pengeluaranFestaba || [];
-                            if(!parsedData.settings.pelanggaran) parsedData.settings.pelanggaran = globalSettings.pelanggaran || [];
-                            if(!parsedData.settings.pembinaan) parsedData.settings.pembinaan = globalSettings.pembinaan || [];
-                            if(!parsedData.settings.masterPelanggaran) parsedData.settings.masterPelanggaran = globalSettings.masterPelanggaran;
-                            globalSettings = Object.assign(globalSettings, parsedData.settings);
-                        }
-                        if(parsedData.chat) {
-                            let newChatCount = parsedData.chat.length;
-                            if (newChatCount > totalChatCount && totalChatCount !== 0 && !isInitialLoad) {
-                                tampilkanNotifikasiChat(parsedData.chat[newChatCount - 1]);
-                            }
-                            globalChatData = parsedData.chat;
-                            totalChatCount = newChatCount;
-                        }
-                    }
-                    localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings, chat: globalChatData}));
-                    
-                    if(isInitialLoad) {
-                        if (localStorage.getItem('siwali_logged_in') === "true") jalankanSistemAwal();
-                        else {
-                            let currRole = document.getElementById("roleSelect").value;
-                            if (currRole === "siswa") checkRole();
-                        }
-                    } else {
-                        let activeTab = localStorage.getItem('siwali_active_tab');
-                        if(activeTab === 'dashboard') renderDashboard();
-                        if(activeTab === 'siswa') renderDataSiswa();
-                        if(activeTab === 'forum') renderChatList();
-                        if(activeTab === 'kas' && !isAdminKasUnlocked) renderKas();
-                        if(activeTab === 'festaba' && !isAdminFestabaUnlocked) renderFestaba();
-                        if(activeTab === 'absensi' && !isEditingRekap) renderTabelAbsensi4Minggu();
-                        if(activeTab === 'pelanggaran') renderPelanggaran();
-                    }
+                if (Array.isArray(parsedData)) {
+                    dataSiswa = parsedData;
                 } else {
-                    console.log("Dokumen Firebase kosong atau belum dibuat. Melakukan migrasi data dari lokal...");
-                    if (dataSiswa.length > 0 || globalChatData.length > 0) {
-                        simpanDataKeCloud();
+                    if(parsedData.siswa !== undefined) dataSiswa = parsedData.siswa;
+                    
+                    if(parsedData.settings) {
+                        if(!parsedData.settings.pengeluaranKas) parsedData.settings.pengeluaranKas = globalSettings.pengeluaranKas || [];
+                        if(!parsedData.settings.pengeluaranFestaba) parsedData.settings.pengeluaranFestaba = globalSettings.pengeluaranFestaba || [];
+                        if(!parsedData.settings.pelanggaran) parsedData.settings.pelanggaran = globalSettings.pelanggaran || [];
+                        if(!parsedData.settings.pembinaan) parsedData.settings.pembinaan = globalSettings.pembinaan || [];
+                        if(!parsedData.settings.masterPelanggaran) parsedData.settings.masterPelanggaran = globalSettings.masterPelanggaran;
+                        globalSettings = Object.assign(globalSettings, parsedData.settings);
                     }
-                    if (isInitialLoad && localStorage.getItem('siwali_logged_in') === "true") {
-                        jalankanSistemAwal();
+                    if(parsedData.chat) {
+                        let newChatCount = parsedData.chat.length;
+                        if (newChatCount > totalChatCount && totalChatCount !== 0 && !isInitialLoad) {
+                            tampilkanNotifikasiChat(parsedData.chat[newChatCount - 1]);
+                        }
+                        globalChatData = parsedData.chat;
+                        totalChatCount = newChatCount;
                     }
                 }
-            }).catch(err => { console.error("Cloud Error / Offline:", err); });
+                localStorage.setItem('siwali_data_master', JSON.stringify({siswa: dataSiswa, settings: globalSettings, chat: globalChatData}));
+                
+                if(isInitialLoad) {
+                    if (localStorage.getItem('siwali_logged_in') === "true") jalankanSistemAwal();
+                    else {
+                        let currRole = document.getElementById("roleSelect").value;
+                        if (currRole === "siswa") checkRole();
+                    }
+                } else {
+                    let activeTab = localStorage.getItem('siwali_active_tab');
+                    if(activeTab === 'dashboard') renderDashboard();
+                    if(activeTab === 'siswa') renderDataSiswa();
+                    if(activeTab === 'forum') renderChatList();
+                    if(activeTab === 'kas' && !isAdminKasUnlocked) renderKas();
+                    if(activeTab === 'festaba' && !isAdminFestabaUnlocked) renderFestaba();
+                    if(activeTab === 'absensi' && !isEditingRekap) renderTabelAbsensi4Minggu();
+                    if(activeTab === 'pelanggaran') renderPelanggaran();
+                }
+            })
+            .catch(err => { 
+                console.error("Cloud Error / Offline:", err);
+                console.log("Melakukan migrasi data dari lokal...");
+                if (dataSiswa.length > 0 || globalChatData.length > 0) {
+                    simpanDataKeCloud();
+                }
+                if (isInitialLoad && localStorage.getItem('siwali_logged_in') === "true") {
+                    jalankanSistemAwal();
+                }
+            });
         }
 
         function loadLocalDataSafely() {
