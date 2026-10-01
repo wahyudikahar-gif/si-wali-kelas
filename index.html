@@ -435,7 +435,8 @@
                                     <option value="November">November</option><option value="Desember">Desember</option><option value="Januari">Januari</option><option value="Februari">Februari</option>
                                     <option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option>
                                 </select>
-                                <button id="btn-admin-kas" onclick="bukaAdminKas()" class="btn btn-secondary hidden"><i class="fas fa-lock"></i> Mode Bendahara</button>
+                                <!-- PERBAIKAN: Menghapus kelas 'hidden' agar tombol bisa diakses Admin -->
+                                <button id="btn-admin-kas" onclick="bukaAdminKas()" class="btn btn-secondary"><i class="fas fa-lock"></i> Mode Bendahara</button>
                                 <button id="btn-save-kas" onclick="simpanKasDariForm()" class="btn btn-success" style="display:none;"><i class="fas fa-save"></i> Simpan Buku</button>
                                 <button id="btn-download-kas-excel" onclick="downloadExcelKas()" class="btn btn-info" style="background:#2980b9;"><i class="fas fa-file-excel"></i> Download Laporan</button>
                                 <button onclick="resetKasBulanan()" class="btn btn-danger admin-only-setting"><i class="fas fa-sync"></i> Reset Bulan Ini</button>
@@ -857,7 +858,8 @@
     <!-- ================== SCRIPT UTAMA ================== -->
     <script>
         // --- VARIABEL APP SCRIPT GLOBAL ---
-        const SCRIPT_URL = "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI";
+        // PERBAIKAN: Memasukkan URL Cloud App Script baru dari Anda 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx40v-el6oOChNCIsxUzqs9JvYhzBeSV1TEPEpt9a1NvktPSH7GnKENsX2MRtEMIroqog/exec";
 
         window.tempStrukturBase64 = ""; 
         window.tempJadwalBase64 = ""; 
@@ -1027,8 +1029,6 @@
                 .then(result => console.log("Berhasil simpan ke App Script: ", result))
                 .catch(err => {
                     console.error("Gagal sinkron ke App Script!", err);
-                    // Peringatan ini bisa diaktifkan kembali jika diperlukan
-                    // alert("Peringatan: Gagal menyimpan data ke server Cloud (App Script). Data ini HANYA tersimpan di perangkat lokal.");
                 });
             } else {
                 console.warn("URL SCRIPT kosong, tersimpan di Local Storage terlebih dahulu.");
@@ -1202,6 +1202,7 @@
             fetch(SCRIPT_URL)
             .then(res => res.json())
             .then(parsedData => {
+                // PERLINDUNGAN DATA: Jangan timpa jika data dari cloud kosong tapi lokal memiliki data
                 if (!parsedData || (Array.isArray(parsedData) && parsedData.length === 0 && dataSiswa.length > 0)) {
                      console.warn("Cloud mengembalikan data kosong, abaikan timpaan lokal.");
                      return;
@@ -1289,10 +1290,10 @@
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
                 
-                // --- UPDATE: Logika Pembaruan Rekap Bulan menjadi 31 Kolom ---
+                // PERLINDUNGAN DATA: Cek apakah format lama (absen < 31, atau data kas belum ada) 
+                // Lalu lakukan padding (menambahkan sel kosong) tanpa menghapus yang lama.
                 if (!s.rekapBulan) {
                     s.rekapBulan = {};
-                    // Jika data lama cuma 20, kita pad (tambah kosong) sampai 31
                     s.rekapBulan["Juli"] = (s.rekap && s.rekap.length >= 20) ? [...s.rekap] : Array(31).fill("");
                 }
                 
@@ -1315,7 +1316,6 @@
                 }
 
                 daftarBulan.forEach(b => { 
-                    // Padding data array absensi menjadi 31 jika dulunya 20
                     if(!s.rekapBulan[b]) {
                         s.rekapBulan[b] = Array(31).fill(""); 
                     } else if (s.rekapBulan[b].length < 31) {
