@@ -857,7 +857,7 @@
     <!-- ================== SCRIPT UTAMA ================== -->
     <script>
         // --- VARIABEL APP SCRIPT GLOBAL ---
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysqIj80Dp1ksHVhcv4eHiRhk1gqUB42aT4O7NgocwgaD7UiAhjCVKTXQyJE8-X-vaJuQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIIQaxxzBk9PniJ44bq7j5qekE49vEdy5XkJXJnHRRe2_aXO1dOClB1U-R2rtTo17zfQ/exec";
 
         window.tempStrukturBase64 = ""; 
         window.tempJadwalBase64 = ""; 
@@ -1015,7 +1015,7 @@
             let payloadStr = JSON.stringify(payload);
             try { localStorage.setItem('siwali_data_master', payloadStr); } catch(e) { console.error("Local storage penuh", e); }
             
-            if (SCRIPT_URL && SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbz-Atkdl9-KUHLCbWafTeDndyTEGWLGpr2Ngh3T1p1Dvh6Jgb6dFWs9haYdFCY7ebdrhQ/exec") {
+            if (SCRIPT_URL && SCRIPT_URL !== "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI") {
                 fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -1195,7 +1195,7 @@
         });
 
         function tarikDataCloud(isInitialLoad) {
-            if (!SCRIPT_URL || SCRIPT_URL === "https://script.google.com/macros/s/AKfycbz-Atkdl9-KUHLCbWafTeDndyTEGWLGpr2Ngh3T1p1Dvh6Jgb6dFWs9haYdFCY7ebdrhQ/exec") return; 
+            if (!SCRIPT_URL || SCRIPT_URL === "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI") return; 
 
             fetch(SCRIPT_URL)
             .then(res => res.json())
