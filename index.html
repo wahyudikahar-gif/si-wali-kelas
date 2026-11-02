@@ -1015,7 +1015,7 @@
             let payloadStr = JSON.stringify(payload);
             try { localStorage.setItem('siwali_data_master', payloadStr); } catch(e) { console.error("Local storage penuh", e); }
             
-            if (SCRIPT_URL && SCRIPT_URL !== "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI") {
+            if (SCRIPT_URL && SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbz-Atkdl9-KUHLCbWafTeDndyTEGWLGpr2Ngh3T1p1Dvh6Jgb6dFWs9haYdFCY7ebdrhQ/exec") {
                 fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: {
