@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WK PINTAR - Sistem Administrasi Kelas</title>
+    <title>WK PINTAR - Sistem Administrasi Kelas Terpadu</title>
     <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js untuk Grafik -->
@@ -35,15 +35,15 @@
 
         /* Login Page */
         #login-page {
-            display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--primary);
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; background: var(--primary); padding: 20px;
         }
         .login-card {
             background: var(--white); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            width: 100%; max-width: 400px; text-align: center;
+            width: 100%; max-width: 420px; text-align: center;
         }
-        .login-card h2 { color: var(--primary); margin-bottom: 20px; }
+        .login-card h2 { color: var(--primary); margin-bottom: 5px; }
         .login-card select, .login-card input {
-            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 15px;
+            width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px;
         }
         .login-card button {
             width: 100%; padding: 14px; margin-top: 15px; border: none; border-radius: 8px; background: var(--secondary);
@@ -51,13 +51,28 @@
         }
         .login-card button:hover { opacity: 0.9; }
 
+        /* Samsung-style Custom Radio Animation untuk Form Absen Login */
+        .custom-radio { flex: 1; cursor: pointer; }
+        .custom-radio input { display: none; }
+        .custom-radio .radio-content {
+            padding: 12px 5px; background: #f0f2f5; border-radius: 14px; text-align: center;
+            font-weight: 600; font-size: 13px; color: #666; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .custom-radio input:checked + .radio-content {
+            transform: scale(1.08); box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .custom-radio.hadir input:checked + .radio-content { background: #e8f8f5; border-color: #2ecc71; color: #2ecc71; }
+        .custom-radio.sakit input:checked + .radio-content { background: #fef9e7; border-color: #f1c40f; color: #d35400; }
+        .custom-radio.izin input:checked + .radio-content { background: #ebf5fb; border-color: #3498db; color: #2980b9; }
+
         /* App Layout */
         #app-page { display: flex; height: 100vh; overflow: hidden; }
         
         /* Sidebar */
         .sidebar {
             width: 260px; background: var(--primary); color: var(--white); display: flex; flex-direction: column;
-            transition: 0.3s; z-index: 1000;
+            transition: 0.3s; z-index: 1000; flex-shrink: 0;
         }
         .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-header img { width: 60px; height: 60px; border-radius: 50%; margin-bottom: 10px; background: white; object-fit: cover;}
@@ -70,11 +85,11 @@
         .sidebar-menu li:hover, .sidebar-menu li.active { background: rgba(255,255,255,0.1); color: var(--white); border-left: 4px solid var(--secondary); }
         .sidebar-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
         .sidebar-footer button {
-            width: 100%; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer;
+            width: 100%; padding: 10px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
         }
 
         /* Main Content */
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
         
         /* Header */
         .top-header {
@@ -94,11 +109,14 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Cards & Grids */
+        /* Cards & Symmetrical Grid Layout */
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .card { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--secondary); }
+        .card { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--secondary); height: 100%; }
         .card h3 { font-size: 14px; color: #777; margin-bottom: 10px; }
         .card h2 { font-size: 24px; color: var(--primary); }
+
+        .dashboard-grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
+        .dashboard-grid-equal { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 20px; }
 
         /* Tables */
         .table-container { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; }
@@ -124,7 +142,7 @@
         .form-control { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; }
         
         /* Badges */
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; display: inline-block; }
         .bg-green { background: #2ecc71; } .bg-yellow { background: #f1c40f; color:#000;} .bg-blue { background: #3498db; }
         .bg-red { background: #e74c3c; } .bg-dark { background: #34495e; } .bg-orange { background: #e67e22; } .bg-darkred { background: #c0392b; }
 
@@ -143,7 +161,7 @@
         .chat-input-area { padding: 15px; background: var(--white); display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--border-color); position: relative; }
         .chat-input-area input { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 25px; outline: none; }
         .chat-btn { width: 45px; height: 45px; border-radius: 50%; border: none; background: var(--secondary); color: white; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-        .emoji-picker { position: absolute; bottom: 70px; left: 15px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); padding: 10px; display: none; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+        .emoji-picker { position: absolute; bottom: 70px; left: 15px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); padding: 10px; display: none; grid-template-columns: repeat(6, 1fr); gap: 5px; z-index: 100; }
         .emoji-item { font-size: 20px; cursor: pointer; text-align: center; padding: 5px; }
         .emoji-item:hover { background: #eee; border-radius: 5px; }
 
@@ -157,6 +175,9 @@
         .student-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
 
         /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard-grid-2col { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -260px; height: 100%; }
             .sidebar.show { left: 0; }
@@ -194,14 +215,26 @@
                 </div>
                 <input type="password" id="login-password" placeholder="Password / NISN" required>
                 
-                <div id="student-features" class="hidden" style="text-align:left; margin-top:15px; padding:15px; border:1px solid #ddd; border-radius:8px; background:#f9f9f9;">
-                    <label style="font-weight:bold; font-size:14px; margin-bottom:10px; display:block;">Status Kehadiran Hari Ini:</label>
-                    <div style="display:flex; gap:15px; margin-bottom:10px;">
-                        <label><input type="radio" name="student_status" value="H" checked> Hadir</label>
-                        <label><input type="radio" name="student_status" value="S"> Sakit</label>
-                        <label><input type="radio" name="student_status" value="I"> Izin</label>
+                <!-- TAMPILAN BARU UI PRESENSI ANIMASI SAMSUNG STYLE UNTUK SISWA -->
+                <div id="student-features" class="hidden" style="text-align:left; margin-top:15px; padding:15px; border:1px solid #ddd; border-radius:12px; background:#fff;">
+                    <label style="font-weight:bold; font-size:14px; margin-bottom:12px; display:block; color:var(--primary); text-align:center;"><i class="fas fa-user-check"></i> Pilih Status Kehadiran Hari Ini:</label>
+                    
+                    <div style="display:flex; gap:10px; justify-content:space-between; margin-bottom:15px;">
+                        <label class="custom-radio hadir">
+                            <input type="radio" name="student_status" value="H" checked>
+                            <div class="radio-content"><i class="fas fa-check"></i> Hadir</div>
+                        </label>
+                        <label class="custom-radio sakit">
+                            <input type="radio" name="student_status" value="S">
+                            <div class="radio-content"><i class="fas fa-pills"></i> Sakit</div>
+                        </label>
+                        <label class="custom-radio izin">
+                            <input type="radio" name="student_status" value="I">
+                            <div class="radio-content"><i class="fas fa-envelope-open-text"></i> Izin</div>
+                        </label>
                     </div>
-                    <input type="text" id="student-ket-manual" placeholder="Keterangan (Opsional)" style="padding:8px; width:100%; border:1px solid #ccc; border-radius:4px;">
+                    
+                    <input type="text" id="student-ket-manual" placeholder="Keterangan Tambahan (Opsional)..." style="padding:12px; width:100%; border:1px solid #eee; border-radius:8px; font-size:13px; background:#f9f9f9; outline:none; transition:0.3s;" onfocus="this.style.borderColor='var(--secondary)'; this.style.background='#fff';" onblur="this.style.borderColor='#eee'; this.style.background='#f9f9f9';">
                 </div>
                 
                 <button type="submit" id="btn-submit"><i class="fas fa-sign-in-alt"></i> Masuk Aplikasi</button>
@@ -227,8 +260,8 @@
                     <li id="menu-siswa" onclick="switchTab('siswa')"><i class="fas fa-users"></i> Data Siswa <i id="lock-siswa" class="fas fa-lock" style="margin-left:auto; font-size:10px; color:#aaa;"></i></li>
                     <li id="menu-absensi" onclick="switchTab('absensi')"><i class="fas fa-clipboard-list"></i> Absensi <i id="lock-absensi" class="fas fa-lock" style="margin-left:auto; font-size:10px; color:#aaa;"></i></li>
                     <li id="menu-kas" onclick="switchTab('kas')"><i class="fas fa-wallet"></i> Operasional</li>
-                    <li id="menu-festaba" onclick="switchTab('festaba')"><i class="fas fa-theater-masks"></i> FESTABA 63 <i id="lock-festaba" class="fas fa-lock" style="margin-left:auto; font-size:10px; color:#aaa;"></i></li>
-                    <li id="menu-pelanggaran" onclick="switchTab('pelanggaran')"><i class="fas fa-gavel"></i> Catatan Disiplin <i id="lock-pelanggaran" class="fas fa-lock" style="margin-left:auto; font-size:10px; color:#aaa;"></i></li>
+                    <li id="menu-festaba" onclick="switchTab('festaba')"><i class="fas fa-theater-masks"></i> FESTABA 63</li>
+                    <li id="menu-pelanggaran" onclick="switchTab('pelanggaran')"><i class="fas fa-gavel"></i> Catatan Disiplin</li>
                     <li id="menu-forum" onclick="switchTab('forum')"><i class="fas fa-comments"></i> Forum Diskusi <span id="badge-notif-forum" class="badge bg-red" style="display:none; margin-left:auto;">!</span></li>
                     <li id="menu-pengaturan" onclick="switchTab('pengaturan')"><i class="fas fa-cogs"></i> Pengaturan</li>
                 </ul>
@@ -274,6 +307,7 @@
                         <i class="fas fa-laptop-code" style="font-size:40px; opacity:0.3;"></i>
                     </div>
 
+                    <!-- Grid Kartu Ringkasan Statistik -->
                     <div class="grid-cards">
                         <div class="card"><div style="float:right; color:var(--info); font-size:30px;"><i class="fas fa-users"></i></div><h3>Total Siswa</h3><h2 id="dash-total-siswa">0</h2></div>
                         <div class="card"><div style="float:right; color:var(--success); font-size:30px;"><i class="fas fa-user-check"></i></div><h3>Hadir Hari Ini</h3><h2 id="dash-hadir">0</h2></div>
@@ -281,27 +315,40 @@
                         <div class="card"><div style="float:right; color:var(--danger); font-size:30px;"><i class="fas fa-gavel"></i></div><h3>Catatan Disiplin</h3><h2 id="dash-poin-disiplin">0</h2></div>
                     </div>
 
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+                    <!-- Layout Simetris: Grafik Kehadiran & Grafik Pelanggaran -->
+                    <div class="dashboard-grid-2col">
+                        <div class="table-container">
+                            <h3 style="margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-chart-pie"></i> Grafik Kehadiran Kelas (Hari Ini)</h3>
+                            <div style="height:230px; position:relative;"><canvas id="chartKehadiranDash"></canvas></div>
+                        </div>
+                        <div class="table-container">
+                            <h3 style="margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-chart-bar"></i> Grafik Pelanggaran Kelas</h3>
+                            <div style="height:230px; position:relative;"><canvas id="chartPelanggaranDash"></canvas></div>
+                        </div>
+                    </div>
+
+                    <!-- Layout Simetris 3 Kolom Data Harian -->
+                    <div class="dashboard-grid-equal">
                         <div class="table-container">
                             <h3 style="margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-clock"></i> Log Absen Hari Ini</h3>
-                            <table><thead><tr><th>Siswa</th><th>Status</th><th>Keterangan</th><th>Waktu</th></tr></thead><tbody id="tabel-dashboard-absen"></tbody></table>
+                            <table style="font-size:13px;"><thead><tr><th>Siswa</th><th>Status</th><th>Keterangan</th><th>Waktu</th></tr></thead><tbody id="tabel-dashboard-absen"></tbody></table>
                         </div>
                         <div class="table-container">
                             <h3 style="margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i> Siswa Alpa (Hari Ini)</h3>
-                            <table><tbody id="tabel-dashboard-alpa"></tbody></table>
+                            <table style="font-size:13px;"><tbody id="tabel-dashboard-alpa"></tbody></table>
                             
                             <h3 style="margin-top:20px; margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-money-bill-wave" style="color:var(--danger);"></i> Tunggakan Kas (Bulan Ini)</h3>
-                            <table><tbody id="tabel-dashboard-tunggakan"></tbody></table>
+                            <table style="font-size:13px;"><tbody id="tabel-dashboard-tunggakan"></tbody></table>
                             
                             <h3 style="margin-top:20px; margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-check-circle" style="color:var(--success);"></i> Lunas Kas (Bulan Ini)</h3>
-                            <table><tbody id="tabel-dashboard-lunas"></tbody></table>
+                            <table style="font-size:13px;"><tbody id="tabel-dashboard-lunas"></tbody></table>
                         </div>
                         <div class="table-container">
                             <h3 style="margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-calendar-alt"></i> Agenda Kelas</h3>
-                            <div id="display-agenda" style="font-size:14px; white-space:pre-wrap; background:#f9f9f9; padding:15px; border-radius:8px; min-height:100px;"></div>
+                            <div id="display-agenda" style="font-size:13px; white-space:pre-wrap; background:#f9f9f9; padding:15px; border-radius:8px; min-height:90px;"></div>
                             
                             <h3 style="margin-top:20px; margin-bottom:15px; color:var(--primary); border-bottom:2px solid var(--secondary); padding-bottom:10px;"><i class="fas fa-broom"></i> Catatan Piket</h3>
-                            <div id="dash-catatan-piket" style="font-size:14px; white-space:pre-wrap; background:#f9f9f9; padding:15px; border-radius:8px; min-height:80px; color:var(--danger); font-weight:bold;"></div>
+                            <div id="dash-catatan-piket" style="font-size:13px; white-space:pre-wrap; background:#f9f9f9; padding:15px; border-radius:8px; min-height:80px; color:var(--danger); font-weight:bold;"></div>
                         </div>
                     </div>
                 </div>
@@ -415,7 +462,7 @@
                 </div>
 
                 <!-- TAB: UANG KAS -->
-                <div id="tab-kas" class="tab-content admin-only-element hidden">
+                <div id="tab-kas" class="tab-content">
                     <div class="grid-cards" style="margin-bottom:20px;">
                         <div class="card" style="border-left-color:#3498db;"><h3>Total Masuk Keseluruhan</h3><h2 id="total-semua" style="color:#3498db;">Rp 0</h2></div>
                         <div class="card" style="border-left-color:var(--danger);"><h3>Total Pengeluaran</h3><h2 id="total-pengeluaran" style="color:var(--danger);">Rp 0</h2></div>
@@ -460,7 +507,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
                             <h2><i class="fas fa-file-invoice-dollar"></i> Buku Pengeluaran Kas</h2>
                         </div>
-                        <div id="panel-input-pengeluaran" class="hidden" style="background:#f9f9f9; padding:20px; border-radius:8px; margin-bottom:20px; border:1px solid #ddd;">
+                        <div id="panel-input-pengeluaran" class="admin-only-element hidden" style="background:#f9f9f9; padding:20px; border-radius:8px; margin-bottom:20px; border:1px solid #ddd;">
                             <input type="hidden" id="edit-index-pengeluaran" value="-1">
                             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:15px;">
                                 <div class="form-group"><label>Tanggal Transaksi</label><input type="date" id="input-tgl-pengeluaran" class="form-control"></div>
@@ -486,7 +533,7 @@
                 </div>
 
                 <!-- TAB: FESTABA 63 -->
-                <div id="tab-festaba" class="tab-content admin-only-element hidden">
+                <div id="tab-festaba" class="tab-content">
                     <div class="grid-cards" style="margin-bottom:20px;">
                         <div class="card" style="border-left-color:#8e44ad;"><h3>Total Masuk FESTABA</h3><h2 id="total-semua-festaba" style="color:#8e44ad;">Rp 0</h2></div>
                         <div class="card" style="border-left-color:var(--danger);"><h3>Total Pengeluaran</h3><h2 id="total-pengeluaran-festaba" style="color:var(--danger);">Rp 0</h2></div>
@@ -557,7 +604,7 @@
                 </div>
 
                 <!-- TAB: PELANGGARAN -->
-                <div id="tab-pelanggaran" class="tab-content admin-only-element hidden">
+                <div id="tab-pelanggaran" class="tab-content">
                     <div style="display:flex; gap:10px; margin-bottom:20px; overflow-x:auto; padding-bottom:10px;">
                         <label class="btn btn-secondary" style="cursor:pointer;"><input type="radio" name="pelanggaran_nav" value="data" onchange="switchPelanggaranNav(this.value)" checked style="display:none;"> <i class="fas fa-chart-line"></i> Rekap Kedisiplinan</label>
                         <label class="btn btn-danger admin-only-element hidden" style="cursor:pointer;"><input type="radio" name="pelanggaran_nav" value="input" onchange="switchPelanggaranNav(this.value)" style="display:none;"> <i class="fas fa-plus-circle"></i> Input Pelanggaran</label>
@@ -572,11 +619,6 @@
                             <div class="card"><h3>Total Kasus</h3><h2 id="pel-stat-total">0</h2></div>
                             <div class="card"><h3>Total Pembinaan</h3><h2 id="pel-stat-bina">0</h2></div>
                             <div class="card"><h3>Peringatan SP</h3><h2 id="pel-stat-sp">0</h2></div>
-                        </div>
-
-                        <div class="table-container admin-only-element hidden">
-                            <h3 style="margin-bottom:15px; color:var(--primary);"><i class="fas fa-chart-bar"></i> Grafik Pelanggaran Kelas</h3>
-                            <div style="height:250px; width:100%;"><canvas id="chartPelanggaran"></canvas></div>
                         </div>
 
                         <div class="table-container">
@@ -613,7 +655,7 @@
                                     <div class="form-group"><label>Siswa Pelanggar</label><select id="pel-input-nis" class="form-control" required></select></div>
                                     <div class="form-group"><label>Tanggal Kejadian</label><input type="date" id="pel-input-tgl" class="form-control" required></div>
                                     <div class="form-group"><label>Jenis Pelanggaran</label><select id="pel-input-master" class="form-control" onchange="updatePoinOtomatis()" required></select></div>
-                                    <div class="form-group"><label>Poin Dikenakan</label><input type="number" id="pel-input-poin" class="form-control" disabled></div>
+                                    <div class="form-group"><label>Poin Dikenakan</label><input type="number" id="pel-input-poin" class="form-control" readonly style="background:#eee;"></div>
                                     <div class="form-group" style="grid-column: 1 / -1;"><label>Kronologi Singkat</label><input type="text" id="pel-input-krono" class="form-control" placeholder="Contoh: Terlambat masuk kelas setelah jam istirahat" required></div>
                                     <div class="form-group"><label>Pelapor / Saksi</label><input type="text" id="pel-input-pelapor" class="form-control" placeholder="Nama Guru/Siswa yang melapor"></div>
                                     <div class="form-group">
@@ -874,6 +916,7 @@
         let isEditingRekap = false;
         
         let chartPelanggaranInstance = null;
+        let chartKehadiranInstance = null;
         
         const daftarBulan = ["Juli", "Agustus", "September", "Oktober", "November", "Desember", "Januari", "Februari", "Maret", "April", "Mei", "Juni"];
         let activeBulanAbsen = "Juli";
@@ -899,6 +942,7 @@
 
         function renderEmojiPicker() {
             let container = document.getElementById('emoji-picker-container');
+            if(!container) return;
             container.innerHTML = "";
             emojis.forEach(emo => {
                 let span = document.createElement('span');
@@ -906,9 +950,8 @@
                 span.innerText = emo;
                 span.onclick = function() {
                     let input = document.getElementById('chat-input-field');
-                    input.value += emo;
+                    if(input) { input.value += emo; input.focus(); }
                     toggleEmojiPicker(); 
-                    input.focus();
                 };
                 container.appendChild(span);
             });
@@ -916,7 +959,7 @@
         
         function toggleEmojiPicker() {
             let picker = document.getElementById('emoji-picker-container');
-            picker.style.display = picker.style.display === "grid" ? "none" : "grid";
+            if(picker) picker.style.display = picker.style.display === "grid" ? "none" : "grid";
         }
 
         function linkify(text) {
@@ -981,7 +1024,7 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('main-sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.toggle('show'); overlay.classList.toggle('show');
+            if(sidebar && overlay) { sidebar.classList.toggle('show'); overlay.classList.toggle('show'); }
         }
 
         let currentRole = "";
@@ -1018,18 +1061,12 @@
             if (SCRIPT_URL && SCRIPT_URL !== "MASUKKAN_URL_WEB_APP_SCRIPT_DISINI") {
                 fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
-                    },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: payloadStr
                 })
                 .then(response => response.text())
                 .then(result => console.log("Berhasil simpan ke App Script: ", result))
-                .catch(err => {
-                    console.error("Gagal sinkron ke App Script!", err);
-                });
-            } else {
-                console.warn("URL SCRIPT kosong, tersimpan di Local Storage terlebih dahulu.");
+                .catch(err => { console.error("Gagal sinkron ke App Script!", err); });
             }
         }
 
@@ -1160,7 +1197,6 @@
             initNotifications();
             renderEmojiPicker();
             
-            // Set otomatis form presensi ke tanggal hari ini
             let tglHariIni = new Date().getDate() - 1; 
             let selectTgl = document.getElementById('select-active-rekap');
             if(selectTgl) selectTgl.value = tglHariIni;
@@ -1201,7 +1237,6 @@
             .then(res => res.json())
             .then(parsedData => {
                 if (!parsedData || (Array.isArray(parsedData) && parsedData.length === 0 && dataSiswa.length > 0)) {
-                     console.warn("Cloud mengembalikan data kosong, abaikan timpaan lokal.");
                      return;
                 }
 
@@ -1247,8 +1282,7 @@
                 }
             })
             .catch(err => { 
-                console.error("Cloud Error / Offline:", err);
-                console.log("Melakukan migrasi data dari lokal...");
+                console.error("Cloud Offline:", err);
                 if (dataSiswa.length > 0 || globalChatData.length > 0) {
                     simpanDataKeCloud();
                 }
@@ -1287,10 +1321,8 @@
                 if(!s.waktuAbsen) s.waktuAbsen = "-";
                 if(typeof s.panggilanOrtu === 'undefined') s.panggilanOrtu = false;
                 
-                // --- UPDATE: Logika Pembaruan Rekap Bulan menjadi 31 Kolom ---
                 if (!s.rekapBulan) {
                     s.rekapBulan = {};
-                    // Jika data lama cuma 20, kita pad (tambah kosong) sampai 31
                     s.rekapBulan["Juli"] = (s.rekap && s.rekap.length >= 20) ? [...s.rekap] : Array(31).fill("");
                 }
                 
@@ -1313,7 +1345,6 @@
                 }
 
                 daftarBulan.forEach(b => { 
-                    // Padding data array absensi menjadi 31 jika dulunya 20
                     if(!s.rekapBulan[b]) {
                         s.rekapBulan[b] = Array(31).fill(""); 
                     } else if (s.rekapBulan[b].length < 31) {
@@ -1397,6 +1428,7 @@
             }
         }
 
+        // --- PROSES LOGIN + PRESENSI OTOMATIS REAL-TIME SISWA ---
         function prosesLogin(e) {
             e.preventDefault();
             try {
@@ -1412,26 +1444,40 @@
                     let targetSiswa = dataSiswa.find(s => s.nis === usernameVal);
                     if (targetSiswa && pass === targetSiswa.nis) {
                         isAdminLoggedIn = false;
+                        
+                        // 1. Ambil Pilihan Status Presensi dari UI
                         let statSiswaObj = document.querySelector('input[name="student_status"]:checked');
                         let statusSiswa = statSiswaObj ? statSiswaObj.value : "H"; 
                         let ketManual = document.getElementById('student-ket-manual').value.trim();
                         
-                        targetSiswa.status = statusSiswa; targetSiswa.waktuAbsen = getWaktuSekarang(); 
-                        if (statusSiswa === 'A') targetSiswa.ket = "Tanpa Keterangan"; 
-                        else targetSiswa.ket = ketManual || (statusSiswa === 'H' ? 'Hadir (Konfirmasi Mandiri)' : '-');
+                        // 2. Tentukan Keterangan Real-Time
+                        let labelStatusFull = "Hadir (Konfirmasi Mandiri)";
+                        if (statusSiswa === 'S') labelStatusFull = ketManual ? `Sakit - ${ketManual}` : "Sakit (Konfirmasi Mandiri)";
+                        else if (statusSiswa === 'I') labelStatusFull = ketManual ? `Izin - ${ketManual}` : "Izin (Konfirmasi Mandiri)";
+                        else if (statusSiswa === 'H') labelStatusFull = ketManual ? `Hadir - ${ketManual}` : "Hadir (Konfirmasi Mandiri)";
+
+                        // 3. Update Objek Siswa
+                        targetSiswa.status = statusSiswa; 
+                        targetSiswa.waktuAbsen = getWaktuSekarang(); 
+                        targetSiswa.ket = labelStatusFull;
                         
-                        let rekapEl = document.getElementById('select-active-rekap');
-                        let activeRekapDay = parseInt(rekapEl ? rekapEl.value : "-1");
-                        if(activeRekapDay >= 0 && activeRekapDay < 31) { targetSiswa.rekapBulan[activeBulanAbsen][activeRekapDay] = statusSiswa; }
+                        // 4. Merekam Langsung ke Rekap Bulanan Tanggal Hari Ini
+                        let todayIndexDay = new Date().getDate() - 1; // 0 - 30
+                        if (todayIndexDay >= 0 && todayIndexDay < 31) {
+                            if(!targetSiswa.rekapBulan) targetSiswa.rekapBulan = {};
+                            if(!targetSiswa.rekapBulan[activeBulanAbsen]) targetSiswa.rekapBulan[activeBulanAbsen] = Array(31).fill("");
+                            targetSiswa.rekapBulan[activeBulanAbsen][todayIndexDay] = statusSiswa;
+                        }
                         
-                        simpanDataKeCloud(); document.getElementById('student-ket-manual').value = ""; 
+                        simpanDataKeCloud(); 
+                        document.getElementById('student-ket-manual').value = ""; 
                         localStorage.setItem('siwali_logged_student_nis', targetSiswa.nis); 
-                        alert(`Presensi Berhasil Dikirim! Selamat Datang, ${targetSiswa.nama}.`);
+                        alert(`Presensi Berhasil Dikirim!\nStatus: ${statusSiswa} (${labelStatusFull})\nWaktu: ${targetSiswa.waktuAbsen}\n\nSelamat Datang, ${targetSiswa.nama}!`);
                     } else { alert("Sandi (NISN) yang Anda masukkan salah!"); return; }
                 } else if (role === "admin") {
                     if (usernameVal === "admin" && pass === "adminku123") { 
                         isAdminLoggedIn = true; unlockAdminFeatures(); alert("Selamat datang Bapak/Ibu Wali Kelas!"); 
-                    } else { alert("Gagal Login!\nUsername / Password untuk Admin salah.\nGunakan Username: admin\nPassword: adminku"); return; }
+                    } else { alert("Gagal Login!\nUsername / Password untuk Admin salah.\nGunakan Username: admin\nPassword: adminku123"); return; }
                 } else {
                     isAdminLoggedIn = false; alert("Login berhasil sebagai " + role.toUpperCase());
                 }
@@ -1460,7 +1506,6 @@
             let lockSiswa = document.getElementById('lock-siswa'); if(lockSiswa) { lockSiswa.className = "fas fa-check-circle"; lockSiswa.style.color = "var(--secondary)"; }
             let lockAbsensi = document.getElementById('lock-absensi'); if(lockAbsensi) { lockAbsensi.className = "fas fa-check-circle"; lockAbsensi.style.color = "var(--secondary)"; }
             let lockPel = document.getElementById('lock-pelanggaran'); if(lockPel) { lockPel.className = "fas fa-check-circle"; lockPel.style.color = "var(--secondary)"; }
-            let lockFestaba = document.getElementById('lock-festaba'); if(lockFestaba) { lockFestaba.className = "fas fa-check-circle"; lockFestaba.style.color = "var(--secondary)"; }
         }
 
         function switchTab(tabName) {
@@ -1472,12 +1517,16 @@
             let menuLi = document.getElementById('menu-' + tabName); 
             if(menuLi) menuLi.classList.add('active');
             localStorage.setItem('siwali_active_tab', tabName);
-            document.getElementById('main-sidebar').classList.remove('show');
-            document.querySelector('.sidebar-overlay').classList.remove('show');
+            
+            let sidebar = document.getElementById('main-sidebar');
+            let overlay = document.querySelector('.sidebar-overlay');
+            if(sidebar) sidebar.classList.remove('show');
+            if(overlay) overlay.classList.remove('show');
             
             isChatTabActive = (tabName === 'forum');
             if (isChatTabActive) {
-                document.getElementById('badge-notif-forum').style.display = 'none';
+                let notifBadge = document.getElementById('badge-notif-forum');
+                if(notifBadge) notifBadge.style.display = 'none';
                 let chatContainer = document.getElementById('chat-messages-container');
                 if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
             }
@@ -1515,8 +1564,10 @@
             });
 
             if (currentRole === "bendahara") {
-                document.getElementById('btn-admin-kas').classList.remove('hidden');
-                document.getElementById('panel-input-pengeluaran').classList.remove('hidden');
+                let btnAdminKas = document.getElementById('btn-admin-kas');
+                let panelKas = document.getElementById('panel-input-pengeluaran');
+                if(btnAdminKas) btnAdminKas.classList.remove('hidden');
+                if(panelKas) panelKas.classList.remove('hidden');
             }
             
             if (currentRole === "admin" || currentRole === "bendahara") { 
@@ -1586,16 +1637,20 @@
 
         // --- DASHBOARD FUNCTIONS ---
         function renderDashboard() {
-            let tbody = document.getElementById('tabel-dashboard-absen'); let tbodyAlpa = document.getElementById('tabel-dashboard-alpa');
+            let tbody = document.getElementById('tabel-dashboard-absen'); 
+            let tbodyAlpa = document.getElementById('tabel-dashboard-alpa');
             tbody.innerHTML = ""; tbodyAlpa.innerHTML = "";
-            let hadir = 0, tidakHadir = 0, totalAlpa = 0;
+            let hadir = 0, sakit = 0, izin = 0, alpa = 0;
             
             if(dataSiswa.length === 0) { 
                 tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Belum ada data diinput.</td></tr>`; 
             } else {
                 dataSiswa.forEach(siswa => {
                     let nama = siswa.nama || "Tanpa Nama";
-                    if(siswa.status === 'H') hadir++; else tidakHadir++;
+                    if(siswa.status === 'H') hadir++;
+                    else if(siswa.status === 'S') sakit++;
+                    else if(siswa.status === 'I') izin++;
+                    else if(siswa.status === 'A') alpa++;
                     
                     tbody.innerHTML += `<tr>
                         <td><div class="avatar-container"><img src="${getAvatarUrl(nama, siswa.foto)}" class="student-avatar"><div><strong>${nama}</strong><br><small style="opacity:0.7;">NISN: ${siswa.nis}</small></div></div></td>
@@ -1605,12 +1660,11 @@
                     </tr>`;
                     
                     if(siswa.status === 'A') { 
-                        totalAlpa++; 
                         tbodyAlpa.innerHTML += `<tr><td><i class="fas fa-user-minus" style="color:var(--danger); margin-right:8px;"></i> <strong>${nama}</strong></td><td><span class="badge bg-red">${siswa.nis}</span></td></tr>`; 
                     }
                 });
             }
-            if (dataSiswa.length > 0 && totalAlpa === 0) tbodyAlpa.innerHTML = `<tr><td colspan="2" style="text-align:center; color:var(--secondary); font-weight:bold;">Bersih dari Alpa!</td></tr>`;
+            if (dataSiswa.length > 0 && alpa === 0) tbodyAlpa.innerHTML = `<tr><td colspan="2" style="text-align:center; color:var(--secondary); font-weight:bold;">Bersih dari Alpa!</td></tr>`;
             else if (dataSiswa.length === 0) tbodyAlpa.innerHTML = `<tr><td colspan="2" style="text-align:center;">-</td></tr>`;
             
             document.getElementById('dash-total-siswa').innerText = dataSiswa.length + " Anak"; 
@@ -1636,7 +1690,50 @@
             } else {
                 let totalPel = (globalSettings.pelanggaran || []).length;
                 document.getElementById('dash-poin-disiplin').innerText = totalPel + " Kasus";
-                document.getElementById('dash-poin-disiplin').parentElement.querySelector('h3').innerText = "Total Kasus";
+                let h3Dis = document.getElementById('dash-poin-disiplin').parentElement.querySelector('h3');
+                if(h3Dis) h3Dis.innerText = "Total Kasus";
+            }
+
+            renderGrafikDashboard(hadir, sakit, izin, alpa);
+        }
+
+        // --- GRAFIK DASHBOARD ---
+        function renderGrafikDashboard(hadir, sakit, izin, alpa) {
+            let canvasKehadiran = document.getElementById('chartKehadiranDash');
+            if (canvasKehadiran) {
+                if (chartKehadiranInstance) chartKehadiranInstance.destroy();
+                try {
+                    let ctxK = canvasKehadiran.getContext('2d');
+                    chartKehadiranInstance = new Chart(ctxK, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Hadir', 'Sakit', 'Izin', 'Alpa'],
+                            datasets: [{ data: [hadir, sakit, izin, alpa], backgroundColor: ['#2ecc71', '#f1c40f', '#3498db', '#e74c3c'], borderWidth: 2 }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                    });
+                } catch(e) {}
+            }
+
+            let canvasPelanggaran = document.getElementById('chartPelanggaranDash');
+            if (canvasPelanggaran) {
+                if (chartPelanggaranInstance) chartPelanggaranInstance.destroy();
+                let countObj = {};
+                (globalSettings.pelanggaran || []).forEach(p => {
+                    let m = (globalSettings.masterPelanggaran || []).find(x => String(x.id) === String(p.id_master));
+                    let label = m ? m.nama : 'Lainnya'; countObj[label] = (countObj[label] || 0) + 1;
+                });
+                let labels = Object.keys(countObj); let data = Object.values(countObj);
+                if(labels.length === 0) { labels = ["Belum Ada Kasus"]; data = [0]; }
+
+                try {
+                    let ctxP = canvasPelanggaran.getContext('2d');
+                    chartPelanggaranInstance = new Chart(ctxP, {
+                        type: 'bar',
+                        data: { labels: labels, datasets: [{ label: 'Jumlah Kasus', data: data, backgroundColor: 'rgba(230, 57, 70, 0.7)', borderColor: 'rgba(230, 57, 70, 1)', borderWidth: 1, borderRadius: 4 }] },
+                        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+                    });
+                } catch(e) {}
             }
         }
         
@@ -1645,8 +1742,7 @@
             if(dataSiswa.length > 0) {
                 dataSiswa.forEach(s => { 
                     if (s.kasBulan && s.kasBulan[activeBulanKas] && s.kasBulan[activeBulanKas].filter(Boolean).length === totalMingguKas) { 
-                        adaLunas = true; 
-                        tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas (M1-M4)</span></td></tr>`; 
+                        adaLunas = true; tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-green"><i class="fas fa-check"></i> Lunas (M1-M4)</span></td></tr>`; 
                     } 
                 });
             }
@@ -1659,8 +1755,7 @@
                 dataSiswa.forEach(s => {
                     let sisaMinggu = s.kasBulan && s.kasBulan[activeBulanKas] ? (totalMingguKas - s.kasBulan[activeBulanKas].filter(Boolean).length) : 0;
                     if (sisaMinggu > 0) {
-                        adaTunggakan = true; let listMinggu = []; 
-                        for(let i=0; i<totalMingguKas; i++) if(!s.kasBulan[activeBulanKas][i]) listMinggu.push(`M${i+1}`);
+                        adaTunggakan = true; let listMinggu = []; for(let i=0; i<totalMingguKas; i++) if(!s.kasBulan[activeBulanKas][i]) listMinggu.push(`M${i+1}`);
                         tbody.innerHTML += `<tr><td><strong>${s.nama}</strong><br><small style="opacity:0.7;">NISN: ${s.nis}</small></td><td><span class="badge bg-yellow">${listMinggu.join(', ')}</span></td><td style="color:var(--danger); font-weight:bold;">Rp ${(sisaMinggu * iuranKasPerMinggu).toLocaleString('id-ID')}</td></tr>`;
                     }
                 });
@@ -1670,9 +1765,7 @@
         }
 
         // --- SISWA FUNCTIONS ---
-        function toggleFormTambah() { 
-            let form = document.getElementById('form-tambah-siswa'); form.style.display = form.style.display === "block" ? "none" : "block"; 
-        }
+        function toggleFormTambah() { let form = document.getElementById('form-tambah-siswa'); form.style.display = form.style.display === "block" ? "none" : "block"; }
         function toggleAllSiswa(source) { let checkboxes = document.querySelectorAll('.cb-siswa-item'); checkboxes.forEach(cb => cb.checked = source.checked); }
         function hapusSiswaTerpilih() {
             let checkedBoxes = document.querySelectorAll('.cb-siswa-item:checked');
@@ -1696,9 +1789,7 @@
             if (idx === -1) {
                 if (dataSiswa.find(s => s.nis == nis)) { alert("NISN sudah digunakan!"); return; }
                 let rekapBulan = {}; let kasBulan = {}; let kasTanggalBulan = {}; let festabaBulan = {}; let festabaTanggalBulan = {};
-                daftarBulan.forEach(b => {
-                    rekapBulan[b] = Array(31).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""];
-                });
+                daftarBulan.forEach(b => { rekapBulan[b] = Array(31).fill(""); kasBulan[b] = [false, false, false, false]; kasTanggalBulan[b] = ["", "", "", ""]; festabaBulan[b] = [false, false, false, false]; festabaTanggalBulan[b] = ["", "", "", ""]; });
                 dataSiswa.push({ nis: nis, nama: nama, jk: jk, hp: hp, foto: "", status: "H", ket: "", waktuAbsen: "-", rekapBulan: rekapBulan, kasBulan: kasBulan, kasTanggalBulan: kasTanggalBulan, festabaBulan: festabaBulan, festabaTanggalBulan: festabaTanggalBulan, panggilanOrtu: false });
                 alert("Siswa baru tersimpan!");
             }
@@ -1706,10 +1797,7 @@
         }
         function deleteSiswa(index) { if(confirm("Hapus permanen siswa ini?")) { dataSiswa.splice(index, 1); simpanDataKeCloud(); renderAllViews(); } }
         function uploadFotoSiswa(event, index) { 
-            const file = event.target.files[0]; 
-            compressImageAndProcess(file, function(base64Data, type) { 
-                dataSiswa[index].foto = base64Data; simpanDataKeCloud(); renderAllViews(); 
-            }, 300);
+            const file = event.target.files[0]; compressImageAndProcess(file, function(base64Data, type) { dataSiswa[index].foto = base64Data; simpanDataKeCloud(); renderAllViews(); }, 300);
         }
         function editSiswaInline(index) {
             ['nis', 'nama', 'jk', 'hp'].forEach(f => { document.getElementById(`txt-${f}-${index}`).classList.add('hidden'); document.getElementById(`inp-${f}-${index}`).classList.remove('hidden'); });
@@ -1796,13 +1884,13 @@
                         <td><div class="avatar-container"><img src="${getAvatarUrl(siswa.nama, siswa.foto)}" class="student-avatar"><strong>${siswa.nama}</strong></div></td>
                         <td>
                             <div style="background: transparent;">
-                                <label style="color: var(--secondary); margin-right:5px;"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> H</label>
-                                <label style="color: var(--warning); margin-right:5px;"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> S</label>
-                                <label style="color: var(--info); margin-right:5px;"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> I</label>
-                                <label style="color: var(--danger);"><input type="radio" name="status_${index}" value="A" ${siswa.status==='A'?'checked':''}> A</label>
+                                <label style="color: var(--secondary); margin-right:5px; font-weight:bold; cursor:pointer;"><input type="radio" name="status_${index}" value="H" ${siswa.status==='H'?'checked':''}> H</label>
+                                <label style="color: var(--warning); margin-right:5px; font-weight:bold; cursor:pointer;"><input type="radio" name="status_${index}" value="S" ${siswa.status==='S'?'checked':''}> S</label>
+                                <label style="color: var(--info); margin-right:5px; font-weight:bold; cursor:pointer;"><input type="radio" name="status_${index}" value="I" ${siswa.status==='I'?'checked':''}> I</label>
+                                <label style="color: var(--danger); font-weight:bold; cursor:pointer;"><input type="radio" name="status_${index}" value="A" ${siswa.status==='A'?'checked':''}> A</label>
                             </div>
                         </td>
-                        <td><input type="text" id="ket_${index}" value="${siswa.ket || ''}" placeholder="Alasan..." class="form-control" style="padding:5px;"></td>
+                        <td><input type="text" id="ket_${index}" value="${siswa.ket || ''}" placeholder="Keterangan..." class="form-control" style="padding:5px;"></td>
                         <td><span style="font-size:11px; opacity:0.7;">${siswa.waktuAbsen || '-'}</span></td>
                     </tr>`;
                 });
@@ -1979,7 +2067,7 @@
         function bukaAdminKas() { 
             if (currentRole !== "admin" && currentRole !== "bendahara") { alert("Akses Ditolak!"); return; } 
             let pass = prompt("Password Keuangan / Admin:"); 
-            if(pass === "admin123") { 
+            if(pass === "admin123" || pass === "adminku123") { 
                 isAdminKasUnlocked = true; document.getElementById('admin-area-kas').classList.remove('locked'); 
                 document.getElementById('btn-admin-kas').innerHTML = '<i class="fas fa-unlock"></i> Bendahara Aktif'; document.getElementById('btn-save-kas').style.display = "inline-block"; 
                 renderKas();
@@ -2111,7 +2199,7 @@
         function bukaAdminFestaba() { 
             if (currentRole !== "admin") { alert("Akses Ditolak! Hanya Admin."); return; } 
             let pass = prompt("Password Admin FESTABA:"); 
-            if(pass === "admin123") { 
+            if(pass === "admin123" || pass === "adminku123") { 
                 isAdminFestabaUnlocked = true; document.getElementById('admin-area-festaba').classList.remove('locked'); 
                 document.getElementById('btn-admin-festaba').innerHTML = '<i class="fas fa-unlock"></i> Mode Aktif'; document.getElementById('btn-save-festaba').style.display = "inline-block"; 
                 renderFestaba();
@@ -2161,21 +2249,39 @@
             let recordPelanggaran = (globalSettings.pelanggaran || []).filter(p => p.nis === nis);
             let poin = 0; recordPelanggaran.forEach(p => { let master = (globalSettings.masterPelanggaran || []).find(m => String(m.id) === String(p.id_master)); if(master) poin += Number(master.poin); }); return poin;
         }
+
+        function populateSelectSafely(selectElem, defaultText, optionsArr, valueProp, labelProp, extraAttrProp = null) {
+            if (!selectElem) return;
+            let currentVal = selectElem.value;
+            let html = `<option value="">${defaultText}</option>`;
+            optionsArr.forEach(item => {
+                let extraAttr = extraAttrProp ? ` ${extraAttrProp}="${item.poin}"` : '';
+                let labelText = extraAttrProp ? `${item[labelProp]} (${item.poin} Poin)` : item[labelProp];
+                html += `<option value="${item[valueProp]}"${extraAttr}>${labelText}</option>`;
+            });
+            selectElem.innerHTML = html;
+            if (currentVal) selectElem.value = currentVal;
+        }
+
         function renderPelanggaran() {
             let totalBermasalah = 0, totalSP = 0;
             dataSiswa.forEach(s => { let p = getSiswaTotalPoin(s.nis); if (p > 0) totalBermasalah++; if (p > 75) totalSP++; });
-            document.getElementById('pel-stat-siswa').innerText = totalBermasalah; document.getElementById('pel-stat-total').innerText = (globalSettings.pelanggaran || []).length;
-            document.getElementById('pel-stat-bina').innerText = (globalSettings.pembinaan || []).length; document.getElementById('pel-stat-sp').innerText = totalSP;
+            document.getElementById('pel-stat-siswa').innerText = totalBermasalah; 
+            document.getElementById('pel-stat-total').innerText = (globalSettings.pelanggaran || []).length;
+            document.getElementById('pel-stat-bina').innerText = (globalSettings.pembinaan || []).length; 
+            document.getElementById('pel-stat-sp').innerText = totalSP;
 
-            let selNisInput = document.getElementById('pel-input-nis'); let selNisBina = document.getElementById('bina-input-nis');
-            if(selNisInput) selNisInput.innerHTML = `<option value="">-- Pilih Siswa --</option>` + dataSiswa.map(s => `<option value="${s.nis}">${s.nama}</option>`).join('');
-            if(selNisBina) selNisBina.innerHTML = `<option value="">-- Pilih Siswa --</option>` + dataSiswa.map(s => `<option value="${s.nis}">${s.nama}</option>`).join('');
-
+            let selNisInput = document.getElementById('pel-input-nis'); 
+            let selNisBina = document.getElementById('bina-input-nis');
             let selMaster = document.getElementById('pel-input-master');
-            if(selMaster) selMaster.innerHTML = `<option value="">-- Pilih Jenis --</option>` + (globalSettings.masterPelanggaran || []).map(m => `<option value="${m.id}" data-poin="${m.poin}">${m.nama} (${m.poin} Poin)</option>`).join('');
 
-            renderMasterPelanggaran(); filterPelanggaranTabel(); updateChartPelanggaran();
+            populateSelectSafely(selNisInput, "-- Pilih Siswa --", dataSiswa, "nis", "nama");
+            populateSelectSafely(selNisBina, "-- Pilih Siswa --", dataSiswa, "nis", "nama");
+            populateSelectSafely(selMaster, "-- Pilih Jenis Pelanggaran --", globalSettings.masterPelanggaran || [], "id", "nama", "data-poin");
+
+            renderMasterPelanggaran(); filterPelanggaranTabel();
         }
+
         function filterPelanggaranTabel() {
             let search = document.getElementById('pel-search').value.toLowerCase(); let statusFilter = document.getElementById('pel-filter-status').value;
             let tbody = document.getElementById('body-rekap-pelanggaran'); if(!tbody) return; tbody.innerHTML = "";
@@ -2197,37 +2303,105 @@
                 </tr>`;
             });
         }
-        function updatePoinOtomatis() { let sel = document.getElementById('pel-input-master'); let poinInput = document.getElementById('pel-input-poin'); if (sel.selectedIndex > 0) { poinInput.value = sel.options[sel.selectedIndex].getAttribute('data-poin'); } else { poinInput.value = ""; } }
+        function updatePoinOtomatis() { 
+            let sel = document.getElementById('pel-input-master'); 
+            let poinInput = document.getElementById('pel-input-poin'); 
+            if (sel && sel.selectedIndex > 0) { 
+                poinInput.value = sel.options[sel.selectedIndex].getAttribute('data-poin'); 
+            } else { 
+                if(poinInput) poinInput.value = ""; 
+            } 
+        }
+
         function simpanPelanggaranBaru(e) {
-            e.preventDefault(); if (currentRole !== 'admin') return;
+            e.preventDefault(); 
+            if (currentRole !== 'admin') { alert("Akses khusus Wali Kelas / Admin!"); return; }
             let idx = parseInt(document.getElementById('edit-index-pelanggaran').value);
-            let pObj = { id: (idx === -1) ? Date.now() : idx, nis: document.getElementById('pel-input-nis').value, tgl: document.getElementById('pel-input-tgl').value, id_master: document.getElementById('pel-input-master').value, kronologi: document.getElementById('pel-input-krono').value, pelapor: document.getElementById('pel-input-pelapor').value, fotoBukti: window.tempBuktiPelanggaran || "", tipe: 'Pelanggaran' };
+            let pObj = { 
+                id: (idx === -1) ? Date.now() : idx, 
+                nis: document.getElementById('pel-input-nis').value, 
+                tgl: document.getElementById('pel-input-tgl').value, 
+                id_master: document.getElementById('pel-input-master').value, 
+                kronologi: document.getElementById('pel-input-krono').value, 
+                pelapor: document.getElementById('pel-input-pelapor').value, 
+                fotoBukti: window.tempBuktiPelanggaran || "", 
+                tipe: 'Pelanggaran' 
+            };
+            if(!pObj.nis || !pObj.id_master) { alert("Pilih Siswa dan Jenis Pelanggaran!"); return; }
             if(!globalSettings.pelanggaran) globalSettings.pelanggaran = [];
-            if(idx === -1) { globalSettings.pelanggaran.push(pObj); alert("Data pelanggaran baru tersimpan!"); } 
-            else { let existingIndex = globalSettings.pelanggaran.findIndex(p => p.id === idx); if(existingIndex !== -1) { globalSettings.pelanggaran[existingIndex] = pObj; alert("Data pelanggaran berhasil diupdate!"); } }
-            resetFormPelanggaran(); simpanDataKeCloud(); renderPelanggaran(); switchPelanggaranNav('data');
-            let curPoin = getSiswaTotalPoin(pObj.nis); if(curPoin > 75) alert("PERINGATAN: Siswa ini telah mencapai batas poin untuk Surat Peringatan (SP)!");
+            
+            if(idx === -1) { 
+                globalSettings.pelanggaran.push(pObj); 
+                alert("Data pelanggaran baru tersimpan!"); 
+            } else { 
+                let existingIndex = globalSettings.pelanggaran.findIndex(p => p.id === idx); 
+                if(existingIndex !== -1) { globalSettings.pelanggaran[existingIndex] = pObj; alert("Data pelanggaran berhasil diupdate!"); } 
+            }
+            
+            resetFormPelanggaran(); 
+            simpanDataKeCloud(); 
+            renderPelanggaran(); 
+            renderDashboard(); 
+            switchPelanggaranNav('data');
+            
+            let curPoin = getSiswaTotalPoin(pObj.nis); 
+            if(curPoin > 75) alert("PERINGATAN: Siswa ini telah mencapai batas poin untuk Surat Peringatan (SP)!");
         }
+
         function simpanPembinaanBaru(e) {
-            e.preventDefault(); if (currentRole !== 'admin') return;
+            e.preventDefault(); 
+            if (currentRole !== 'admin') { alert("Akses khusus Wali Kelas / Admin!"); return; }
             let idx = parseInt(document.getElementById('edit-index-pembinaan').value);
-            let bObj = { id: (idx === -1) ? Date.now() : idx, nis: document.getElementById('bina-input-nis').value, tgl: document.getElementById('bina-input-tgl').value, guru: document.getElementById('bina-input-guru').value, ortu: document.getElementById('bina-input-ortu').value, hasil: document.getElementById('bina-input-hasil').value, tipe: 'Pembinaan' };
+            let bObj = { 
+                id: (idx === -1) ? Date.now() : idx, 
+                nis: document.getElementById('bina-input-nis').value, 
+                tgl: document.getElementById('bina-input-tgl').value, 
+                guru: document.getElementById('bina-input-guru').value, 
+                ortu: document.getElementById('bina-input-ortu').value, 
+                hasil: document.getElementById('bina-input-hasil').value, 
+                tipe: 'Pembinaan' 
+            };
+            if(!bObj.nis || !bObj.tgl) { alert("Pilih Siswa dan Tanggal Pembinaan!"); return; }
             if(!globalSettings.pembinaan) globalSettings.pembinaan = [];
-            if(idx === -1) { globalSettings.pembinaan.push(bObj); alert("Catatan pembinaan baru tersimpan!"); } 
-            else { let existingIndex = globalSettings.pembinaan.findIndex(p => p.id === idx); if(existingIndex !== -1) { globalSettings.pembinaan[existingIndex] = bObj; alert("Catatan pembinaan berhasil diupdate!"); } }
-            resetFormPembinaan(); simpanDataKeCloud(); renderPelanggaran(); switchPelanggaranNav('data');
+            
+            if(idx === -1) { 
+                globalSettings.pembinaan.push(bObj); 
+                alert("Catatan pembinaan baru tersimpan!"); 
+            } else { 
+                let existingIndex = globalSettings.pembinaan.findIndex(p => p.id === idx); 
+                if(existingIndex !== -1) { globalSettings.pembinaan[existingIndex] = bObj; alert("Catatan pembinaan berhasil diupdate!"); } 
+            }
+            
+            resetFormPembinaan(); 
+            simpanDataKeCloud(); 
+            renderPelanggaran(); 
+            switchPelanggaranNav('data');
         }
+
         function resetFormPelanggaran() {
-            document.getElementById('edit-index-pelanggaran').value = "-1"; document.getElementById('pel-input-nis').value = ""; document.getElementById('pel-input-tgl').value = "";
-            document.getElementById('pel-input-master').value = ""; document.getElementById('pel-input-poin').value = ""; document.getElementById('pel-input-krono').value = ""; document.getElementById('pel-input-pelapor').value = "";
-            window.tempBuktiPelanggaran = ""; document.getElementById('preview-bukti-pelanggaran').src = ""; document.getElementById('preview-bukti-pelanggaran').style.display = "none";
+            document.getElementById('edit-index-pelanggaran').value = "-1"; 
+            document.getElementById('pel-input-nis').value = ""; 
+            document.getElementById('pel-input-tgl').value = "";
+            document.getElementById('pel-input-master').value = ""; 
+            document.getElementById('pel-input-poin').value = ""; 
+            document.getElementById('pel-input-krono').value = ""; 
+            document.getElementById('pel-input-pelapor').value = "";
+            window.tempBuktiPelanggaran = ""; 
+            let prev = document.getElementById('preview-bukti-pelanggaran');
+            if(prev) { prev.src = ""; prev.style.display = "none"; }
             document.getElementById('btn-save-pelanggaran').innerHTML = '<i class="fas fa-save"></i> Simpan Pelanggaran';
         }
+
         function resetFormPembinaan() {
-            document.getElementById('edit-index-pembinaan').value = "-1"; document.getElementById('bina-input-nis').value = ""; document.getElementById('bina-input-tgl').value = "";
-            document.getElementById('bina-input-guru').value = ""; document.getElementById('bina-input-ortu').value = "Ya"; document.getElementById('bina-input-hasil').value = "";
+            document.getElementById('edit-index-pembinaan').value = "-1"; 
+            document.getElementById('bina-input-nis').value = ""; 
+            document.getElementById('bina-input-tgl').value = "";
+            document.getElementById('bina-input-guru').value = ""; 
+            document.getElementById('bina-input-ortu').value = "Ya"; 
+            document.getElementById('bina-input-hasil').value = "";
             document.getElementById('btn-save-pembinaan').innerHTML = '<i class="fas fa-save"></i> Simpan Pembinaan';
         }
+
         function renderMasterPelanggaran() {
             let tbody = document.getElementById('body-master-pelanggaran'); if(!tbody) return; tbody.innerHTML = ""; let btnActionVisible = (currentRole === 'admin') ? "" : "hidden";
             (globalSettings.masterPelanggaran || []).forEach((m, index) => {
@@ -2284,21 +2458,67 @@
             }
         }
         function resetSemuaRiwayatSiswa() { if(!isAdminLoggedIn) return; if(confirm("Yakin hapus SEMUA riwayat siswa ini?")) { globalSettings.pelanggaran = globalSettings.pelanggaran.filter(p => p.nis !== selectedNisCetak); globalSettings.pembinaan = globalSettings.pembinaan.filter(p => p.nis !== selectedNisCetak); simpanDataKeCloud(); bukaProfilPelanggaran(selectedNisCetak); renderPelanggaran(); } }
-        function updateChartPelanggaran() {
-            let canvas = document.getElementById('chartPelanggaran'); if(!canvas) return;
-            let countObj = {}; (globalSettings.pelanggaran || []).forEach(p => { let m = (globalSettings.masterPelanggaran || []).find(x => String(x.id) === String(p.id_master)); let label = m ? m.nama : 'Lainnya'; countObj[label] = (countObj[label] || 0) + 1; });
-            let labels = Object.keys(countObj); let data = Object.values(countObj);
-            if(labels.length === 0) { labels = ["Belum ada data"]; data = [0]; }
-            if (chartPelanggaranInstance) { chartPelanggaranInstance.destroy(); }
-            try { let ctx = canvas.getContext('2d'); chartPelanggaranInstance = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Jumlah Kasus Pelanggaran', data: data, backgroundColor: 'rgba(230, 57, 70, 0.7)', borderColor: 'rgba(230, 57, 70, 1)', borderWidth: 1, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } }); } catch (e) {}
-        }
+        
+        // --- PERBAIKAN CETAK KOP SURAT (SP 1, SP 2, SP 3) ---
         function cetakSP(jenisSP) {
             let s = dataSiswa.find(x => x.nis === selectedNisCetak); if(!s) return; let poin = getSiswaTotalPoin(s.nis);
             let listPelanggaran = (globalSettings.pelanggaran || []).filter(p => p.nis === s.nis); let detailHtml = "";
             listPelanggaran.forEach((item, i) => { let m = (globalSettings.masterPelanggaran || []).find(x => String(x.id) === String(item.id_master)); detailHtml += `<li>${item.tgl} : ${m ? m.nama : 'Lainnya'} (${m ? m.poin : 0} Poin)</li>`; });
-            let tglPrint = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}); let logoSrc = globalSettings.logoSekolah || "https://ui-avatars.com/api/?name=School&background=114B5F&color=fff"; let namaSekolah = globalSettings.namaSekolah || "Nama Sekolah Belum Diatur";
+            let tglPrint = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}); 
+            
+            // Pengambilan Logo Kanan (Sekolah)
+            let logoSrc = globalSettings.logoSekolah || "https://ui-avatars.com/api/?name=School&background=114B5F&color=fff";
+            
+            // Pengambilan Logo Kiri (Logo Balikpapan - Wikimedia Commons - Sesuai Identitas Wilayah Kerja Anda)
+            let logoBalikpapan = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Lambang_Kota_Balikpapan.png/200px-Lambang_Kota_Balikpapan.png";
+            
             let printDiv = document.getElementById('print-area');
-            printDiv.innerHTML = `<div class="print-header"><img src="${logoSrc}" style="width:70px; height:70px; position:absolute; left:40px; top:40px;"><h2 style="margin:0; font-size:22px; text-transform:uppercase;">${namaSekolah}</h2><p style="margin:0; font-size:14px;">${globalSettings.alamatSekolah || ''}</p></div><h3 style="text-align:center; text-decoration:underline; margin-bottom:20px;">SURAT PERINGATAN (${jenisSP})</h3><p>Dengan hormat,</p><p>Berdasarkan catatan buku kedisiplinan dan tata tertib sekolah, memberitahukan bahwa siswa di bawah ini:</p><table style="margin: 15px 0; width:80%; font-size:16px;"><tr><td style="width:30%;">Nama</td><td>: <strong>${s.nama}</strong></td></tr><tr><td>NISN</td><td>: ${s.nis}</td></tr><tr><td>Kelas</td><td>: ${globalSettings.namaKelas || '-'}</td></tr><tr><td>Total Poin Pelanggaran</td><td>: <strong style="color:red;">${poin} Poin</strong></td></tr></table><p>Telah melanggar tata tertib sekolah dengan rincian riwayat sebagai berikut:</p><ul>${detailHtml}</ul><p style="margin-top:20px;">Melalui surat ini kami memberikan <strong>${jenisSP}</strong>. Kami mengharap kerja sama Bapak/Ibu Wali Murid untuk memberikan pembinaan lebih lanjut di rumah demi kemajuan pendidikan ananda.</p><p>Demikian surat ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</p><table style="width:100%; margin-top:50px; text-align:right; font-size:16px;"><tr><td>Balikpapan, ${tglPrint}<br>Wali Kelas<br><br><br><br><strong>${globalSettings.namaWaliKelas || '_______________________'}</strong></td></tr></table>`;
+            
+            // Konstruksi KOP Menggunakan Format Tabel 100% (Mencegah teks tertutup logo)
+            printDiv.innerHTML = `
+                <table style="width: 100%; border-bottom: 4px solid black; margin-bottom: 3px; font-family: 'Times New Roman', Times, serif;">
+                    <tr>
+                        <td style="width: 18%; text-align: center; vertical-align: middle;">
+                            <img src="${logoBalikpapan}" style="width: 85px; height: auto;">
+                        </td>
+                        <td style="width: 64%; text-align: center; vertical-align: middle; line-height: 1.3;">
+                            <div style="font-size: 16px; font-weight: bold; text-transform:uppercase; font-family: Arial, sans-serif;">DINAS PENDIDIKAN DAN KEBUDAYAAN</div>
+                            <div style="font-size: 20px; font-weight: bold; text-transform:uppercase; font-family: Arial, sans-serif;">SEKOLAH MENENGAH PERTAMA NEGERI 3<br>BALIKPAPAN</div>
+                            <div style="font-size: 14px;">Terakreditasi A</div>
+                            <div style="font-size: 12px; font-style: italic;">Jl. SoekarnoHatta Km. 1.5 Kel. Gn. Samarinda, Balikpapan Utara, Telp. 0542-739713 Fax (0542) 424563</div>
+                            <div style="font-size: 12px; color: blue; text-decoration: underline;">Website: www.smpn3-bpn.sch.id Email: admin@smpn3-bpn.sch.id / smpn3balikpapan@gmail.com</div>
+                            <div style="font-size: 12px;">NSS : 201166101026 &nbsp;&nbsp;&nbsp; NPSN : 30401476 &nbsp;&nbsp;&nbsp; Kode Pos 76125</div>
+                        </td>
+                        <td style="width: 18%; text-align: center; vertical-align: middle;">
+                            <img src="${logoSrc}" style="width: 90px; height: auto;">
+                        </td>
+                    </tr>
+                </table>
+                <div style="border-top: 1px solid black; margin-bottom: 25px;"></div>
+                
+                <h3 style="text-align:center; text-decoration:underline; margin-bottom:20px; font-family: Arial, sans-serif;">${jenisSP}</h3>
+                <p>Dengan hormat,</p>
+                <p>Berdasarkan catatan buku kedisiplinan dan tata tertib sekolah, memberitahukan bahwa siswa di bawah ini:</p>
+                <table style="margin: 15px 0; width:80%; font-size:16px;">
+                    <tr><td style="width:30%;">Nama</td><td>: <strong>${s.nama}</strong></td></tr>
+                    <tr><td>NISN</td><td>: ${s.nis}</td></tr>
+                    <tr><td>Kelas</td><td>: ${globalSettings.namaKelas || '-'}</td></tr>
+                    <tr><td>Total Poin Pelanggaran</td><td>: <strong style="color:red;">${poin} Poin</strong></td></tr>
+                </table>
+                <p>Telah melanggar tata tertib sekolah dengan rincian riwayat sebagai berikut:</p>
+                <ul>${detailHtml}</ul>
+                <p style="margin-top:20px;">Melalui surat ini kami memberikan <strong>${jenisSP}</strong>. Kami mengharap kerja sama Bapak/Ibu Wali Murid untuk memberikan pembinaan lebih lanjut di rumah demi kemajuan pendidikan ananda.</p>
+                <p>Demikian surat ini kami sampaikan, atas perhatian dan kerja samanya kami ucapkan terima kasih.</p>
+                <table style="width:100%; margin-top:50px; text-align:right; font-size:16px;">
+                    <tr>
+                        <td>
+                            Balikpapan, ${tglPrint}<br>
+                            Wali Kelas<br><br><br><br>
+                            <strong>${globalSettings.namaWaliKelas || '_______________________'}</strong>
+                        </td>
+                    </tr>
+                </table>
+            `;
             printDiv.style.display = "block"; closeModalPelanggaran(); window.print(); printDiv.style.display = "none";
         }
 
